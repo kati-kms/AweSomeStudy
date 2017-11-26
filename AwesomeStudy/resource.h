@@ -11,6 +11,7 @@
 #define IDD_AWESOMEHOME                 310
 #define IDD_AWESOMEPIC                  311
 #define IDD_AWESOMEMMAP                 312
+#define IDD_DIALOG1                     316
 #define IDC_PASSWORD                    1000
 #define IDC_OPEN                        1002
 #define IDC_LOGIN                       1003
@@ -22,6 +23,8 @@
 #define IDC_HOME_PIC                    1010
 #define IDC_HOME_MINDMAP                1011
 #define IDC_HOME                        1012
+#define IDC_PicTree                     1015
+#define IDC_EDIT1                       1016
 #define IDR_MAIN_TOOLBAR                32776
 #define ID_AWESOMESTUDYVER1             32777
 #define ID_32778                        32778
@@ -30,9 +33,9 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        316
+#define _APS_NEXT_RESOURCE_VALUE        318
 #define _APS_NEXT_COMMAND_VALUE         32779
-#define _APS_NEXT_CONTROL_VALUE         1015
+#define _APS_NEXT_CONTROL_VALUE         1018
 #define _APS_NEXT_SYMED_VALUE           313
 #endif
 #endif

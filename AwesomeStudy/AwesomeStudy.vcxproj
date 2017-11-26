@@ -193,6 +193,7 @@
     <ClInclude Include="AwesomeStudyView.h" />
     <ClInclude Include="AwesomeWrite.h" />
     <ClInclude Include="MainFrm.h" />
+    <ClInclude Include="PicNameDialog.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
@@ -206,6 +207,7 @@
     <ClCompile Include="AwesomeStudyView.cpp" />
     <ClCompile Include="AwesomeWrite.cpp" />
     <ClCompile Include="MainFrm.cpp" />
+    <ClCompile Include="PicNameDialog.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

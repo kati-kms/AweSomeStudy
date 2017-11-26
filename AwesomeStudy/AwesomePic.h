@@ -1,4 +1,7 @@
 #pragma once
+#include "afxcmn.h"
+#include "afxwin.h"
+#include "AwesomeStudyDoc.h"
 
 
 
@@ -23,6 +26,11 @@ public:
 #endif
 #endif
 
+public:
+	CString PicNodePath;
+	int IsPic;
+	HTREEITEM PicNode;
+
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 지원입니다.
 
@@ -31,6 +39,16 @@ public:
 	virtual BOOL Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, CCreateContext* pContext = NULL);
 
 	afx_msg void OnHome();
+	virtual void OnInitialUpdate();
+	CAwesomeStudyDoc* GetDocument() const;
+	CTreeCtrl m_PicTree;
+	afx_msg void OnNMClickPictree(NMHDR *pNMHDR, LRESULT *pResult);
+	afx_msg void OnBnClickedPicAddFolder();
+	afx_msg void OnBnClickedPicAddFile();
+	afx_msg void OnBnClickedPicDelete();
+	afx_msg void OnBnClickedFileSave();
+	virtual void OnDraw(CDC* pDC);
+	CEdit m_PicMemo;
 };
 
 

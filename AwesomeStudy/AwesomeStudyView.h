@@ -21,6 +21,7 @@ public:
 public:
 	CAwesomeStudyDoc* GetDocument() const;
 
+
 // 작업입니다.
 public:
 
