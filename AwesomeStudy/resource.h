@@ -59,16 +59,43 @@
 #define ID_FILE_OPEN32783               32783
 #define ID_32786                        32786
 #define ID_ADD                          32787
-#define ID_FILE_SAVE32788               32788
-#define ID_TEST_FILE                    32789
+#define ID_WRITE32788                   32788
+#define ID_WRITE32789                   32789
+#define ID_WRITE32790                   32790
+#define ID_WRITE32791                   32791
+#define ID_WRITE32792                   32792
+#define ID_WRITE32793                   32793
+#define ID_WRITE32794                   32794
+#define ID_WRITE32795                   32795
+#define ID_WRITE32796                   32796
+#define ID_WRITE32797                   32797
+#define ID_WRITE32798                   32798
+#define ID_WRITE32799                   32799
+#define ID_WRITE32800                   32800
+#define ID_WRITE_CUT                    32801
+#define ID_WRITE_COPY                   32802
+#define ID_WRITE_PASTE                  32803
+#define ID_WRITE_DEL                    32804
+#define ID_WRITE_FIND                   32805
+#define ID_WRITE_FINDNEXT               32806
+#define ID_WRITE_REPLACE                32807
+#define ID_WRITE_GO                     32808
+#define ID_WRITE_UNDO                   32809
+#define ID_WRITE_DATETIME               32810
+#define ID_WRITE32811                   32811
+#define ID_WRITE32812                   32812
+#define ID_WRITE_FONTSTATE              32813
+#define ID_WRITE_FINDREPLACE            32814
+#define ID_WRITE32815                   32815
+#define ID_WRITE32816                   32816
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        324
-#define _APS_NEXT_COMMAND_VALUE         32790
-#define _APS_NEXT_CONTROL_VALUE         1047
+#define _APS_NEXT_COMMAND_VALUE         32817
+#define _APS_NEXT_CONTROL_VALUE         1045
 #define _APS_NEXT_SYMED_VALUE           314
 #endif
 #endif
