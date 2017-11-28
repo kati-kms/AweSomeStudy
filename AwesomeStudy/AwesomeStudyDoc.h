@@ -51,6 +51,5 @@ protected:
 	void SetSearchContent(const CString& value);
 #endif // SHARED_HANDLERS
 public:
-	int PicGetIndentLevel(HTREEITEM hItem);
-	HTREEITEM PicGetNextItem(HTREEITEM hItem);
+
 };

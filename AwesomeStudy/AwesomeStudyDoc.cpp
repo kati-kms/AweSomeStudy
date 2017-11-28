@@ -155,35 +155,6 @@ void CAwesomeStudyDoc::Dump(CDumpContext& dc) const
 // CAwesomeStudyDoc ¸í·É
 
 
-int CAwesomeStudyDoc::PicGetIndentLevel(HTREEITEM hItem)
-{
-	int iIndent = 0;
-	POSITION pos = GetFirstViewPosition();
-	CAwesomePic *pView = (CAwesomePic*)GetNextView(pos);
 
-	while ((hItem = pView->m_PicTree.GetParentItem(hItem)) != NULL)
-		iIndent++;
-	return iIndent;
-}
-
-
-HTREEITEM CAwesomeStudyDoc::PicGetNextItem(HTREEITEM hItem)
-{
-	HTREEITEM  hti;
-	POSITION pos = GetFirstViewPosition();
-	CAwesomePic *pView = (CAwesomePic*)GetNextView(pos);
-
-	if (pView->m_PicTree.ItemHasChildren(hItem))
-		return pView->m_PicTree.GetChildItem(hItem);           // return first child
-	else {
-		// return next sibling item
-		// Go up the tree to find a parent's sibling if needed.
-		while ((hti = pView->m_PicTree.GetNextSiblingItem(hItem)) == NULL) {
-			if ((hItem = pView->m_PicTree.GetParentItem(hItem)) == NULL)
-				return NULL;
-		}
-	}
-	return hti;
-}
 
 

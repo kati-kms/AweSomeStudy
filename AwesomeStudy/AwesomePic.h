@@ -49,6 +49,8 @@ public:
 	//afx_msg void OnBnClickedFileSave();
 	virtual void OnDraw(CDC* pDC);
 	CEdit m_PicMemo;
+	int PicGetIndentLevel(HTREEITEM hItem);
+	HTREEITEM PicGetNextItem(HTREEITEM hItem);
 };
 
 

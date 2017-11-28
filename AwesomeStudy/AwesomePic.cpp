@@ -92,21 +92,19 @@ void CAwesomePic::OnInitialUpdate()
 		int n = 0;
 		while (hti)
 		{
-			int indent = pDoc->PicGetIndentLevel(hti);
+			int indent = PicGetIndentLevel(hti);
 			while (indent--)
 				pDoc->PicTreeStr[n] += "\t";
 			pDoc->PicTreeStr[n] += m_PicTree.GetItemText(hti);
 			pDoc->PicTreeStr[n++] += "\r";
-			hti = pDoc->PicGetNextItem(hti);
+			hti = PicGetNextItem(hti);
 		}
 	}
 	else if (pDoc->PicIsSaved == 2) {
 		m_PicTree.DeleteAllItems();
 		int n = 0;
 		CString sLine=pDoc->PicTreeStr[n];
-		if (sLine.GetLength()==0)
-			return;
-
+		
 		HTREEITEM hti = NULL;
 		int indent, baseindent = 0;
 		while (sLine[baseindent] == '\t')
@@ -121,7 +119,7 @@ void CAwesomePic::OnInitialUpdate()
 			indent -= baseindent;
 
 			HTREEITEM parent;
-			int previndent = pDoc->PicGetIndentLevel(hti);
+			int previndent = PicGetIndentLevel(hti);
 			if (indent == previndent)
 				parent = m_PicTree.GetParentItem(hti);
 			else if (indent > previndent)
@@ -255,4 +253,30 @@ void CAwesomePic::OnDraw(CDC* pDC)
 		size.cy = Image.GetHeight();
 		SetScrollSizes(MM_TEXT, size);
 	}
+}
+
+int CAwesomePic::PicGetIndentLevel(HTREEITEM hItem)
+{
+	int iIndent = 0;
+	while ((hItem = m_PicTree.GetParentItem(hItem)) != NULL)
+		iIndent++;
+	return iIndent;
+}
+
+
+HTREEITEM CAwesomePic::PicGetNextItem(HTREEITEM hItem)
+{
+	HTREEITEM  hti;
+	
+	if (m_PicTree.ItemHasChildren(hItem))
+		return m_PicTree.GetChildItem(hItem);           // return first child
+	else {
+		// return next sibling item
+		// Go up the tree to find a parent's sibling if needed.
+		while ((hti =m_PicTree.GetNextSiblingItem(hItem)) == NULL) {
+			if ((hItem = m_PicTree.GetParentItem(hItem)) == NULL)
+				return NULL;
+		}
+	}
+	return hti;
 }
