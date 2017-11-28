@@ -123,7 +123,22 @@ BEGIN
     END
     POPUP "write부문"
     BEGIN
-        MENUITEM "전체선택",                        ID_WRITE_SELECTALL
+        MENUITEM "Undo(&U)\tCtrl+Z",            ID_WRITE_UNDO
+        MENUITEM SEPARATOR
+        MENUITEM "Cut(&T)\tCtrl+X",             ID_WRITE_CUT
+        MENUITEM "Copy(&C)\tCtrl+C",            ID_WRITE_COPY
+        MENUITEM "Paste(&P)\tCtrl+V",           ID_WRITE_PASTE
+        MENUITEM "Delete(&L)\tDel",             ID_WRITE_DEL
+        MENUITEM SEPARATOR
+        MENUITEM "Find(&F)\tCtrl+F",            ID_WRITE_FIND
+        MENUITEM "FindNext(&N)\tF3",            ID_WRITE_FINDNEXT
+        MENUITEM "Replace(&R)\tCtrl+H",         ID_WRITE_REPLACE
+        MENUITEM "Go(&G)\tCtrl+G",              ID_WRITE_GO
+        MENUITEM SEPARATOR
+        MENUITEM "Select All(&A)\tCtrl+A",      ID_WRITE_SELECTALL
+        MENUITEM "Date/Time(&D)\tF5",           ID_WRITE_DATETIME
+        MENUITEM SEPARATOR
+        MENUITEM "FontState(&D)\tCtrl+D",       ID_WRITE_FONTSTATE
     END
     POPUP "시간표(&T)"
     BEGIN

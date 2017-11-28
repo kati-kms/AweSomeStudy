@@ -36,6 +36,17 @@ public:
 	afx_msg void OnBnClickedWriteSave();
 	afx_msg void OnWriteSelectall();
 	afx_msg void OnBnClickedWriteClose();
-};
+	afx_msg void OnWriteUndo();
+	afx_msg void OnWriteCut();
+	afx_msg void OnWriteCopy();
+	afx_msg void OnWritePaste();
+	afx_msg void OnWriteDel();
+	afx_msg void OnWriteFind();
+	afx_msg void OnWriteFindnext();
+	afx_msg void OnWriteReplace();
+	afx_msg void OnWriteGo();
+	afx_msg void OnWriteDatetime();
+	afx_msg void OnWriteFontstate();
+	};
 
 
