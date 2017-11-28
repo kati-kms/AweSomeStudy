@@ -32,7 +32,6 @@ void CAwesomePic::DoDataExchange(CDataExchange* pDX)
 }
 
 BEGIN_MESSAGE_MAP(CAwesomePic, CFormView)
-
 	ON_COMMAND(IDC_HOME, &CAwesomePic::OnHome)
 	ON_NOTIFY(NM_CLICK, IDC_PicTree, &CAwesomePic::OnNMClickPictree)
 	ON_BN_CLICKED(IDC_PIC_ADD_FOLDER, &CAwesomePic::OnBnClickedPicAddFolder)
@@ -118,6 +117,9 @@ void CAwesomePic::OnNMClickPictree(NMHDR *pNMHDR, LRESULT *pResult)
 		IsPic = 1;
 		Invalidate();
 	}
+	else if (PicNodePath.Compare(_T("1"))) {
+		return;
+	}
 	else {
 		AfxMessageBox(_T("그림 파일이 아니거나 파일이 이동되었습니다."));
 		pDoc->PicNodeToPathMap.RemoveKey(m_PicTree.GetItemText(PicNode));
@@ -193,11 +195,12 @@ void CAwesomePic::OnDraw(CDC* pDC)
 	CAwesomeStudyDoc* pDoc = GetDocument();
 	if (IsPic == 1) {   //노드를 클릭해서 사진을 띄워야하면 사진띄우기
 		CImage Image;
-		Image.BitBlt(pDC->m_hDC, 700, 5, SRCCOPY);
+		Image.Load(PicNodePath);
+		//Image.BitBlt(pDC->m_hDC, 700, 5, SRCCOPY);
+		Image.StretchBlt(pDC->m_hDC, 700, 5, 500, 500, SRCCOPY);
 		CSize size;
-		size.cx = Image.GetWidth();
+		size.cx = Image.GetWidth()+700;
 		size.cy = Image.GetHeight();
 		SetScrollSizes(MM_TEXT, size);
-
 	}
 }
