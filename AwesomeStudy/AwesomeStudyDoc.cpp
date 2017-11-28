@@ -11,6 +11,7 @@
 
 #include "AwesomeStudyDoc.h"
 #include "AwesomePic.h"
+#include "MainFrm.h"
 
 #include <propkey.h>
 
@@ -61,8 +62,10 @@ void CAwesomeStudyDoc::Serialize(CArchive& ar)
 		// TODO: 여기에 저장 코드를 추가합니다.
 		PicNodeToPathMap.Serialize(ar);
 		PicNodeToTextMap.Serialize(ar);
-		POSITION pos = GetFirstViewPosition();
-		CAwesomePic *pView = (CAwesomePic*)GetNextView(pos);
+		//POSITION pos = GetFirstViewPosition();
+		//CAwesomePic *pView = (CAwesomePic*)GetNextView(pos);
+		CMainFrame* mView = (CMainFrame*)AfxGetMainWnd();
+		CAwesomePic *pView = (CAwesomePic*)mView->m_pwndPic;
 		HTREEITEM hti = pView->m_PicTree.GetRootItem();
 		while (hti)
 		{
@@ -79,8 +82,10 @@ void CAwesomeStudyDoc::Serialize(CArchive& ar)
 		PicIsSaved = 1;
 		PicNodeToPathMap.Serialize(ar);
 		PicNodeToTextMap.Serialize(ar);
-		POSITION pos = GetFirstViewPosition();
-		CAwesomePic *pView = (CAwesomePic*)GetNextView(pos);
+		//POSITION pos = GetFirstViewPosition();
+		//CAwesomePic *pView = (CAwesomePic*)GetNextView(pos);
+		CMainFrame* mView = (CMainFrame*)AfxGetMainWnd();
+		CAwesomePic *pView = (CAwesomePic*)mView->m_pwndPic;
 		pView->m_PicTree.DeleteAllItems();
 
 		CString sLine;
@@ -193,8 +198,8 @@ void CAwesomeStudyDoc::Dump(CDumpContext& dc) const
 int CAwesomeStudyDoc::PicGetIndentLevel(HTREEITEM hItem)
 {
 	int iIndent = 0;
-	POSITION pos = GetFirstViewPosition();
-	CAwesomePic *pView = (CAwesomePic*)GetNextView(pos);
+	CMainFrame* mView = (CMainFrame*)AfxGetMainWnd();
+	CAwesomePic *pView = (CAwesomePic*)mView->m_pwndPic;
 
 	while ((hItem = pView->m_PicTree.GetParentItem(hItem)) != NULL)
 		iIndent++;
@@ -205,8 +210,8 @@ int CAwesomeStudyDoc::PicGetIndentLevel(HTREEITEM hItem)
 HTREEITEM CAwesomeStudyDoc::PicGetNextItem(HTREEITEM hItem)
 {
 	HTREEITEM  hti;
-	POSITION pos = GetFirstViewPosition();
-	CAwesomePic *pView = (CAwesomePic*)GetNextView(pos);
+	CMainFrame* mView = (CMainFrame*)AfxGetMainWnd();
+	CAwesomePic *pView = (CAwesomePic*)mView->m_pwndPic;
 
 	if (pView->m_PicTree.ItemHasChildren(hItem))
 		return pView->m_PicTree.GetChildItem(hItem);           // return first child

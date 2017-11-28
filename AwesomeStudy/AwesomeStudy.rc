@@ -129,6 +129,11 @@ BEGIN
     BEGIN
         MENUITEM "추가(&A)",                      ID_ADD
     END
+    POPUP "file"
+    BEGIN
+        MENUITEM "open",                        ID_FILE_OPEN
+        MENUITEM "save",                        ID_FILE_SAVE
+    END
 END
 
 
@@ -177,10 +182,9 @@ FONT 9, "MS Shell Dlg", 0, 0, 0x1
 BEGIN
     LTEXT           "비밀번호",IDC_STATIC,20,76,39,8
     EDITTEXT        IDC_PASSWORD,68,76,122,14,ES_AUTOHSCROLL
-    PUSHBUTTON      "열기",IDC_OPEN,14,45,50,14
     PUSHBUTTON      "로그인",IDC_LOGIN,208,76,50,14
     LTEXT           "",IDC_PATH,98,45,349,13
-    LTEXT           "PATH :",IDC_STATIC,71,45,25,8
+    LTEXT           "PATH :",IDC_STATIC,71,45,141,8
 END
 
 IDD_AWESOMEHOME DIALOGEX 0, 0, 451, 270
