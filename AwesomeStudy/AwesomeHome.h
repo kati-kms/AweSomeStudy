@@ -22,6 +22,15 @@ public:
 	virtual void Dump(CDumpContext& dc) const;
 #endif
 #endif
+public :
+	CString class_name; // EditBox > 강의명
+	CString class_professor; // EditBox > 교수명
+	int class_day; // ComboBox > 시간(요일)
+	int class_start_hour; // ComboBox > 시간(시)
+	int class_start_minute; // ComboBox > 시간(분)
+	int class_end_hour; // ComboBox > 시간(시)
+	int class_end_minute; // ComboBox > 시간(분)
+	CString class_room; // EditBox > 강의장 
 
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 지원입니다.
@@ -32,6 +41,8 @@ public:
 	afx_msg void OnBnClickedHomeWrite();
 	afx_msg void OnBnClickedHomePic();
 	afx_msg void OnBnClickedHomeMindmap();
+	virtual void OnDraw(CDC* /*pDC*/);
+	afx_msg void OnAdd();
 };
 
 
