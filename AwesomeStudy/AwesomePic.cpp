@@ -86,6 +86,7 @@ void CAwesomePic::OnInitialUpdate()
 		CAwesomeStudyDoc* pDoc = GetDocument();
 		HTREEITEM root_branch = m_PicTree.InsertItem(_T("고급컴퓨터수학"), TVI_ROOT);
 		pDoc->PicNodeToPathMap.SetAt(m_PicTree.GetItemText(root_branch), _T("1"));
+		m_PicTree.Select(root_branch, TVGN_CARET);
 	}
 }
 
@@ -112,9 +113,15 @@ void CAwesomePic::OnNMClickPictree(NMHDR *pNMHDR, LRESULT *pResult)
 	CString str;
 	pDoc->PicNodeToTextMap.Lookup(name, str);
 	m_PicMemo.SetWindowText(str);
-	if (PicNodePath.Compare(_T("1"))) {    //사진이라고 판명나면 check=1;
+	CImage image;
+	if (SUCCEEDED(image.Load(PicNodePath))) {    //사진이라고 판명나면 check=1;
 		IsPic = 1;
 		Invalidate();
+	}
+	else {
+		AfxMessageBox(_T("그림 파일이 아니거나 파일이 이동되었습니다."));
+		pDoc->PicNodeToPathMap.RemoveKey(m_PicTree.GetItemText(PicNode));
+		m_PicTree.DeleteItem(PicNode);
 	}
 	*pResult = 0;
 }
@@ -186,14 +193,6 @@ void CAwesomePic::OnDraw(CDC* pDC)
 	CAwesomeStudyDoc* pDoc = GetDocument();
 	if (IsPic == 1) {   //노드를 클릭해서 사진을 띄워야하면 사진띄우기
 		CImage Image;
-		if (FAILED(Image.Load(PicNodePath))) {
-			AfxMessageBox(_T("그림 파일이 아니거나 파일이 이동되었습니다."));
-			pDoc->PicNodeToPathMap.RemoveKey(m_PicTree.GetItemText(PicNode));
-			m_PicTree.DeleteItem(PicNode);
-			IsPic = 0;
-			return;
-		}
-
 		Image.BitBlt(pDC->m_hDC, 700, 5, SRCCOPY);
 		CSize size;
 		size.cx = Image.GetWidth();
