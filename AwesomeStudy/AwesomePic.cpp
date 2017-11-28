@@ -98,10 +98,13 @@ CAwesomeStudyDoc* CAwesomePic::GetDocument() const
 }
 
 
-void CAwesomePic::OnNMClickPictree(NMHDR *pNMHDR, LRESULT *pResult)
-{
+void CAwesomePic::OnNMClickPictree(NMHDR *pNMHDR, LRESULT *pResult){
 	CAwesomeStudyDoc* pDoc = GetDocument();
-	IsPic = 0;                 //사진이 아닐때를 위해 초기화
+	CString preNodeName=m_PicTree.GetItemText(PicNode);
+	CString preNodeText;
+	m_PicMemo.GetWindowText(preNodeText);
+	pDoc->PicNodeToTextMap.SetAt(preNodeName, preNodeText);
+	IsPic = 0;             //사진이 아닐때를 위해 초기화
 	CPoint p;
 	GetCursorPos(&p);
 	UINT flag;
@@ -117,7 +120,7 @@ void CAwesomePic::OnNMClickPictree(NMHDR *pNMHDR, LRESULT *pResult)
 		IsPic = 1;
 		Invalidate();
 	}
-	else if (PicNodePath.Compare(_T("1"))) {
+	else if (str.Compare(_T("1"))) {     //
 		return;
 	}
 	else {
