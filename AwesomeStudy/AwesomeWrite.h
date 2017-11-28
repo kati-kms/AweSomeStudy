@@ -1,9 +1,11 @@
 #pragma once
+#include "afxwin.h"
 
 
-// CAwesomeWrite ∫‰¿‘¥œ¥Ÿ.
 
-class CAwesomeWrite : public CRichEditView
+// CAwesomeWrite ∆˚ ∫‰¿‘¥œ¥Ÿ.
+
+class CAwesomeWrite : public CFormView
 {
 	DECLARE_DYNCREATE(CAwesomeWrite)
 
@@ -12,6 +14,9 @@ public:
 	virtual ~CAwesomeWrite();
 
 public:
+#ifdef AFX_DESIGN_TIME
+	enum { IDD = IDD_AWESOMEWRITE };
+#endif
 #ifdef _DEBUG
 	virtual void AssertValid() const;
 #ifndef _WIN32_WCE
@@ -20,9 +25,17 @@ public:
 #endif
 
 protected:
+	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV ¡ˆø¯¿‘¥œ¥Ÿ.
+
 	DECLARE_MESSAGE_MAP()
 public:
 	afx_msg void OnHome();
+	virtual BOOL Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, CCreateContext* pContext = NULL);
+	CEdit m_write;
+	afx_msg void OnBnClickedWriteAllclear();
+	afx_msg void OnBnClickedWriteSave();
+	afx_msg void OnWriteSelectall();
+	afx_msg void OnBnClickedWriteClose();
 };
 
 

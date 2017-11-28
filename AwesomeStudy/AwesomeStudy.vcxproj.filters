@@ -42,9 +42,6 @@
     <ClInclude Include="AwesomeHome.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="AwesomeWrite.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="AwesomePic.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -52,6 +49,9 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="PicNameDialog.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="AwesomeWrite.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
@@ -74,9 +74,6 @@
     <ClCompile Include="AwesomeHome.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="AwesomeWrite.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="AwesomePic.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -84,6 +81,9 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="PicNameDialog.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="AwesomeWrite.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
