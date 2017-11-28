@@ -11,6 +11,7 @@
 
 #include "AwesomeStudyDoc.h"
 #include "AwesomePic.h"
+#include "MainFrm.h"
 
 #include <propkey.h>
 
@@ -61,60 +62,24 @@ void CAwesomeStudyDoc::Serialize(CArchive& ar)
 		// TODO: 여기에 저장 코드를 추가합니다.
 		PicNodeToPathMap.Serialize(ar);
 		PicNodeToTextMap.Serialize(ar);
-		POSITION pos = GetFirstViewPosition();
-		CAwesomePic *pView = (CAwesomePic*)GetNextView(pos);
-		HTREEITEM hti = pView->m_PicTree.GetRootItem();
-		while (hti)
-		{
-			int indent = PicGetIndentLevel(hti);
-			while (indent--)
-				ar.WriteString(_T("\t"));
-			ar.WriteString(pView->m_PicTree.GetItemText(hti) + "\r\n");
-			hti = PicGetNextItem(hti);
-		}
+		//POSITION pos = GetFirstViewPosition();
+		//CAwesomePic *pView = (CAwesomePic*)GetNextView(pos);
+		/*CMainFrame *mView = (CMainFrame*)AfxGetMainWnd();
+		CAwesomePic *pView = (CAwesomePic*)mView->m_pwndPic;
+		*/
+		PicIsSaved = 1;
 	}
 	else
 	{
 		// TODO: 여기에 로딩 코드를 추가합니다.
-		PicIsSaved = 1;
+		PicIsSaved = 2;
 		PicNodeToPathMap.Serialize(ar);
 		PicNodeToTextMap.Serialize(ar);
-		POSITION pos = GetFirstViewPosition();
-		CAwesomePic *pView = (CAwesomePic*)GetNextView(pos);
-		pView->m_PicTree.DeleteAllItems();
-
-		CString sLine;
-		if (!ar.ReadString(sLine))
-			return;
-
-		HTREEITEM hti = NULL;
-		int indent, baseindent = 0;
-		while (sLine[baseindent] == '\t')
-			baseindent++;
-		do
-		{
-			if (sLine.GetLength() == 0)
-				continue;
-			for (indent = 0; sLine[indent] == '\t'; indent++)
-				;               // We don't need a body
-			sLine = sLine.Right(sLine.GetLength() - indent);
-			indent -= baseindent;
-
-			HTREEITEM parent;
-			int previndent = PicGetIndentLevel(hti);
-			if (indent == previndent)
-				parent = pView->m_PicTree.GetParentItem(hti);
-			else if (indent > previndent)
-				parent = hti;
-			else
-			{
-				int nLevelsUp = previndent - indent;
-				parent = pView->m_PicTree.GetParentItem(hti);
-				while (nLevelsUp--)
-					parent = pView->m_PicTree.GetParentItem(parent);
-			}
-			hti = pView->m_PicTree.InsertItem(sLine, parent ? parent : TVI_ROOT, TVI_LAST);
-		} while (ar.ReadString(sLine));
+		//POSITION pos = GetFirstViewPosition();
+		//CAwesomePic *pView = (CAwesomePic*)GetNextView(pos);
+		/*CMainFrame *mView = (CMainFrame*)AfxGetMainWnd();
+		CAwesomePic *pView = (CAwesomePic*)mView->m_pwndPic;
+		*/
 	}
 }
 

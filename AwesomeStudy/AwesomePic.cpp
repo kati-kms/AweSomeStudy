@@ -87,6 +87,55 @@ void CAwesomePic::OnInitialUpdate()
 		pDoc->PicNodeToPathMap.SetAt(m_PicTree.GetItemText(root_branch), _T("1"));
 		m_PicTree.Select(root_branch, TVGN_CARET);
 	}
+	else if (pDoc->PicIsSaved==1) {
+		HTREEITEM hti = m_PicTree.GetRootItem();
+		int n = 0;
+		while (hti)
+		{
+			int indent = pDoc->PicGetIndentLevel(hti);
+			while (indent--)
+				pDoc->PicTreeStr[n] += "\t";
+			pDoc->PicTreeStr[n] += m_PicTree.GetItemText(hti);
+			pDoc->PicTreeStr[n++] += "\r";
+			hti = pDoc->PicGetNextItem(hti);
+		}
+	}
+	else if (pDoc->PicIsSaved == 2) {
+		m_PicTree.DeleteAllItems();
+		int n = 0;
+		CString sLine=pDoc->PicTreeStr[n];
+		if (sLine.GetLength()==0)
+			return;
+
+		HTREEITEM hti = NULL;
+		int indent, baseindent = 0;
+		while (sLine[baseindent] == '\t')
+			baseindent++;
+		do
+		{
+			if (sLine.GetLength() == 0)
+				continue;
+			for (indent = 0; sLine[indent] == '\t'; indent++)
+				;               // We don't need a body
+			sLine = sLine.Right(sLine.GetLength() - indent);
+			indent -= baseindent;
+
+			HTREEITEM parent;
+			int previndent = pDoc->PicGetIndentLevel(hti);
+			if (indent == previndent)
+				parent = m_PicTree.GetParentItem(hti);
+			else if (indent > previndent)
+				parent = hti;
+			else
+			{
+				int nLevelsUp = previndent - indent;
+				parent = m_PicTree.GetParentItem(hti);
+				while (nLevelsUp--)
+					parent = m_PicTree.GetParentItem(parent);
+			}
+			hti = m_PicTree.InsertItem(sLine, parent ? parent : TVI_ROOT, TVI_LAST);
+		} while ((sLine = pDoc->PicTreeStr[++n])&&sLine.GetLength()==0);
+	}
 }
 
 

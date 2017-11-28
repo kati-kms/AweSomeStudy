@@ -18,6 +18,7 @@ public:
 	CMapStringToString PicNodeToTextMap;
 	int PicIsSaved;
 	CString PicPath;
+	CArray<CString, CString> PicTreeStr;
 
 // 작업입니다.
 public:
