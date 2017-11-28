@@ -38,7 +38,7 @@ BEGIN_MESSAGE_MAP(CAwesomePic, CFormView)
 	ON_BN_CLICKED(IDC_PIC_ADD_FOLDER, &CAwesomePic::OnBnClickedPicAddFolder)
 	ON_BN_CLICKED(IDC_PIC_ADD_FILE, &CAwesomePic::OnBnClickedPicAddFile)
 	ON_BN_CLICKED(IDC_PIC_DELETE, &CAwesomePic::OnBnClickedPicDelete)
-	ON_BN_CLICKED(ID_FILE_SAVE, &CAwesomePic::OnBnClickedFileSave)
+	//ON_BN_CLICKED(ID_FILE_SAVE, &CAwesomePic::OnBnClickedFileSave)
 END_MESSAGE_MAP()
 
 
@@ -172,13 +172,13 @@ void CAwesomePic::OnBnClickedPicDelete()
 }
 
 
-void CAwesomePic::OnBnClickedFileSave()
+/*void CAwesomePic::OnBnClickedFileSave()
 {
 	CAwesomeStudyDoc* pDoc = GetDocument();
 	CString str;
 	m_PicMemo.GetWindowText(str);
 	pDoc->PicNodeToTextMap.SetAt(m_PicTree.GetItemText(PicNode), str);
-}
+}*/
 
 
 void CAwesomePic::OnDraw(CDC* pDC)

@@ -46,7 +46,7 @@ public:
 	afx_msg void OnBnClickedPicAddFolder();
 	afx_msg void OnBnClickedPicAddFile();
 	afx_msg void OnBnClickedPicDelete();
-	afx_msg void OnBnClickedFileSave();
+	//afx_msg void OnBnClickedFileSave();
 	virtual void OnDraw(CDC* pDC);
 	CEdit m_PicMemo;
 };
