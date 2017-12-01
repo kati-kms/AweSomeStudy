@@ -47,6 +47,7 @@ public:
 	afx_msg void OnWriteGo();
 	afx_msg void OnWriteDatetime();
 	afx_msg void OnWriteFontstate();
-	};
+	afx_msg void OnEnChangeWrite();
+};
 
 

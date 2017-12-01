@@ -14,7 +14,6 @@
 #define IDD_AWESOMEWRITE                313
 #define IDD_DIALOG1                     316
 #define IDD_ADD_CLASS                   321
-#define IDD_SET_PASSWORD                324
 #define IDC_PASSWORD                    1000
 #define IDC_OPEN                        1002
 #define IDC_LOGIN                       1003
@@ -89,15 +88,14 @@
 #define ID_WRITE_FINDREPLACE            32814
 #define ID_WRITE32815                   32815
 #define ID_WRITE32816                   32816
-#define ID_FILE_32817                   32817
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        326
-#define _APS_NEXT_COMMAND_VALUE         32818
-#define _APS_NEXT_CONTROL_VALUE         1048
+#define _APS_NEXT_RESOURCE_VALUE        324
+#define _APS_NEXT_COMMAND_VALUE         32832
+#define _APS_NEXT_CONTROL_VALUE         1045
 #define _APS_NEXT_SYMED_VALUE           314
 #endif
 #endif
