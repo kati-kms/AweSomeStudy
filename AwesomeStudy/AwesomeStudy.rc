@@ -159,19 +159,26 @@ END
 
 IDR_MAINFRAME ACCELERATORS
 BEGIN
-    "N",            ID_FILE_NEW,            VIRTKEY, CONTROL
-    "O",            ID_FILE_OPEN,           VIRTKEY, CONTROL
-    "S",            ID_FILE_SAVE,           VIRTKEY, CONTROL
-    "Z",            ID_EDIT_UNDO,           VIRTKEY, CONTROL
-    "X",            ID_EDIT_CUT,            VIRTKEY, CONTROL
-    "C",            ID_EDIT_COPY,           VIRTKEY, CONTROL
-    "V",            ID_EDIT_PASTE,          VIRTKEY, CONTROL
-    VK_BACK,        ID_EDIT_UNDO,           VIRTKEY, ALT
-    VK_DELETE,      ID_EDIT_CUT,            VIRTKEY, SHIFT
-    VK_INSERT,      ID_EDIT_COPY,           VIRTKEY, CONTROL
-    VK_INSERT,      ID_EDIT_PASTE,          VIRTKEY, SHIFT
-    VK_F6,          ID_NEXT_PANE,           VIRTKEY 
-    VK_F6,          ID_PREV_PANE,           VIRTKEY, SHIFT
+    VK_INSERT,      ID_EDIT_COPY,           VIRTKEY, CONTROL, NOINVERT
+    VK_DELETE,      ID_EDIT_CUT,            VIRTKEY, SHIFT, NOINVERT
+    VK_INSERT,      ID_EDIT_PASTE,          VIRTKEY, SHIFT, NOINVERT
+    VK_BACK,        ID_EDIT_UNDO,           VIRTKEY, ALT, NOINVERT
+    "N",            ID_FILE_NEW,            VIRTKEY, CONTROL, NOINVERT
+    "O",            ID_FILE_OPEN,           VIRTKEY, CONTROL, NOINVERT
+    "S",            ID_FILE_SAVE,           VIRTKEY, CONTROL, NOINVERT
+    VK_F6,          ID_NEXT_PANE,           VIRTKEY, NOINVERT
+    VK_F6,          ID_PREV_PANE,           VIRTKEY, SHIFT, NOINVERT
+    "C",            ID_WRITE_COPY,          VIRTKEY, CONTROL, NOINVERT
+    "X",            ID_WRITE_CUT,           VIRTKEY, CONTROL, NOINVERT
+    VK_F5,          ID_WRITE_DATETIME,      VIRTKEY, NOINVERT
+    VK_DELETE,      ID_WRITE_DEL,           VIRTKEY, NOINVERT
+    "F",            ID_WRITE_FIND,          VIRTKEY, CONTROL, NOINVERT
+    VK_F3,          ID_WRITE_FINDNEXT,      VIRTKEY, NOINVERT
+    "G",            ID_WRITE_GO,            VIRTKEY, CONTROL, NOINVERT
+    "V",            ID_WRITE_PASTE,         VIRTKEY, CONTROL, NOINVERT
+    "H",            ID_WRITE_REPLACE,       VIRTKEY, CONTROL, NOINVERT
+    "A",            ID_WRITE_SELECTALL,     VIRTKEY, CONTROL, NOINVERT
+    "Z",            ID_WRITE_UNDO,          VIRTKEY, CONTROL, NOINVERT
 END
 
 

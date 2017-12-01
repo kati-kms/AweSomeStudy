@@ -44,6 +44,7 @@ BEGIN_MESSAGE_MAP(CAwesomeWrite, CFormView)
 	ON_COMMAND(ID_WRITE_GO, &CAwesomeWrite::OnWriteGo)
 	ON_COMMAND(ID_WRITE_DATETIME, &CAwesomeWrite::OnWriteDatetime)
 	ON_COMMAND(ID_WRITE_FONTSTATE, &CAwesomeWrite::OnWriteFontstate)
+	ON_EN_CHANGE(IDC_WRITE, &CAwesomeWrite::OnEnChangeWrite)
 END_MESSAGE_MAP()
 
 
@@ -164,6 +165,7 @@ void CAwesomeWrite::OnWriteFind()
 void CAwesomeWrite::OnWriteFindnext()
 {
 	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+	//문자열 찾는거 실질적인 기능 추가 --> viewedit.cpp 에서 확인
 }
 
 void CAwesomeWrite::OnWriteReplace()
@@ -176,13 +178,15 @@ void CAwesomeWrite::OnWriteReplace()
 		pReplaceDlg = new CFindReplaceDialog();
 		pReplaceDlg->Create(FALSE, _T(""), _T(""), FR_DOWN, this);
 	}
-
+	//문자열 찾는거 실질적인 기능 추가 --> viewedit.cpp 에서 확인
 }
 
 void CAwesomeWrite::OnWriteGo()
 {
 	// TODO: 여기에 명령 처리기 코드를 추가합니다.
 	//찾아서 다음거로 가는것. // 다이얼로그 띄어서 할지말지
+	//전체 줄 기억하는 변수 만들기 // enchanged 이벤트 처리기에서 처리
+	//커서이동이 포인트! > viewedit.cpp
 }
 
 //----------------------------------------
@@ -206,6 +210,20 @@ void CAwesomeWrite::OnWriteDatetime()
 void CAwesomeWrite::OnWriteFontstate()
 {
 	// TODO: 여기에 명령 처리기 코드를 추가합니다.
-	//cfont dialog
+	//cfont dialog // 책
 }
 
+//-----------------------------------------------------------------------edit창 자체 이벤트 컨트롤------------------------------------------------------
+
+void CAwesomeWrite::OnEnChangeWrite()
+{
+	// TODO:  RICHEDIT 컨트롤인 경우, 이 컨트롤은
+	// CFormView::OnInitDialog() 함수를 재지정 
+	//하고 마스크에 OR 연산하여 설정된 ENM_CHANGE 플래그를 지정하여 CRichEditCtrl().SetEventMask()를 호출하지 않으면
+	// 이 알림 메시지를 보내지 않습니다.
+
+	// TODO:  여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	// 문자열이 바뀌면 Updata()? 함수 호출 // for 저장
+	// 문자열이 바뀌면 전체줄 기억하기
+
+}
