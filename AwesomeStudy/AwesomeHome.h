@@ -43,6 +43,7 @@ public:
 	afx_msg void OnBnClickedHomeMindmap();
 	virtual void OnDraw(CDC* /*pDC*/);
 	afx_msg void OnAdd();
+	afx_msg void OnUpdateFileOpen(CCmdUI *pCmdUI);
 };
 
 

@@ -12,6 +12,8 @@
 #include "AwesomeStudyDoc.h"
 #include "AwesomePic.h"
 #include "MainFrm.h"
+#include "AwesomeStudyView.h"
+#include "VeiwPassDialog.h"
 
 #include <propkey.h>
 
@@ -33,6 +35,7 @@ CAwesomeStudyDoc::CAwesomeStudyDoc()
 {
 	// TODO: 여기에 일회성 생성 코드를 추가합니다.
 	PicIsSaved = 0;
+	NewFile = 0;
 }
 
 CAwesomeStudyDoc::~CAwesomeStudyDoc()
@@ -60,10 +63,17 @@ void CAwesomeStudyDoc::Serialize(CArchive& ar)
 	if (ar.IsStoring())
 	{
 		// TODO: 여기에 저장 코드를 추가합니다.
+		ar << NewFile;
 		PicNodeToPathMap.Serialize(ar);
 		PicNodeToTextMap.Serialize(ar);
-		//POSITION pos = GetFirstViewPosition();
-		//CAwesomePic *pView = (CAwesomePic*)GetNextView(pos);
+		if (NewFile == 0) {
+			CVeiwPassDialog dlg;
+			if (dlg.DoModal() == IDOK) {
+				PassWord = dlg.m_password.GetString();
+			}
+		}
+		ar << PassWord;
+		
 		CMainFrame* mView = (CMainFrame*)AfxGetMainWnd();
 		CAwesomePic *pView = (CAwesomePic*)mView->m_pwndPic;
 		HTREEITEM hti = pView->m_PicTree.GetRootItem();
@@ -75,15 +85,19 @@ void CAwesomeStudyDoc::Serialize(CArchive& ar)
 			ar.WriteString(pView->m_PicTree.GetItemText(hti) + "\r\n");
 			hti = PicGetNextItem(hti);
 		}
+
+
 	}
 	else
 	{
+		NewFile = 1;    //새로운 파일이 아니므로 매번 비밀번호를 새로 생성할 필요x
+		ar >> NewFile;
 		// TODO: 여기에 로딩 코드를 추가합니다.
-		PicIsSaved = 1;
+		PicIsSaved = 1; //pic이 로드됨
 		PicNodeToPathMap.Serialize(ar);
 		PicNodeToTextMap.Serialize(ar);
-		//POSITION pos = GetFirstViewPosition();
-		//CAwesomePic *pView = (CAwesomePic*)GetNextView(pos);
+		ar >> PassWord;
+
 		CMainFrame* mView = (CMainFrame*)AfxGetMainWnd();
 		CAwesomePic *pView = (CAwesomePic*)mView->m_pwndPic;
 		pView->m_PicTree.DeleteAllItems();
@@ -120,6 +134,7 @@ void CAwesomeStudyDoc::Serialize(CArchive& ar)
 			}
 			hti = pView->m_PicTree.InsertItem(sLine, parent ? parent : TVI_ROOT, TVI_LAST);
 		} while (ar.ReadString(sLine));
+	
 	}
 }
 

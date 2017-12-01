@@ -197,6 +197,7 @@
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="VeiwPassDialog.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AwesomeHome.cpp" />
@@ -214,6 +215,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="VeiwPassDialog.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="AwesomeStudy.reg" />

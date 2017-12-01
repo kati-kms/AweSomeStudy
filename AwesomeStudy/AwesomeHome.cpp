@@ -38,6 +38,7 @@ BEGIN_MESSAGE_MAP(CAwesomeHome, CFormView)
 	ON_BN_CLICKED(IDC_HOME_PIC, &CAwesomeHome::OnBnClickedHomePic)
 	ON_BN_CLICKED(IDC_HOME_MINDMAP, &CAwesomeHome::OnBnClickedHomeMindmap)
 	ON_COMMAND(ID_ADD, &CAwesomeHome::OnAdd)
+	ON_UPDATE_COMMAND_UI(ID_FILE_OPEN, &CAwesomeHome::OnUpdateFileOpen)
 END_MESSAGE_MAP()
 
 
@@ -156,4 +157,15 @@ void CAwesomeHome::OnAdd()
 	dc.DrawText(class_name, &rect, TA_LEFT | TA_TOP | DT_EXPANDTABS | DT_WORDBREAK);
 
 	// To Do : rect를 저장할 List 생성하기
+}
+
+
+void CAwesomeHome::OnUpdateFileOpen(CCmdUI *pCmdUI)
+{
+	/*CMainFrame* mView = (CMainFrame*)AfxGetMainWnd();
+	CView *pView = mView->GetActiveView();
+	if (pView == mView->m_pwndHome) {
+		pCmdUI->Enable(0);
+	}*/   //지우지마시오 ㅠㅠㅠㅠㅠㅠㅠ
+	// TODO: 여기에 명령 업데이트 UI 처리기 코드를 추가합니다.
 }

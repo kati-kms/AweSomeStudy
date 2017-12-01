@@ -14,6 +14,8 @@ protected: // serialization에서만 만들어집니다.
 
 // 특성입니다.
 public:
+	int NewFile;
+	CString PassWord;
 	CMapStringToString PicNodeToPathMap;
 	CMapStringToString PicNodeToTextMap;
 	int PicIsSaved;
