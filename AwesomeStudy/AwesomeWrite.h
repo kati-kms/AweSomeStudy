@@ -48,6 +48,12 @@ public:
 	afx_msg void OnWriteDatetime();
 	afx_msg void OnWriteFontstate();
 	afx_msg void OnEnChangeWrite();
+	CFindReplaceDialog *pFindDlg;
+	CFindReplaceDialog *pReplaceDlg;
+	int m_next_start;//검색을 위해 저장
+	bool m_find_next; // 다음검색 함수를 위해
+protected:
+	LRESULT OnFindReplaceCmd(WPARAM wParam, LPARAM lParam);
 };
 
 

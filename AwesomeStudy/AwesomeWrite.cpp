@@ -6,15 +6,21 @@
 #include "AwesomeWrite.h"
 #include "MainFrm.h"
 
+#include "WriteGoLine.h"
+
 
 // CAwesomeWrite
+static UINT WM_FINDREPLACE = ::RegisterWindowMessage(FINDMSGSTRING);
 
 IMPLEMENT_DYNCREATE(CAwesomeWrite, CFormView)
 
 CAwesomeWrite::CAwesomeWrite()
 	: CFormView(IDD_AWESOMEWRITE)
 {
-
+	pFindDlg = NULL;
+	pReplaceDlg = NULL;
+	m_next_start = 0;
+	m_find_next = false;
 }
 
 CAwesomeWrite::~CAwesomeWrite()
@@ -45,6 +51,7 @@ BEGIN_MESSAGE_MAP(CAwesomeWrite, CFormView)
 	ON_COMMAND(ID_WRITE_DATETIME, &CAwesomeWrite::OnWriteDatetime)
 	ON_COMMAND(ID_WRITE_FONTSTATE, &CAwesomeWrite::OnWriteFontstate)
 	ON_EN_CHANGE(IDC_WRITE, &CAwesomeWrite::OnEnChangeWrite)
+	ON_REGISTERED_MESSAGE(WM_FINDREPLACE, OnFindReplaceCmd)
 END_MESSAGE_MAP()
 
 
@@ -88,11 +95,9 @@ BOOL CAwesomeWrite::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD 
 void CAwesomeWrite::OnBnClickedWriteAllclear()
 {
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
-
 	int len = m_write.GetWindowTextLength();
 	m_write.SetSel(0, len);
 	m_write.Clear();
-
 }
 
 void CAwesomeWrite::OnBnClickedWriteSave()
@@ -152,41 +157,54 @@ void CAwesomeWrite::OnWriteDel()
 void CAwesomeWrite::OnWriteFind()
 {
 	// TODO: 여기에 명령 처리기 코드를 추가합니다.
-	CFindReplaceDialog *pFindDlg = NULL;
 	if (pFindDlg != NULL)
 		pFindDlg->SetFocus();
 	else {
 		pFindDlg = new CFindReplaceDialog();
 		pFindDlg->Create(TRUE, _T(""), _T(""), FR_DOWN, this);
 	}
-
 }
 
 void CAwesomeWrite::OnWriteFindnext()
 {
 	// TODO: 여기에 명령 처리기 코드를 추가합니다.
 	//문자열 찾는거 실질적인 기능 추가 --> viewedit.cpp 에서 확인
+	m_find_next = true;
+	OnFindReplaceCmd(0,0);
 }
 
 void CAwesomeWrite::OnWriteReplace()
 {
 	// TODO: 여기에 명령 처리기 코드를 추가합니다.
-	CFindReplaceDialog *pReplaceDlg = NULL;
 	if (pReplaceDlg != NULL)
 		pReplaceDlg->SetFocus();
 	else {
 		pReplaceDlg = new CFindReplaceDialog();
 		pReplaceDlg->Create(FALSE, _T(""), _T(""), FR_DOWN, this);
 	}
-	//문자열 찾는거 실질적인 기능 추가 --> viewedit.cpp 에서 확인
 }
 
 void CAwesomeWrite::OnWriteGo()
 {
 	// TODO: 여기에 명령 처리기 코드를 추가합니다.
-	//찾아서 다음거로 가는것. // 다이얼로그 띄어서 할지말지
-	//전체 줄 기억하는 변수 만들기 // enchanged 이벤트 처리기에서 처리
-	//커서이동이 포인트! > viewedit.cpp
+	CWriteGoLine dlg;
+	int TotalLine = m_write.GetLineCount();
+	int result = dlg.DoModal();
+
+	if (result == IDOK) {
+		if (dlg.m_line > TotalLine) {
+			//오류
+			AfxMessageBox(_T("줄번호가 전체 줄 수를 넘습니다"),MB_ICONINFORMATION);
+		}
+		else {
+			//go goline
+			int index = m_write.LineIndex(dlg.m_line - 1);
+			m_write.SetSel(index, index, true);
+			Invalidate();
+		}
+	}
+	else
+		Invalidate();
 }
 
 //----------------------------------------
@@ -195,8 +213,7 @@ void CAwesomeWrite::OnWriteSelectall()
 {
 	// TODO: 여기에 명령 처리기 코드를 추가합니다.
 	CString str;
-	int len = m_write.GetWindowTextLength();
-	m_write.SetSel(0, len);
+	m_write.SetSel(0, -1);
 }
 
 void CAwesomeWrite::OnWriteDatetime()
@@ -225,5 +242,38 @@ void CAwesomeWrite::OnEnChangeWrite()
 	// TODO:  여기에 컨트롤 알림 처리기 코드를 추가합니다.
 	// 문자열이 바뀌면 Updata()? 함수 호출 // for 저장
 	// 문자열이 바뀌면 전체줄 기억하기
+	
+	int total_line = m_write.GetLineCount();
+	CString str;
+	str.Format(_T("%d"), total_line);
+	//AfxMessageBox(str);	
+}
 
+
+LRESULT CAwesomeWrite::OnFindReplaceCmd(WPARAM wParam, LPARAM lParam)
+{
+	if (pFindDlg->FindNext() || m_find_next) {
+		//검색할String
+		CString FindStr;
+		FindStr = pFindDlg->GetFindString();
+		int length = FindStr.GetLength();
+		//전체 String
+		CString TotalWrite;
+		m_write.GetWindowText(TotalWrite); // 전체String 가져오기   // 찾을때마다 짤라내자 ㅎ // next_start부터의 string
+		int total_length = TotalWrite.GetLength();
+
+		//Sub String
+		CString SubWrite;
+		SubWrite = TotalWrite.Right(total_length - m_next_start); //이전까지 찾은 문자열은 빼기
+		int start = SubWrite.Find(FindStr);
+		if (start == -1) {
+			AfxMessageBox(FindStr + _T("을 찾을 수 없습니다"), MB_ICONINFORMATION);
+			return 0;
+		}
+		int end = start + length;
+		m_write.SetSel(m_next_start + start, m_next_start + end);
+		m_next_start = m_next_start + end; // aaa테스트해봐야함
+		m_find_next = false;
+	}
+	return LRESULT();
 }
