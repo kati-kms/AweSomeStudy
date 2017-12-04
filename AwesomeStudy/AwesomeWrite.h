@@ -40,7 +40,6 @@ public:
 	afx_msg void OnWriteCut();
 	afx_msg void OnWriteCopy();
 	afx_msg void OnWritePaste();
-	afx_msg void OnWriteDel();
 	afx_msg void OnWriteFind();
 	afx_msg void OnWriteFindnext();
 	afx_msg void OnWriteReplace();
@@ -49,9 +48,12 @@ public:
 	afx_msg void OnWriteFontstate();
 	afx_msg void OnEnChangeWrite();
 	CFindReplaceDialog *pFindDlg;
-	CFindReplaceDialog *pReplaceDlg;
+	COLORREF m_color;
+	CFont m_font;
+
 	int m_next_start;//검색을 위해 저장
 	bool m_find_next; // 다음검색 함수를 위해
+	bool m_replace_first; // Replace처음
 protected:
 	LRESULT OnFindReplaceCmd(WPARAM wParam, LPARAM lParam);
 };

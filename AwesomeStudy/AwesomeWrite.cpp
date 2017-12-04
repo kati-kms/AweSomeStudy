@@ -18,9 +18,11 @@ CAwesomeWrite::CAwesomeWrite()
 	: CFormView(IDD_AWESOMEWRITE)
 {
 	pFindDlg = NULL;
-	pReplaceDlg = NULL;
+	m_color = RGB(0, 0, 0);
+
 	m_next_start = 0;
 	m_find_next = false;
+	m_replace_first = false;
 }
 
 CAwesomeWrite::~CAwesomeWrite()
@@ -43,7 +45,6 @@ BEGIN_MESSAGE_MAP(CAwesomeWrite, CFormView)
 	ON_COMMAND(ID_WRITE_CUT, &CAwesomeWrite::OnWriteCut)
 	ON_COMMAND(ID_WRITE_COPY, &CAwesomeWrite::OnWriteCopy)
 	ON_COMMAND(ID_WRITE_PASTE, &CAwesomeWrite::OnWritePaste)
-	ON_COMMAND(ID_WRITE_DEL, &CAwesomeWrite::OnWriteDel)
 	ON_COMMAND(ID_WRITE_FIND, &CAwesomeWrite::OnWriteFind)
 	ON_COMMAND(ID_WRITE_FINDNEXT, &CAwesomeWrite::OnWriteFindnext)
 	ON_COMMAND(ID_WRITE_REPLACE, &CAwesomeWrite::OnWriteReplace)
@@ -105,7 +106,9 @@ void CAwesomeWrite::OnBnClickedWriteSave()
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 	CString str;
 	m_write.GetWindowText(str);
-	//저장 추가
+	//str저장하면됨
+	//폰트 저장
+	//색깔 저장
 }
 
 
@@ -146,12 +149,6 @@ void CAwesomeWrite::OnWritePaste()
 	m_write.Paste();
 }
 
-void CAwesomeWrite::OnWriteDel()
-{
-	// TODO: 여기에 명령 처리기 코드를 추가합니다.
-	m_write.Clear();
-}
-
 //----------------------------------------
 
 void CAwesomeWrite::OnWriteFind()
@@ -168,7 +165,6 @@ void CAwesomeWrite::OnWriteFind()
 void CAwesomeWrite::OnWriteFindnext()
 {
 	// TODO: 여기에 명령 처리기 코드를 추가합니다.
-	//문자열 찾는거 실질적인 기능 추가 --> viewedit.cpp 에서 확인
 	m_find_next = true;
 	OnFindReplaceCmd(0,0);
 }
@@ -176,11 +172,13 @@ void CAwesomeWrite::OnWriteFindnext()
 void CAwesomeWrite::OnWriteReplace()
 {
 	// TODO: 여기에 명령 처리기 코드를 추가합니다.
-	if (pReplaceDlg != NULL)
-		pReplaceDlg->SetFocus();
+	if (pFindDlg != NULL) {
+		pFindDlg->SetFocus();
+	}
 	else {
-		pReplaceDlg = new CFindReplaceDialog();
-		pReplaceDlg->Create(FALSE, _T(""), _T(""), FR_DOWN, this);
+		pFindDlg = new CFindReplaceDialog();
+		m_replace_first = true;
+		pFindDlg->Create(FALSE, _T(""), _T(""), FR_DOWN, this);
 	}
 }
 
@@ -219,7 +217,24 @@ void CAwesomeWrite::OnWriteSelectall()
 void CAwesomeWrite::OnWriteDatetime()
 {
 	// TODO: 여기에 명령 처리기 코드를 추가합니다.
-	//2장확인
+	CTime tm;
+	tm = CTime::GetCurrentTime();
+	CString str_date;
+	str_date.Format(_T("%d-%d-%d "), tm.GetYear(), tm.GetMonth(), tm.GetDay(), tm.GetHour(), tm.GetMinute(), tm.GetSecond());
+	CString str_am_pm;
+	int Hour = tm.GetHour();
+	if (Hour < 12) {
+		str_am_pm = _T("오전 ");
+	}
+	else {
+		Hour -= 12;
+		str_am_pm = _T("오후 ");
+	}
+	if (Hour == 0)
+		Hour = 12; // 오전 12시 예외처리
+	CString str_time;
+	str_time.Format(_T("%d : %d "), Hour, tm.GetMinute());
+	m_write.ReplaceSel(str_am_pm + str_time + str_date);
 }
 
 //----------------------------------------
@@ -228,6 +243,21 @@ void CAwesomeWrite::OnWriteFontstate()
 {
 	// TODO: 여기에 명령 처리기 코드를 추가합니다.
 	//cfont dialog // 책
+	CFontDialog FontDlg;
+	
+	if (FontDlg.DoModal() == IDOK) {
+		//매번 폰트를 눌러야하는 오류가 있음 // 저장시 해결각
+		m_color = FontDlg.GetColor();
+		LOGFONT lf;
+		if (m_font.m_hObject != NULL)
+			m_font.DeleteObject();
+		FontDlg.GetCurrentFont(&lf);
+		
+		m_font.CreateFontIndirectW(&lf);
+		m_write.SetFont(&m_font);
+
+		// 색깔 구해야함	
+	}
 }
 
 //-----------------------------------------------------------------------edit창 자체 이벤트 컨트롤------------------------------------------------------
@@ -247,11 +277,17 @@ void CAwesomeWrite::OnEnChangeWrite()
 	CString str;
 	str.Format(_T("%d"), total_line);
 	//AfxMessageBox(str);	
+	//상태바에 추가하기
 }
 
 
 LRESULT CAwesomeWrite::OnFindReplaceCmd(WPARAM wParam, LPARAM lParam)
 {
+	if (pFindDlg->IsTerminating()) {
+		pFindDlg = NULL;
+		m_next_start = 0; // 히히히히히히
+		return 0;
+	}
 	if (pFindDlg->FindNext() || m_find_next) {
 		//검색할String
 		CString FindStr;
@@ -272,8 +308,63 @@ LRESULT CAwesomeWrite::OnFindReplaceCmd(WPARAM wParam, LPARAM lParam)
 		}
 		int end = start + length;
 		m_write.SetSel(m_next_start + start, m_next_start + end);
-		m_next_start = m_next_start + end; // aaa테스트해봐야함
+		m_next_start = m_next_start + end;
 		m_find_next = false;
+	}
+	else if (pFindDlg->ReplaceCurrent() || m_find_next) {
+		if (!m_replace_first) {
+			m_write.ReplaceSel(pFindDlg->GetReplaceString());
+		}
+
+		//검색할String
+		CString FindStr;
+		FindStr = pFindDlg->GetFindString();
+		int length = FindStr.GetLength();
+		//전체 String
+		CString TotalWrite;
+		m_write.GetWindowText(TotalWrite); // 전체String 가져오기   // 찾을때마다 짤라내자 ㅎ // next_start부터의 string
+		int total_length = TotalWrite.GetLength();
+
+		//Sub String
+		CString SubWrite;
+		SubWrite = TotalWrite.Right(total_length - m_next_start); //이전까지 찾은 문자열은 빼기
+		int start = SubWrite.Find(FindStr);
+		if (start == -1) {
+			AfxMessageBox(FindStr + _T("을 찾을 수 없습니다"), MB_ICONINFORMATION);
+			return 0;
+		}
+		int end = start + length;
+		m_write.SetSel(m_next_start + start, m_next_start + end);
+		m_next_start = m_next_start + end;
+		m_find_next = false;
+		m_replace_first = false;
+	}
+	else if (pFindDlg->ReplaceAll()) {
+		int start = 0;
+		while (1) {
+			//검색할String
+			CString FindStr;
+			FindStr = pFindDlg->GetFindString();
+			int length = FindStr.GetLength();
+			//전체 String
+			CString TotalWrite;
+			m_write.GetWindowText(TotalWrite); // 전체String 가져오기   // 찾을때마다 짤라내자 ㅎ // next_start부터의 string
+			int total_length = TotalWrite.GetLength();
+
+			//Sub String
+			CString SubWrite;
+			SubWrite = TotalWrite.Right(total_length - m_next_start); //이전까지 찾은 문자열은 빼기
+			int start = SubWrite.Find(FindStr);
+			if (start == -1) {
+				break;
+			}
+			int end = start + length;
+			m_write.SetSel(m_next_start + start, m_next_start + end);
+			m_next_start = m_next_start + end;
+			m_find_next = false;
+
+			m_write.ReplaceSel(pFindDlg->GetReplaceString());
+		}
 	}
 	return LRESULT();
 }

@@ -128,7 +128,6 @@ BEGIN
         MENUITEM "Cut(&T)\tCtrl+X",             ID_WRITE_CUT
         MENUITEM "Copy(&C)\tCtrl+C",            ID_WRITE_COPY
         MENUITEM "Paste(&P)\tCtrl+V",           ID_WRITE_PASTE
-        MENUITEM "Delete(&L)\tDel",             ID_WRITE_DEL
         MENUITEM SEPARATOR
         MENUITEM "Find(&F)\tCtrl+F",            ID_WRITE_FIND
         MENUITEM "FindNext(&N)\tF3",            ID_WRITE_FINDNEXT
@@ -138,7 +137,7 @@ BEGIN
         MENUITEM "Select All(&A)\tCtrl+A",      ID_WRITE_SELECTALL
         MENUITEM "Date/Time(&D)\tF5",           ID_WRITE_DATETIME
         MENUITEM SEPARATOR
-        MENUITEM "FontState(&D)\tCtrl+D",       ID_WRITE_FONTSTATE
+        MENUITEM "FontState(&S)\tCtrl+D",       ID_WRITE_FONTSTATE
     END
     POPUP "½Ã°£Ç¥(&T)"
     BEGIN
@@ -170,7 +169,6 @@ BEGIN
     "C",            ID_WRITE_COPY,          VIRTKEY, CONTROL, NOINVERT
     "X",            ID_WRITE_CUT,           VIRTKEY, CONTROL, NOINVERT
     VK_F5,          ID_WRITE_DATETIME,      VIRTKEY, NOINVERT
-    VK_DELETE,      ID_WRITE_DEL,           VIRTKEY, NOINVERT
     "F",            ID_WRITE_FIND,          VIRTKEY, CONTROL, NOINVERT
     VK_F3,          ID_WRITE_FINDNEXT,      VIRTKEY, NOINVERT
     "G",            ID_WRITE_GO,            VIRTKEY, CONTROL, NOINVERT
@@ -178,6 +176,7 @@ BEGIN
     "H",            ID_WRITE_REPLACE,       VIRTKEY, CONTROL, NOINVERT
     "A",            ID_WRITE_SELECTALL,     VIRTKEY, CONTROL, NOINVERT
     "Z",            ID_WRITE_UNDO,          VIRTKEY, CONTROL, NOINVERT
+    "D",            ID_WRITE_FONTSTATE,     VIRTKEY, CONTROL, NOINVERT
 END
 
 
