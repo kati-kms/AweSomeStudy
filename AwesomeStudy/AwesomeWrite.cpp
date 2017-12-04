@@ -53,6 +53,8 @@ BEGIN_MESSAGE_MAP(CAwesomeWrite, CFormView)
 	ON_COMMAND(ID_WRITE_FONTSTATE, &CAwesomeWrite::OnWriteFontstate)
 	ON_EN_CHANGE(IDC_WRITE, &CAwesomeWrite::OnEnChangeWrite)
 	ON_REGISTERED_MESSAGE(WM_FINDREPLACE, OnFindReplaceCmd)
+	ON_WM_CTLCOLOR()
+	ON_WM_SIZE()
 END_MESSAGE_MAP()
 
 
@@ -242,7 +244,6 @@ void CAwesomeWrite::OnWriteDatetime()
 void CAwesomeWrite::OnWriteFontstate()
 {
 	// TODO: 여기에 명령 처리기 코드를 추가합니다.
-	//cfont dialog // 책
 	CFontDialog FontDlg;
 	
 	if (FontDlg.DoModal() == IDOK) {
@@ -256,7 +257,11 @@ void CAwesomeWrite::OnWriteFontstate()
 		m_font.CreateFontIndirectW(&lf);
 		m_write.SetFont(&m_font);
 
-		// 색깔 구해야함	
+		// 색깔 구해야함
+		CDC *pDC = GetDC();
+		CWnd *pWnd = AfxGetMainWnd();
+		OnCtlColor(pDC, pWnd,m_color);
+		//OnCtlColor()
 	}
 }
 
@@ -303,7 +308,7 @@ LRESULT CAwesomeWrite::OnFindReplaceCmd(WPARAM wParam, LPARAM lParam)
 		SubWrite = TotalWrite.Right(total_length - m_next_start); //이전까지 찾은 문자열은 빼기
 		int start = SubWrite.Find(FindStr);
 		if (start == -1) {
-			AfxMessageBox(FindStr + _T("을 찾을 수 없습니다"), MB_ICONINFORMATION);
+			AfxMessageBox(FindStr + _T("을 찾을 수 없습니다"), /*MB_ICONINFORMATION*/MB_ICONWARNING);
 			return 0;
 		}
 		int end = start + length;
@@ -367,4 +372,44 @@ LRESULT CAwesomeWrite::OnFindReplaceCmd(WPARAM wParam, LPARAM lParam)
 		}
 	}
 	return LRESULT();
+}
+
+HBRUSH CAwesomeWrite::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
+{
+	HBRUSH hbr = CFormView::OnCtlColor(pDC, pWnd, nCtlColor);
+
+	// TODO:  여기서 DC의 특성을 변경합니다.
+	if (pWnd->GetDlgCtrlID() == IDC_WRITE /* 색 바꾸려는 컨트롤의 id*/) {
+		hbr = (HBRUSH)::GetSysColorBrush(COLOR_WINDOW);  // 배경 브러쉬
+		pDC->SetBkColor(RGB(255, 255, 255)); // 배경색
+		pDC->SetTextColor(m_color);  // 텍스트 색
+	}
+	// TODO:  기본값이 적당하지 않으면 다른 브러시를 반환합니다.
+	return hbr;
+}
+
+// 컨트롤들 위치 및 사이즈 지정
+
+void CAwesomeWrite::OnSize(UINT nType, int cx, int cy)
+{
+	CFormView::OnSize(nType, cx, cy);
+
+	//CWriteGoLine m_write;
+	if (m_write.GetSafeHwnd() != NULL)
+	{
+		CRect editLogRect; // 에디트 박스의 영역
+		m_write.GetWindowRect(editLogRect); // 에디트 박스의 스크린 영역을 구함
+
+											  // 에디트 박스의 스크린 영역을 CMyFormView 객체의 클라이언트 영역을 기준으로 변경
+		ScreenToClient(editLogRect);
+
+		CRect clientRect;
+		GetClientRect(clientRect); // CMyFormView 객체의 클라이언트 영역을 구함
+
+		editLogRect.right = clientRect.right - 15; // 클라이언트 영역의 오른쪽에 15픽셀의 공간을 둔다.
+		editLogRect.bottom = clientRect.bottom - 15; // 클라이언트 영역의 하단에 15픽셀의 공간을 둔다.
+
+		m_write.MoveWindow(editLogRect); // 에디트 박스의 수정된 위치를 적용함
+	}
+	// TODO: 여기에 메시지 처리기 코드를 추가합니다.
 }

@@ -56,6 +56,9 @@ public:
 	bool m_replace_first; // Replace√≥¿Ω
 protected:
 	LRESULT OnFindReplaceCmd(WPARAM wParam, LPARAM lParam);
+public:
+	afx_msg HBRUSH OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor);
+	afx_msg void OnSize(UINT nType, int cx, int cy);
 };
 
 
