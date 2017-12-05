@@ -45,14 +45,14 @@ void CClassInfo::DoDataExchange(CDataExchange* pDX)
 	DDX_CBIndex(pDX, IDC_E_MINUTE, m_e_minute);
 	DDX_Text(pDX, IDC_PLACE, m_place);
 	DDX_CBIndex(pDX, IDC_DATE, m_date);
-	DDX_Control(pDX, IDC_ADD_TIME, m_add_time);
+	//DDX_Control(pDX, IDC_ADD_TIME, m_add_time);
 }
 
 
 BEGIN_MESSAGE_MAP(CClassInfo, CDialog)
 	ON_BN_CLICKED(IDOK, &CClassInfo::OnBnClickedOk)
 	ON_BN_CLICKED(IDCANCEL, &CClassInfo::OnBnClickedCancel)
-	ON_BN_CLICKED(IDC_ADD_TIME, &CClassInfo::OnBnClickedAddTime)
+	//ON_BN_CLICKED(IDC_ADD_TIME, &CClassInfo::OnBnClickedAddTime)
 END_MESSAGE_MAP()
 
 
@@ -85,8 +85,9 @@ void CClassInfo::OnBnClickedCancel()
 	CDialog::OnCancel();
 }
 
-
+/*
 void CClassInfo::OnBnClickedAddTime()
 {
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 }
+*/
