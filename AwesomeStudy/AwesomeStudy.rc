@@ -348,64 +348,6 @@ END
 // DESIGNINFO
 //
 
-#ifdef APSTUDIO_INVOKED
-GUIDELINES DESIGNINFO
-BEGIN
-    IDD_ABOUTBOX, DIALOG
-    BEGIN
-        , 50
-    END
-
-    IDD_AWESOMESTUDY_FORM, DIALOG
-    BEGIN
-        , 50
-    END
-
-    IDD_AWESOMEHOME, DIALOG
-    BEGIN
-        , 50
-    END
-
-    IDD_AWESOMEPIC, DIALOG
-    BEGIN
-        , 50
-    END
-
-    IDD_AWESOMEMMAP, DIALOG
-    BEGIN
-        , 50
-    END
-
-    IDD_DIALOG1, DIALOG
-    BEGIN
-        , 50
-    END
-
-    IDD_AWESOMEWRITE, DIALOG
-    BEGIN
-        , 50
-    END
-
-    IDD_ADD_CLASS, DIALOG
-    BEGIN
-        , 50
-    END
-
-    IDD_SET_PASSWORD, DIALOG
-    BEGIN
-        , 50
-    END
-
-    IDD_WRITE_GOLINE, DIALOG
-    BEGIN
-        LEFTMARGIN, 7
-        RIGHTMARGIN, 235
-        TOPMARGIN, 7
-        BOTTOMMARGIN, 86
-    END
-END
-#endif    // APSTUDIO_INVOKED
-
 
 /////////////////////////////////////////////////////////////////////////////
 //
