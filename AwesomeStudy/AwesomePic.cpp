@@ -38,6 +38,7 @@ BEGIN_MESSAGE_MAP(CAwesomePic, CFormView)
 	ON_BN_CLICKED(IDC_PIC_ADD_FILE, &CAwesomePic::OnBnClickedPicAddFile)
 	ON_BN_CLICKED(IDC_PIC_DELETE, &CAwesomePic::OnBnClickedPicDelete)
 	//ON_BN_CLICKED(ID_FILE_SAVE, &CAwesomePic::OnBnClickedFileSave)
+	ON_WM_LBUTTONDOWN()
 END_MESSAGE_MAP()
 
 
@@ -206,4 +207,15 @@ void CAwesomePic::OnDraw(CDC* pDC)
 		size.cy = Image.GetHeight();
 		SetScrollSizes(MM_TEXT, size);
 	}
+}
+
+
+void CAwesomePic::OnLButtonDown(UINT nFlags, CPoint point)
+{
+	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
+	CRect rect(700, 5, 500, 500);
+	if (rect.PtInRect(point)) {
+		AfxMessageBox(_T("여기당"));
+	}
+	CFormView::OnLButtonDown(nFlags, point);
 }
