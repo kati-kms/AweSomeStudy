@@ -51,6 +51,10 @@
 #define IDC_STR_EHOUR                   1042
 #define IDC_STR_EMIN                    1043
 #define IDC_CLASS                       1044
+#define IDC_STR_DATE                    1045
+#define IDC_DATE                        1046
+#define IDC_BUTTON1                     1048
+#define IDC_ADD_TIME                    1048
 #define IDR_MAIN_TOOLBAR                32776
 #define ID_AWESOMESTUDYVER1             32777
 #define ID_32778                        32778
@@ -95,9 +99,9 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        327
+#define _APS_NEXT_RESOURCE_VALUE        329
 #define _APS_NEXT_COMMAND_VALUE         32835
-#define _APS_NEXT_CONTROL_VALUE         1045
+#define _APS_NEXT_CONTROL_VALUE         1049
 #define _APS_NEXT_SYMED_VALUE           314
 #endif
 #endif

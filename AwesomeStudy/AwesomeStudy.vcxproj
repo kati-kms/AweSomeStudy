@@ -192,6 +192,7 @@
     <ClInclude Include="AwesomeStudyDoc.h" />
     <ClInclude Include="AwesomeStudyView.h" />
     <ClInclude Include="AwesomeWrite.h" />
+    <ClInclude Include="ClassInfo.h" />
     <ClInclude Include="MainFrm.h" />
     <ClInclude Include="PicNameDialog.h" />
     <ClInclude Include="Resource.h" />
@@ -208,6 +209,7 @@
     <ClCompile Include="AwesomeStudyDoc.cpp" />
     <ClCompile Include="AwesomeStudyView.cpp" />
     <ClCompile Include="AwesomeWrite.cpp" />
+    <ClCompile Include="ClassInfo.cpp" />
     <ClCompile Include="MainFrm.cpp" />
     <ClCompile Include="PicNameDialog.cpp" />
     <ClCompile Include="stdafx.cpp">
