@@ -37,7 +37,6 @@ BEGIN_MESSAGE_MAP(CAwesomePic, CFormView)
 	ON_BN_CLICKED(IDC_PIC_ADD_FOLDER, &CAwesomePic::OnBnClickedPicAddFolder)
 	ON_BN_CLICKED(IDC_PIC_ADD_FILE, &CAwesomePic::OnBnClickedPicAddFile)
 	ON_BN_CLICKED(IDC_PIC_DELETE, &CAwesomePic::OnBnClickedPicDelete)
-	//ON_BN_CLICKED(ID_FILE_SAVE, &CAwesomePic::OnBnClickedFileSave)
 	ON_WM_LBUTTONDOWN()
 END_MESSAGE_MAP()
 

@@ -51,7 +51,6 @@ public:
 	afx_msg void OnBnClickedLogin();
 
 	CStatic m_password;
-	afx_msg void OnBnClickedFileOpen();
 };
 
 #ifndef _DEBUG  // AwesomeStudyView.cpp의 디버그 버전

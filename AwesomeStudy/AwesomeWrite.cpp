@@ -5,6 +5,8 @@
 #include "AwesomeStudy.h"
 #include "AwesomeWrite.h"
 #include "MainFrm.h"
+#include "AwesomeStudyDoc.h"
+#include "PicNameDialog.h"
 
 #include "WriteGoLine.h"
 
@@ -33,6 +35,7 @@ void CAwesomeWrite::DoDataExchange(CDataExchange* pDX)
 {
 	CFormView::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_WRITE, m_write);
+	DDX_Control(pDX, IDC_TREE1, m_treeWrite);
 }
 
 BEGIN_MESSAGE_MAP(CAwesomeWrite, CFormView)
@@ -55,6 +58,7 @@ BEGIN_MESSAGE_MAP(CAwesomeWrite, CFormView)
 	ON_REGISTERED_MESSAGE(WM_FINDREPLACE, OnFindReplaceCmd)
 	ON_WM_CTLCOLOR()
 	ON_WM_SIZE()
+	ON_NOTIFY(NM_CLICK, IDC_WriteTree, &CAwesomeWrite::OnNMClickWritetree)
 END_MESSAGE_MAP()
 
 
@@ -76,7 +80,12 @@ void CAwesomeWrite::Dump(CDumpContext& dc) const
 
 
 // CAwesomeWrite 메시지 처리기입니다.
+CAwesomeStudyDoc* CAwesomeWrite::GetDocument() const
+{
+	ASSERT(m_pDocument->IsKindOf(RUNTIME_CLASS(CAwesomeStudyDoc)));
+	return (CAwesomeStudyDoc*)m_pDocument;
 
+}
 
 void CAwesomeWrite::OnHome()
 {
@@ -103,14 +112,31 @@ void CAwesomeWrite::OnBnClickedWriteAllclear()
 	m_write.Clear();
 }
 
+
+
 void CAwesomeWrite::OnBnClickedWriteSave()
 {
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 	CString str;
 	m_write.GetWindowText(str);
+	CAwesomeStudyDoc* pDoc = GetDocument();
+	CPicNameDialog dlg;
+	CString name;
+	if (dlg.DoModal() == IDOK) {
+		name = dlg.m_str;
+	}
+	else return;
 	//str저장하면됨
+	PicNode = m_treeWrite.InsertItem(name, TVI_ROOT);
+	pDoc->WriteNodeToTextMap.SetAt(name, str);
+	m_treeWrite.Select(PicNode, TVGN_CARET);
+	int len = m_write.GetWindowTextLength();
+	m_write.SetSel(0, len);
+	m_write.Clear();
 	//폰트 저장
+	//pDoc->w.SetAt(name, m_font);
 	//색깔 저장
+	//pDoc->WriteNodeToColorMap.SetAt(name, m_color);
 }
 
 
@@ -406,10 +432,35 @@ void CAwesomeWrite::OnSize(UINT nType, int cx, int cy)
 		CRect clientRect;
 		GetClientRect(clientRect); // CMyFormView 객체의 클라이언트 영역을 구함
 
-		editLogRect.right = clientRect.right - 15; // 클라이언트 영역의 오른쪽에 15픽셀의 공간을 둔다.
+		editLogRect.right = clientRect.right - 500; // 클라이언트 영역의 오른쪽에 15픽셀의 공간을 둔다.
 		editLogRect.bottom = clientRect.bottom - 15; // 클라이언트 영역의 하단에 15픽셀의 공간을 둔다.
 
 		m_write.MoveWindow(editLogRect); // 에디트 박스의 수정된 위치를 적용함
 	}
 	// TODO: 여기에 메시지 처리기 코드를 추가합니다.
+}
+
+
+void CAwesomeWrite::OnNMClickWritetree(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	CAwesomeStudyDoc* pDoc = GetDocument();
+	CPoint p;
+	GetCursorPos(&p);
+	UINT flag;
+	m_treeWrite.ScreenToClient(&p);
+	PicNode = m_treeWrite.HitTest(p, &flag);
+	CString name = m_treeWrite.GetItemText(PicNode);
+	CString str;
+	pDoc->WriteNodeToTextMap.Lookup(name, str);
+	m_write.SetWindowText(str);
+	//pDoc->WriteNodeToFontMap.Lookup(name,m_font);
+	//pDoc->WriteNodeToColorMap.Lookup(name, m_color);
+	
+	//m_write.SetFont(&m_font);
+
+	/*CDC *pDC = GetDC();
+	CWnd *pWnd = AfxGetMainWnd();
+	OnCtlColor(pDC, pWnd, m_color);*/
+	*pResult = 0;
 }

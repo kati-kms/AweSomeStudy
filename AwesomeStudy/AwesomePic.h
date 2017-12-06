@@ -30,6 +30,7 @@ public:
 	CString PicNodePath;
 	int IsPic;
 	HTREEITEM PicNode;
+	
 
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 지원입니다.
@@ -46,7 +47,6 @@ public:
 	afx_msg void OnBnClickedPicAddFolder();
 	afx_msg void OnBnClickedPicAddFile();
 	afx_msg void OnBnClickedPicDelete();
-	//afx_msg void OnBnClickedFileSave();
 	virtual void OnDraw(CDC* pDC);
 	CEdit m_PicMemo;
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);

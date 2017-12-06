@@ -1,7 +1,7 @@
 
 // AwesomeStudyDoc.h : CAwesomeStudyDoc 클래스의 인터페이스
 //
-
+#include <afxtempl.h>
 
 #pragma once
 
@@ -20,6 +20,13 @@ public:
 	CMapStringToString PicNodeToTextMap;
 	int PicIsSaved;
 	CString PicPath;
+	CMapStringToString WriteNodeToTextMap;
+	int PicCount;
+	//CMap<CString, CString&, CFont, CFont&> WriteNodeToFontMap;
+	//CMap<CString,CString&,COLORREF,COLORREF&> WriteNodeToColorMap;
+	//CMap<CString, CString, CPoint, CPoint> WriteNodeToFontMap; 
+	//CMap<int, int, CFont*, CFont*> myMap;
+	//CMapStringToOb w;
 
 // 작업입니다.
 public:

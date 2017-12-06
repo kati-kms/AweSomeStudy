@@ -25,7 +25,6 @@ IMPLEMENT_DYNCREATE(CAwesomeStudyView, CFormView)
 BEGIN_MESSAGE_MAP(CAwesomeStudyView, CFormView)
 	ON_BN_CLICKED(IDC_OPEN, &CAwesomeStudyView::OnBnClickedOpen)
 	ON_BN_CLICKED(IDC_LOGIN, &CAwesomeStudyView::OnBnClickedLogin)
-	ON_BN_CLICKED(ID_FILE_OPEN, &CAwesomeStudyView::OnBnClickedFileOpen)
 END_MESSAGE_MAP()
 
 // CAwesomeStudyView 생성/소멸
@@ -125,10 +124,4 @@ void CAwesomeStudyView::OnBnClickedLogin()
 
 
 
-void CAwesomeStudyView::OnBnClickedFileOpen()
-{
-	CMainFrame *frame = (CMainFrame *)AfxGetApp()->GetMainWnd();
-	frame->SwitchView(VIEWID_HOME);
 
-	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
-}

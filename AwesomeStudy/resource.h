@@ -55,6 +55,8 @@
 #define IDC_DATE                        1046
 #define IDC_BUTTON1                     1048
 #define IDC_ADD_TIME                    1048
+#define IDC_TREE1                       1049
+#define IDC_WriteTree                   1049
 #define IDR_MAIN_TOOLBAR                32776
 #define ID_AWESOMESTUDYVER1             32777
 #define ID_32778                        32778
@@ -94,14 +96,17 @@
 #define ID_WRITE_FINDREPLACE            32814
 #define ID_WRITE32815                   32815
 #define ID_WRITE32816                   32816
+#define ID_32835                        32835
+#define IDC_FILE_SAVE                   32836
+#define ID_FILE_OPEN32837               32837
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        329
-#define _APS_NEXT_COMMAND_VALUE         32835
-#define _APS_NEXT_CONTROL_VALUE         1049
+#define _APS_NEXT_COMMAND_VALUE         32838
+#define _APS_NEXT_CONTROL_VALUE         1050
 #define _APS_NEXT_SYMED_VALUE           314
 #endif
 #endif

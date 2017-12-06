@@ -1,10 +1,11 @@
 #pragma once
 #include "afxwin.h"
+#include "afxcmn.h"
 
 
 
 // CAwesomeWrite Æû ºäÀÔ´Ï´Ù.
-
+class CAwesomeStudyDoc;
 class CAwesomeWrite : public CFormView
 {
 	DECLARE_DYNCREATE(CAwesomeWrite)
@@ -47,6 +48,7 @@ public:
 	afx_msg void OnWriteDatetime();
 	afx_msg void OnWriteFontstate();
 	afx_msg void OnEnChangeWrite();
+	HTREEITEM PicNode;
 	CFindReplaceDialog *pFindDlg;
 	COLORREF m_color;
 	CFont m_font;
@@ -59,6 +61,9 @@ protected:
 public:
 	afx_msg HBRUSH OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor);
 	afx_msg void OnSize(UINT nType, int cx, int cy);
+	CTreeCtrl m_treeWrite;
+	CAwesomeStudyDoc* GetDocument() const;
+	afx_msg void OnNMClickWritetree(NMHDR *pNMHDR, LRESULT *pResult);
 };
 
 

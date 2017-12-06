@@ -73,10 +73,18 @@ void CAwesomeStudyDoc::Serialize(CArchive& ar)
 			}
 		}
 		ar << PassWord;
-		
+		WriteNodeToTextMap.Serialize(ar);
+
 		CMainFrame* mView = (CMainFrame*)AfxGetMainWnd();
 		CAwesomePic *pView = (CAwesomePic*)mView->m_pwndPic;
 		HTREEITEM hti = pView->m_PicTree.GetRootItem();
+		PicCount = pView->m_PicTree.GetCount();
+
+		ar << PicCount;
+
+		CString str;
+		str.Format(_T("%d"), PicCount);
+		AfxMessageBox(str);
 		while (hti)
 		{
 			int indent = PicGetIndentLevel(hti);
@@ -85,26 +93,39 @@ void CAwesomeStudyDoc::Serialize(CArchive& ar)
 			ar.WriteString(pView->m_PicTree.GetItemText(hti) + "\r\n");
 			hti = PicGetNextItem(hti);
 		}
-
-
+		NewFile = 1;
+		
+		CAwesomeWrite *wView = (CAwesomeWrite*)mView->m_pwndWrite;
+		hti = wView->m_treeWrite.GetRootItem();
+		while (hti)
+		{
+			CString str;
+			str.Format(wView->m_treeWrite.GetItemText(hti));
+			AfxMessageBox(str);
+			ar.WriteString(wView->m_treeWrite.GetItemText(hti) + "\n");
+			hti = PicGetNextItem(hti);
+		}
 	}
 	else
 	{
+		ar >> NewFile; //
 		NewFile = 1;    //새로운 파일이 아니므로 매번 비밀번호를 새로 생성할 필요x
-		ar >> NewFile;
 		// TODO: 여기에 로딩 코드를 추가합니다.
 		PicIsSaved = 1; //pic이 로드됨
-		PicNodeToPathMap.Serialize(ar);
-		PicNodeToTextMap.Serialize(ar);
-		ar >> PassWord;
+		PicNodeToPathMap.Serialize(ar);//
+		PicNodeToTextMap.Serialize(ar);//
+		ar >> PassWord;  //
+		WriteNodeToTextMap.Serialize(ar);//
+		ar >> PicCount;
 
 		CMainFrame* mView = (CMainFrame*)AfxGetMainWnd();
 		CAwesomePic *pView = (CAwesomePic*)mView->m_pwndPic;
 		pView->m_PicTree.DeleteAllItems();
 
 		CString sLine;
-		if (!ar.ReadString(sLine))
+		if (!ar.ReadString(sLine)) {
 			return;
+		}
 
 		HTREEITEM hti = NULL;
 		int indent, baseindent = 0;
@@ -133,8 +154,18 @@ void CAwesomeStudyDoc::Serialize(CArchive& ar)
 					parent = pView->m_PicTree.GetParentItem(parent);
 			}
 			hti = pView->m_PicTree.InsertItem(sLine, parent ? parent : TVI_ROOT, TVI_LAST);
+			PicCount--;
+		} while (ar.ReadString(sLine)&&(PicCount!=0));
+		//////////////////////////
+		CAwesomeWrite *wView = (CAwesomeWrite*)mView->m_pwndWrite;
+		if (sLine.IsEmpty()) {
+			return;
+		}
+
+		do
+		{
+			wView->m_treeWrite.InsertItem(sLine, TVI_ROOT);
 		} while (ar.ReadString(sLine));
-	
 	}
 }
 
