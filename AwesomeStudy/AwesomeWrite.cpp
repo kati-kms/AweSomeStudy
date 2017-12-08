@@ -419,23 +419,38 @@ HBRUSH CAwesomeWrite::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
 void CAwesomeWrite::OnSize(UINT nType, int cx, int cy)
 {
 	CFormView::OnSize(nType, cx, cy);
-
-	//CWriteGoLine m_write;
-	if (m_write.GetSafeHwnd() != NULL)
+	double CenterRate = 0.8; // Center Rate : 1 - CenterRate    내분 
+	if (m_write.GetSafeHwnd() != NULL && m_treeWrite.GetSafeHwnd() != NULL)
 	{
 		CRect editLogRect; // 에디트 박스의 영역
 		m_write.GetWindowRect(editLogRect); // 에디트 박스의 스크린 영역을 구함
-
-											  // 에디트 박스의 스크린 영역을 CMyFormView 객체의 클라이언트 영역을 기준으로 변경
+														  // 에디트 박스의 스크린 영역을 CMyFormView 객체의 클라이언트 영역을 기준으로 변경
 		ScreenToClient(editLogRect);
-
 		CRect clientRect;
 		GetClientRect(clientRect); // CMyFormView 객체의 클라이언트 영역을 구함
 
-		editLogRect.right = clientRect.right - 500; // 클라이언트 영역의 오른쪽에 15픽셀의 공간을 둔다.
+		editLogRect.right = (long)(clientRect.right * CenterRate) - 15; // 클라이언트 영역의 오른쪽에 15픽셀의 공간을 둔다.
 		editLogRect.bottom = clientRect.bottom - 15; // 클라이언트 영역의 하단에 15픽셀의 공간을 둔다.
 
 		m_write.MoveWindow(editLogRect); // 에디트 박스의 수정된 위치를 적용함
+
+		
+		CRect treeLogRect;
+		m_treeWrite.GetWindowRect(treeLogRect);
+		ScreenToClient(treeLogRect);
+		
+
+		treeLogRect.left = editLogRect.right + 15;
+		treeLogRect.right = clientRect.right -15;
+		treeLogRect.bottom = clientRect.bottom - 15;
+
+	
+		m_treeWrite.MoveWindow(treeLogRect);
+/*	
+		CString str;
+		str.Format(_T("Er %d Tl %d Tr %d"), editLogRect.right, treeLogRect.left, treeLogRect.right);
+		AfxMessageBox(str);
+		*/
 	}
 	// TODO: 여기에 메시지 처리기 코드를 추가합니다.
 }
