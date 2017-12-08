@@ -14,6 +14,8 @@
 #include "MainFrm.h"
 #include "AwesomeStudyView.h"
 #include "VeiwPassDialog.h"
+#include "Idea.h"
+#include "AwesomeMmap.h"
 
 #include <propkey.h>
 
@@ -50,6 +52,50 @@ BOOL CAwesomeStudyDoc::OnNewDocument()
 	// TODO: 여기에 재초기화 코드를 추가합니다.
 	// SDI 문서는 이 문서를 다시 사용합니다.
 
+	//MMAP
+	m_ideaList.RemoveAll();
+	CMainFrame *pFrame = (CMainFrame *)AfxGetMainWnd();
+	//CMindMapView* pView = (CMindMapView*)pFrame->GetActiveView();
+
+	//m_ideaLine.RemoveAll();
+	//m_tempIdea1 = m_tempIdea2 = NULL;
+
+	//하나의 독립Idea를 만들어놓자.
+	CRect mainIdeaRect, clientRect;
+	CPoint topLeftPnt, botRightPnt;
+	//pView->GetClientRect(&clientRect);
+	topLeftPnt = CPoint(300, 300);
+	botRightPnt = CPoint(500, 500);
+	mainIdeaRect.SetRect(topLeftPnt, botRightPnt);
+	CIdea firstMainIdea(mainIdeaRect, _T("Main Idea"));
+
+	//debug
+	/*
+	CString str;
+	str.Format(_T("%d %d %d %d %d %d")
+		, mainIdeaRect.left
+		, mainIdeaRect.top
+		, mainIdeaRect.right
+		, mainIdeaRect.bottom
+		, mainIdeaRect.Width()
+		, mainIdeaRect.Height()
+	);
+	AfxMessageBox(str);
+	*/
+
+	//List에 추가
+	m_ideaList.AddTail(firstMainIdea);
+	//UpdateAllViews(NULL);
+
+	//하나 더 추가해볼까?
+	topLeftPnt = CPoint(700, 200);
+	botRightPnt = CPoint(800, 500);
+	mainIdeaRect.SetRect(topLeftPnt, botRightPnt);
+	CIdea secondMainIdea(mainIdeaRect, _T("Main Idea #2"));
+
+	m_ideaList.AddTail(secondMainIdea);
+	UpdateAllViews(NULL);
+
 	return TRUE;
 }
 
@@ -81,7 +127,16 @@ void CAwesomeStudyDoc::Serialize(CArchive& ar)
 		PicCount = pView->m_PicTree.GetCount();
 
 		ar << PicCount;
-
+		//MMAP
+		int count = m_ideaList.GetCount();
+		ar << count;
+		// TODO: 여기에 저장 코드를 추가합니다.
+		for (POSITION pos = m_ideaList.GetHeadPosition(); pos != NULL;)
+		{
+			CIdea * p_object = &m_ideaList.GetNext(pos);
+			p_object->Serialize(ar);
+		}
+		//Mmap
 		CString str;
 		str.Format(_T("%d"), PicCount);
 		AfxMessageBox(str);
@@ -105,6 +160,7 @@ void CAwesomeStudyDoc::Serialize(CArchive& ar)
 			ar.WriteString(wView->m_treeWrite.GetItemText(hti) + "\n");
 			hti = PicGetNextItem(hti);
 		}
+	
 	}
 	else
 	{
@@ -117,6 +173,18 @@ void CAwesomeStudyDoc::Serialize(CArchive& ar)
 		ar >> PassWord;  //
 		WriteNodeToTextMap.Serialize(ar);//
 		ar >> PicCount;
+
+		//MMAP
+		int count = 0;
+		ar >> count;
+
+		for (int i = 0; i < count; i++)
+		{
+			CIdea * p_object = new CIdea();
+			p_object->Serialize(ar);
+			m_ideaList.AddTail(*p_object);
+		}
+		//MMap
 
 		CMainFrame* mView = (CMainFrame*)AfxGetMainWnd();
 		CAwesomePic *pView = (CAwesomePic*)mView->m_pwndPic;
@@ -166,6 +234,7 @@ void CAwesomeStudyDoc::Serialize(CArchive& ar)
 		{
 			wView->m_treeWrite.InsertItem(sLine, TVI_ROOT);
 		} while (ar.ReadString(sLine));
+		
 	}
 }
 

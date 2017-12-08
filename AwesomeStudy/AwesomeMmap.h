@@ -1,10 +1,12 @@
 #pragma once
+#include "Idea.h"
 
+//get document 하는 법 : 
+//CTestDoc *pDoc = ((CMainFrame *)AfxGetMainWnd())->GetActiveDocument();
 
+// CAwesomeMmap 뷰입니다.
 
-// CAwesomeMmap 폼 뷰입니다.
-
-class CAwesomeMmap : public CFormView
+class CAwesomeMmap : public CView
 {
 	DECLARE_DYNCREATE(CAwesomeMmap)
 
@@ -13,9 +15,7 @@ public:
 	virtual ~CAwesomeMmap();
 
 public:
-#ifdef AFX_DESIGN_TIME
-	enum { IDD = IDD_AWESOMEMMAP };
-#endif
+	virtual void OnDraw(CDC* pDC);      // 이 뷰를 그리기 위해 재정의되었습니다.
 #ifdef _DEBUG
 	virtual void AssertValid() const;
 #ifndef _WIN32_WCE
@@ -24,13 +24,13 @@ public:
 #endif
 
 protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 지원입니다.
-
 	DECLARE_MESSAGE_MAP()
 public:
-	virtual BOOL Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, CCreateContext* pContext = NULL);
-	virtual void OnDraw(CDC* pDC);
 	afx_msg void OnHome();
+	afx_msg BOOL OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message);
+	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
+	// 마우스가 객체 안에 들어있으면 변경. (리전 생성 후 제거 요망
+	BOOL CheckPtInIdea(CPoint point);
 };
 
 

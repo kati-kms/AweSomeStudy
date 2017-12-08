@@ -2,9 +2,12 @@
 // AwesomeStudyDoc.h : CAwesomeStudyDoc 클래스의 인터페이스
 //
 #include <afxtempl.h>
+#include "AwesomeMMap.h"
+#include "Idea.h"
 
 #pragma once
 
+//class Cidea;
 
 class CAwesomeStudyDoc : public CDocument
 {
@@ -27,6 +30,9 @@ public:
 	//CMap<CString, CString, CPoint, CPoint> WriteNodeToFontMap; 
 	//CMap<int, int, CFont*, CFont*> myMap;
 	//CMapStringToOb w;
+
+	//MMAP
+	CList <CIdea, CIdea&> m_ideaList;
 
 // 작업입니다.
 public:
