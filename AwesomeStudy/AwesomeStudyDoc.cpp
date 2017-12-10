@@ -16,6 +16,8 @@
 #include "VeiwPassDialog.h"
 #include "Idea.h"
 #include "AwesomeMmap.h"
+#include "InfoSave.h"
+#include "AwesomeHome.h"
 
 #include <propkey.h>
 
@@ -127,6 +129,14 @@ void CAwesomeStudyDoc::Serialize(CArchive& ar)
 		PicCount = pView->m_PicTree.GetCount();
 
 		ar << PicCount;
+		//HOME
+		CAwesomeHome* pHome = (CAwesomeHome*)mView->m_pwndHome;
+		int num = pHome->m_array.GetCount();
+		ar << num;
+		for (int pos = 0; pos < pHome->m_array.GetCount(); pos++) {
+			CInfoSave *p_class = &pHome->m_array.GetAt(pos);
+			p_class->Serialize(ar);
+		}
 		//MMAP
 		int count = m_ideaList.GetCount();
 		ar << count;
@@ -173,7 +183,17 @@ void CAwesomeStudyDoc::Serialize(CArchive& ar)
 		ar >> PassWord;  //
 		WriteNodeToTextMap.Serialize(ar);//
 		ar >> PicCount;
-
+		//Home
+		CMainFrame* m_View = (CMainFrame*)AfxGetMainWnd();
+		CAwesomeHome* pHome = (CAwesomeHome*)m_View->m_pwndHome;
+		int n = 0;
+		ar >> n;
+		pHome->m_array.RemoveAll();
+		for (int i = 0; i < n; i++) {
+			CInfoSave *p_class = new CInfoSave();
+			p_class->Serialize(ar);
+			pHome->m_array.Add(*p_class);
+		}
 		//MMAP
 		int count = 0;
 		ar >> count;
@@ -185,7 +205,6 @@ void CAwesomeStudyDoc::Serialize(CArchive& ar)
 			m_ideaList.AddTail(*p_object);
 		}
 		//MMap
-
 		CMainFrame* mView = (CMainFrame*)AfxGetMainWnd();
 		CAwesomePic *pView = (CAwesomePic*)mView->m_pwndPic;
 		pView->m_PicTree.DeleteAllItems();

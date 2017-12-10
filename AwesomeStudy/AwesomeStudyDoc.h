@@ -4,6 +4,8 @@
 #include <afxtempl.h>
 #include "AwesomeMMap.h"
 #include "Idea.h"
+#include "AwesomeHome.h"
+#include "InfoSave.h"
 
 #pragma once
 
@@ -33,6 +35,7 @@ public:
 
 	//MMAP
 	CList <CIdea, CIdea&> m_ideaList;
+	CArray <CInfoSave, CInfoSave&> m_classList;
 
 // 작업입니다.
 public:

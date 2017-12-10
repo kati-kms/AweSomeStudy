@@ -4,9 +4,11 @@
 #include "stdafx.h"
 #include "AwesomeStudy.h"
 #include "AwesomeHome.h"
+#include "AwesomeStudyDoc.h"
 #include "MainFrm.h"
 #include "ClassInfo.h"
 #include <afxtempl.h>
+#include "InfoSave.h"
 
 
 // CAwesomeHome
@@ -26,6 +28,8 @@ CAwesomeHome::CAwesomeHome()
 	class_end_minute = 0;
 	class_room = "";
 	m_array.RemoveAll();
+	AddList = FALSE;
+	Select_num = 0;
 }
 
 CAwesomeHome::~CAwesomeHome()
@@ -35,6 +39,11 @@ CAwesomeHome::~CAwesomeHome()
 void CAwesomeHome::DoDataExchange(CDataExchange* pDX)
 {
 	CFormView::DoDataExchange(pDX);
+	DDX_Control(pDX, IDC_DELETE, m_delete);
+	DDX_Control(pDX, IDC_INFO, m_list);
+	DDX_Control(pDX, IDC_HOME_WRITE, m_write);
+	DDX_Control(pDX, IDC_HOME_PIC, m_pic);
+	DDX_Control(pDX, IDC_HOME_MINDMAP, m_map);
 }
 
 BEGIN_MESSAGE_MAP(CAwesomeHome, CFormView)
@@ -44,6 +53,7 @@ BEGIN_MESSAGE_MAP(CAwesomeHome, CFormView)
 	ON_COMMAND(ID_ADD, &CAwesomeHome::OnAdd)
 	ON_UPDATE_COMMAND_UI(ID_FILE_OPEN, &CAwesomeHome::OnUpdateFileOpen)
 	ON_WM_LBUTTONDOWN()
+	ON_BN_CLICKED(IDC_DELETE, &CAwesomeHome::OnBnClickedDelete)
 END_MESSAGE_MAP()
 
 
@@ -70,7 +80,6 @@ void CAwesomeHome::Dump(CDumpContext& dc) const
 BOOL CAwesomeHome::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, CCreateContext* pContext)
 {
 	// TODO: 여기에 특수화된 코드를 추가 및/또는 기본 클래스를 호출합니다.
-
 	return CFormView::Create(lpszClassName, lpszWindowName, dwStyle, rect, pParentWnd, nID, pContext);
 }
 
@@ -102,6 +111,8 @@ void CAwesomeHome::OnBnClickedHomeMindmap()
 void CAwesomeHome::OnDraw(CDC* pDC)
 {
 	// TODO: 여기에 특수화된 코드를 추가 및/또는 기본 클래스를 호출합니다.
+	CAwesomeStudyDoc* pDoc = (CAwesomeStudyDoc *)GetDocument();
+	
 	pDC->Rectangle(50, 50, 590, 810);
 	for (int i = 0; i < 12; i++) {
 		pDC->MoveTo(50, 90 + i * 60);
@@ -144,7 +155,7 @@ void CAwesomeHome::OnAdd()
 	// TODO: 여기에 명령 처리기 코드를 추가합니다.
 	CClassInfo AddDlg;
 	int result = AddDlg.DoModal();
-	MyClass temp;
+	CInfoSave temp;
 	if (result == IDOK) {
 		temp.m_class = AddDlg.m_class;
 		temp.m_professor = AddDlg.m_professor;
@@ -248,8 +259,63 @@ void CAwesomeHome::OnUpdateFileOpen(CCmdUI *pCmdUI)
 void CAwesomeHome::OnLButtonDown(UINT nFlags, CPoint point)
 {
 	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
-	for (int i = 0; i < m_array.GetCount(); i++) {
-		//if (point == m_array[i].rect.)
+	AddList = FALSE;
+	m_delete.EnableWindow(FALSE);
+	m_write.EnableWindow(FALSE);
+	m_pic.EnableWindow(FALSE);
+	m_map.EnableWindow(FALSE);
+	for (int i = 0; i < m_array.GetSize(); i++) {
+		Select_num = i;
+		if (m_array[i].rect.PtInRect(point)) {
+			m_list.ResetContent();
+			CString str;
+			str.Format(_T("강의명 : %s"), m_array[i].m_class);
+			m_list.AddString(str);
+			str.Format(_T("교수명 : %s"), m_array[i].m_professor);
+			m_list.AddString(str);
+			switch (m_array[i].m_date) {
+			case 0 : str.Format(_T("요일 : 월요일"));
+				break;
+			case 1: str.Format(_T("요일 : 화요일"));
+				break;
+			case 2: str.Format(_T("요일 : 수요일"));
+				break;
+			case 3: str.Format(_T("요일 : 목요일"));
+				break;
+			case 4: str.Format(_T("요일 : 금요일"));
+				break;
+			}
+			m_list.AddString(str);
+			str.Format(_T("시간 : %d시 %d분 ~ "), m_array[i].m_s_hour + 9, (m_array[i].m_s_minute)*5);
+			m_list.AddString(str);
+			str.Format(_T("		  %d시 %d분"), m_array[i].m_e_hour + 9, (m_array[i].m_e_minute)*5);
+			m_list.AddString(str);
+			str.Format(_T("장소 : %s"), m_array[i].m_place);
+			m_list.AddString(str);
+			
+			AddList = TRUE;
+			m_delete.EnableWindow(TRUE);
+			m_write.EnableWindow(TRUE);
+			m_pic.EnableWindow(TRUE);
+			m_map.EnableWindow(TRUE);
+			break;
+		}
 	}
+	if (AddList == FALSE)
+		m_list.ResetContent();
 	CFormView::OnLButtonDown(nFlags, point);
+}
+
+
+void CAwesomeHome::OnBnClickedDelete()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	int Start = m_array[Select_num].m_s_hour * 12 + m_array[Select_num].m_s_minute;
+	int End = m_array[Select_num].m_e_hour * 12 + m_array[Select_num].m_e_minute;
+	for (int i = Start; i < End; i++)
+		IsAble[m_array[Select_num].m_date][i] = FALSE;
+
+	m_array.RemoveAt(Select_num);
+	m_list.ResetContent();
+	Invalidate();
 }

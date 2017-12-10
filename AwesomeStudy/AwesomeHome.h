@@ -1,5 +1,8 @@
 #pragma once
 class CClassInfo;
+class CInfoSave;
+#include "InfoSave.h"
+#include "afxwin.h"
 
 
 // CAwesomeHome 폼 뷰입니다.
@@ -33,33 +36,10 @@ public :
 	int class_end_minute; // ComboBox > 시간(분)
 	CString class_room; // EditBox > 강의장 
 	BOOL IsAble[5][144];
-	struct MyClass {
-		CString m_class;
-		CString m_professor;
-		int m_s_hour;
-		int m_s_minute;
-		int m_e_hour;
-		int m_e_minute;
-		CString m_place;
-		int m_date;
-		COLORREF m_color;
-		CRect rect;
-		MyClass() {};
-		MyClass(CString m_class, CString m_professor, int m_s_hour, int m_s_minute, int m_e_hour, int m_e_minute,
-			CString m_place, int m_date, COLORREF m_color, CRect rect) {
-			m_class = _T("");
-			m_professor = "";
-			m_date = 0;
-			m_s_hour = 0;
-			m_s_minute = 0;
-			m_e_hour = 0;
-			m_e_minute = 0;
-			m_place = "";
-			m_color = 0;
-			rect = NULL;
-		}
-	};
-	CArray <MyClass, MyClass&> m_array;
+	BOOL AddList;
+	int Select_num;
+	
+	CArray <CInfoSave, CInfoSave&> m_array;
 
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 지원입니다.
@@ -74,6 +54,12 @@ public:
 	afx_msg void OnAdd();
 	afx_msg void OnUpdateFileOpen(CCmdUI *pCmdUI);
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
+	CButton m_delete;
+	CListBox m_list;
+	afx_msg void OnBnClickedDelete();
+	CButton m_write;
+	CButton m_pic;
+	CButton m_map;
 };
 
 

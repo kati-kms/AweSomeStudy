@@ -66,6 +66,9 @@
     <ClInclude Include="AwesomeMmap.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="InfoSave.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AwesomeStudy.cpp">
@@ -108,6 +111,9 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="AwesomeMmap.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="InfoSave.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
