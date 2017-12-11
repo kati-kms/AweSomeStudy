@@ -65,6 +65,8 @@ public:
 	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
 	// pos->Prev자리의 노드를 제거한다.
 	CIdea& DeleteIdea(POSITION pos, CList<CIdea, CIdea&>& ideaList);
+	// OnDraw 함수가 호출하여 사용하는 더블버퍼링용 그리기 DC
+	void DrawImage(CDC* pDC);
 };
 
 
