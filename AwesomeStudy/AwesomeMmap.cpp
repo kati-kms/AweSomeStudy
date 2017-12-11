@@ -231,6 +231,8 @@ void CAwesomeMmap::OnLButtonDown(UINT nFlags, CPoint point)
 	//TODO: GetNext(pos)의 pos는 Element를 정확히 가리키는 pos가 아니라
 	//Element의 Next를 가리키는 pos이기 때문에 이에 관한 추가적인 코딩이 필요하다
 	int pointCode = CheckPtInIdea(point, selectedIdea);
+	//선택된 아이디아를 Head에 가져다 놓는다.
+
 
 	/*
 	//debug
@@ -271,7 +273,11 @@ void CAwesomeMmap::OnLButtonDown(UINT nFlags, CPoint point)
 		//SetAt(POSITION, ARG_TYPE)를 호출하여 위에서 저장한 ideaPosition 변수의
 		//Prev값이 곧 원 Element이기 때문에 ideaPosition.Prev한 자리에 selectedIdea를 
 		//집어넣는다.
-		SetIdea(tmpPosition, pDoc->m_ideaList, selectedIdea);
+		//ToDO:아니! 선택된 Idea는 Head에 올려줘야 한다. 즉, 현재 Idea가 있는 자리의 노드는
+		//제거하고 이걸 Head에다가 붙혀주면 되겠다
+		//SetIdea(tmpPosition, pDoc->m_ideaList, selectedIdea);
+		DeleteIdea(tmpPosition, pDoc->m_ideaList);
+		pDoc->m_ideaList.AddHead(selectedIdea);
 
 		pDoc->SetModifiedFlag();
 		Invalidate();
@@ -644,6 +650,8 @@ int CAwesomeMmap::SetDehighlight(CList<CIdea, CIdea&>& ideaList)
 		}
 	}
 
+	//tmpPosition = NULL;
+
 	return count;
 }
 
@@ -775,4 +783,21 @@ void CAwesomeMmap::OnLButtonUp(UINT nFlags, CPoint point)
 	}
 
 	CView::OnLButtonUp(nFlags, point);
+}
+
+
+// pos->Prev자리의 노드를 제거한다.
+//만약 지우려는 노드가 Tail이라 pos가 NULL인 경우,
+//Tail을 지운다
+CIdea& CAwesomeMmap::DeleteIdea(POSITION pos, CList<CIdea, CIdea&>& ideaList)
+{
+	// TODO: 여기에 반환 구문을 삽입합니다.
+	CIdea* tmpIdea;
+	if (pos == NULL) {
+		return ideaList.RemoveTail();
+	}
+	ideaList.GetPrev(pos);
+	tmpIdea = &ideaList.GetAt(pos);
+	ideaList.RemoveAt(pos);
+	return *tmpIdea;
 }

@@ -63,6 +63,8 @@ public:
 	void SetIdea(POSITION pos, CList<CIdea, CIdea&>& ideaList, CIdea& newIdea);
 	CIdea& GetIdea(POSITION pos, CList<CIdea, CIdea&>& ideaList);
 	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
+	// pos->Prev자리의 노드를 제거한다.
+	CIdea& DeleteIdea(POSITION pos, CList<CIdea, CIdea&>& ideaList);
 };
 
 
