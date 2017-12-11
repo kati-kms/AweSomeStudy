@@ -14,6 +14,10 @@
 #include "MainFrm.h"
 #include "AwesomeStudyView.h"
 #include "VeiwPassDialog.h"
+#include "Idea.h"
+#include "AwesomeMmap.h"
+#include "InfoSave.h"
+#include "AwesomeHome.h"
 
 #include <propkey.h>
 
@@ -50,6 +54,46 @@ BOOL CAwesomeStudyDoc::OnNewDocument()
 	// TODO: 여기에 재초기화 코드를 추가합니다.
 	// SDI 문서는 이 문서를 다시 사용합니다.
 
+	//MMAP
+	m_ideaList.RemoveAll();
+	CMainFrame *pFrame = (CMainFrame *)AfxGetMainWnd();
+	//CMindMapView* pView = (CMindMapView*)pFrame->GetActiveView();
+
+	//m_ideaLine.RemoveAll();
+	//m_tempIdea1 = m_tempIdea2 = NULL;
+
+	if (m_ideaList.GetCount() == 0) {
+		//하나의 독립Idea를 만들어놓자.
+		CRect mainIdeaRect, clientRect;
+		CPoint topLeftPnt, botRightPnt;
+		//pView->GetClientRect(&clientRect);
+		topLeftPnt = CPoint(300, 300);
+		botRightPnt = CPoint(500, 500);
+		mainIdeaRect.SetRect(topLeftPnt, botRightPnt);
+		CIdea firstMainIdea(mainIdeaRect, _T("Main Idea"));
+		firstMainIdea.NewIdea();
+
+		//List에 추가
+		m_ideaList.AddTail(firstMainIdea);
+		UpdateAllViews(NULL);
+	}
+
+
+	//debug
+	/*
+	CString str;
+	str.Format(_T("%d %d %d %d %d %d")
+		, mainIdeaRect.left
+		, mainIdeaRect.top
+		, mainIdeaRect.right
+		, mainIdeaRect.bottom
+		, mainIdeaRect.Width()
+		, mainIdeaRect.Height()
+	);
+	AfxMessageBox(str);
+	*/
+
+
 	return TRUE;
 }
 
@@ -81,7 +125,24 @@ void CAwesomeStudyDoc::Serialize(CArchive& ar)
 		PicCount = pView->m_PicTree.GetCount();
 
 		ar << PicCount;
-
+		//HOME
+		CAwesomeHome* pHome = (CAwesomeHome*)mView->m_pwndHome;
+		int num = pHome->m_array.GetCount();
+		ar << num;
+		for (int pos = 0; pos < pHome->m_array.GetCount(); pos++) {
+			CInfoSave *p_class = &pHome->m_array.GetAt(pos);
+			p_class->Serialize(ar);
+		}
+		//MMAP
+		int count = m_ideaList.GetCount();
+		ar << count;
+		// TODO: 여기에 저장 코드를 추가합니다.
+		for (POSITION pos = m_ideaList.GetHeadPosition(); pos != NULL;)
+		{
+			CIdea * p_object = &m_ideaList.GetNext(pos);
+			p_object->Serialize(ar);
+		}
+		//Mmap
 		CString str;
 		str.Format(_T("%d"), PicCount);
 		AfxMessageBox(str);
@@ -105,6 +166,7 @@ void CAwesomeStudyDoc::Serialize(CArchive& ar)
 			ar.WriteString(wView->m_treeWrite.GetItemText(hti) + "\n");
 			hti = PicGetNextItem(hti);
 		}
+	
 	}
 	else
 	{
@@ -117,7 +179,28 @@ void CAwesomeStudyDoc::Serialize(CArchive& ar)
 		ar >> PassWord;  //
 		WriteNodeToTextMap.Serialize(ar);//
 		ar >> PicCount;
+		//Home
+		CMainFrame* m_View = (CMainFrame*)AfxGetMainWnd();
+		CAwesomeHome* pHome = (CAwesomeHome*)m_View->m_pwndHome;
+		int n = 0;
+		ar >> n;
+		pHome->m_array.RemoveAll();
+		for (int i = 0; i < n; i++) {
+			CInfoSave *p_class = new CInfoSave();
+			p_class->Serialize(ar);
+			pHome->m_array.Add(*p_class);
+		}
+		//MMAP
+		int count = 0;
+		ar >> count;
 
+		for (int i = 0; i < count; i++)
+		{
+			CIdea * p_object = new CIdea();
+			p_object->Serialize(ar);
+			m_ideaList.AddTail(*p_object);
+		}
+		//MMap
 		CMainFrame* mView = (CMainFrame*)AfxGetMainWnd();
 		CAwesomePic *pView = (CAwesomePic*)mView->m_pwndPic;
 		pView->m_PicTree.DeleteAllItems();
@@ -166,6 +249,7 @@ void CAwesomeStudyDoc::Serialize(CArchive& ar)
 		{
 			wView->m_treeWrite.InsertItem(sLine, TVI_ROOT);
 		} while (ar.ReadString(sLine));
+		
 	}
 }
 
@@ -273,3 +357,17 @@ HTREEITEM CAwesomeStudyDoc::PicGetNextItem(HTREEITEM hItem)
 }
 
 
+
+
+// m_ideaList를 순회하면서 selfIndex와 pnt를 비교, 일치한다면 그놈을 리턴, pos도 같이 내보낸다.
+CIdea& CAwesomeStudyDoc::FindIndexIdea(POSITION pos, IndexPointer pnt)
+{
+	// TODO: 여기에 반환 구문을 삽입합니다.
+	CIdea tmpIdea;
+	pos = m_ideaList.GetHeadPosition();
+	while (pos != NULL) {
+		tmpIdea = m_ideaList.GetNext(pos);
+		if (tmpIdea.m_ipSelfNode == pnt) { return tmpIdea; }
+	}
+	return tmpIdea;
+}

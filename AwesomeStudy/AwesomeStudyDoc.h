@@ -2,9 +2,14 @@
 // AwesomeStudyDoc.h : CAwesomeStudyDoc 클래스의 인터페이스
 //
 #include <afxtempl.h>
+#include "AwesomeMMap.h"
+#include "Idea.h"
+#include "AwesomeHome.h"
+#include "InfoSave.h"
 
 #pragma once
 
+//class Cidea;
 
 class CAwesomeStudyDoc : public CDocument
 {
@@ -23,6 +28,10 @@ public:
 	CMapStringToString WriteNodeToTextMap;
 	int PicCount;
 
+
+	//MMAP
+	CList <CIdea, CIdea&> m_ideaList;
+	CArray <CInfoSave, CInfoSave&> m_classList;
 
 // 작업입니다.
 public:
@@ -57,4 +66,6 @@ protected:
 public:
 	int PicGetIndentLevel(HTREEITEM hItem);
 	HTREEITEM PicGetNextItem(HTREEITEM hItem);
+	// m_ideaList를 순회하면서 selfIndex와 pnt를 비교, 일치한다면 그놈을 리턴, pos도 같이 내보낸다.
+	CIdea& FindIndexIdea(POSITION pos, IndexPointer pnt);
 };

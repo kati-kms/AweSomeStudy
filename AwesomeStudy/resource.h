@@ -6,6 +6,7 @@
 #define IDP_OLE_INIT_FAILED             100
 #define IDD_AWESOMESTUDY_FORM           101
 #define IDP_SOCKETS_INIT_FAILED         104
+#define IDC_ADD_CHILD                   104
 #define IDR_MAINFRAME                   128
 #define IDR_AwesomeStudyTYPE            130
 #define IDD_AWESOMEHOME                 310
@@ -16,6 +17,9 @@
 #define IDD_ADD_CLASS                   321
 #define IDD_SET_PASSWORD                324
 #define IDD_WRITE_GOLINE                325
+#define IDR_MMAP_CNTXT                  329
+#define IDC_CURSOR1                     330
+#define IDB_BITMAP1                     331
 #define IDC_PASSWORD                    1000
 #define IDC_OPEN                        1002
 #define IDC_LOGIN                       1003
@@ -27,6 +31,7 @@
 #define IDC_HOME_PIC                    1010
 #define IDC_HOME_MINDMAP                1011
 #define IDC_HOME                        1012
+#define IDC_DELETE                      1012
 #define IDC_PicTree                     1015
 #define IDC_EDIT1                       1016
 #define IDC_WRITE                       1021
@@ -57,6 +62,7 @@
 #define IDC_ADD_TIME                    1048
 #define IDC_TREE1                       1049
 #define IDC_WriteTree                   1049
+#define IDC_INFO                        1050
 #define IDR_MAIN_TOOLBAR                32776
 #define ID_AWESOMESTUDYVER1             32777
 #define ID_32778                        32778
@@ -99,14 +105,43 @@
 #define ID_32835                        32835
 #define IDC_FILE_SAVE                   32836
 #define ID_FILE_OPEN32837               32837
+#define ID_32838                        32838
+#define ID_DELETE                       32839
+#define ID_RBTN_CUT                     32840
+#define ID_RBTN_COPY                    32841
+#define ID_RBTN_TEXTEDIT                32842
+#define ID_RBTN_32847                   32843
+#define ID_DELETE_ONLYTHIS              32844
+#define ID_DELETE_EVERYSUBIDEAS         32845
+#define ID_INSERT_ONLYTHIS              32846
+#define ID_INSERT_INDIDEA               32847
+#define ID_RBTN_PASTE                   32848
+#define ID_RBTN_INSERTIDEA              32849
+#define ID_RBTN_COLOR                   32850
+#define ID_RBN_CUT                      32851
+#define ID_RBN_PASTE                    32852
+#define ID_RBN_TXT_EDIT                 32853
+#define ID_RBTN_IN_INSERT_ONLY          32854
+#define ID_RBTN_IN_COLOR                32855
+#define ID_RBN_IN_CUT                   32856
+#define ID_RBN_IN_PASTE                 32857
+#define ID_RBN_IN_TXT_EDIT              32858
+#define ID_RBN_IN_DELETE_SUB            32859
+#define ID_RBTN_IN_DELETE_ONLY          32860
+#define ID_RBN_INSERT_SUB               32861
+#define ID_RBN_IN_INDEPENDENT           32862
+#define ID_RBN_IN_INSERT_SUB            32863
+#define ID_RBN_OUT_PASTE                32864
+#define ID_RBN_OUT_INSERT_INDEPENDENT   32865
+#define ID_RBN_IN_INSERT_INDEPENDENT    32866
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        329
-#define _APS_NEXT_COMMAND_VALUE         32838
-#define _APS_NEXT_CONTROL_VALUE         1050
+#define _APS_NEXT_RESOURCE_VALUE        332
+#define _APS_NEXT_COMMAND_VALUE         32867
+#define _APS_NEXT_CONTROL_VALUE         1051
 #define _APS_NEXT_SYMED_VALUE           314
 #endif
 #endif

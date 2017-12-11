@@ -36,6 +36,7 @@
 
 #include <afxsock.h>            // MFC 소켓 확장
 #include <afxrich.h>
+#include <afx.h>
 
 
 

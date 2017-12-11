@@ -45,9 +45,6 @@
     <ClInclude Include="AwesomePic.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="AwesomeMmap.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="PicNameDialog.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -61,6 +58,15 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="ClassInfo.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Idea.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="AwesomeMmap.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="InfoSave.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
@@ -86,9 +92,6 @@
     <ClCompile Include="AwesomePic.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="AwesomeMmap.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="PicNameDialog.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -104,10 +107,25 @@
     <ClCompile Include="ClassInfo.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="Idea.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="AwesomeMmap.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="InfoSave.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="AwesomeStudy.reg" />
     <None Include="res\AwesomeStudy.rc2">
+      <Filter>리소스 파일</Filter>
+    </None>
+    <None Include="res\cursor1.cur">
+      <Filter>리소스 파일</Filter>
+    </None>
+    <None Include="POINTER.cur">
       <Filter>리소스 파일</Filter>
     </None>
   </ItemGroup>
@@ -127,6 +145,9 @@
       <Filter>리소스 파일</Filter>
     </Image>
     <Image Include="res\toolbar1.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\bitmap1.bmp">
       <Filter>리소스 파일</Filter>
     </Image>
   </ItemGroup>

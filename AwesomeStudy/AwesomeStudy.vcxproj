@@ -193,6 +193,8 @@
     <ClInclude Include="AwesomeStudyView.h" />
     <ClInclude Include="AwesomeWrite.h" />
     <ClInclude Include="ClassInfo.h" />
+    <ClInclude Include="Idea.h" />
+    <ClInclude Include="InfoSave.h" />
     <ClInclude Include="MainFrm.h" />
     <ClInclude Include="PicNameDialog.h" />
     <ClInclude Include="Resource.h" />
@@ -210,6 +212,8 @@
     <ClCompile Include="AwesomeStudyView.cpp" />
     <ClCompile Include="AwesomeWrite.cpp" />
     <ClCompile Include="ClassInfo.cpp" />
+    <ClCompile Include="Idea.cpp" />
+    <ClCompile Include="InfoSave.cpp" />
     <ClCompile Include="MainFrm.cpp" />
     <ClCompile Include="PicNameDialog.cpp" />
     <ClCompile Include="stdafx.cpp">
@@ -223,7 +227,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="AwesomeStudy.reg" />
+    <None Include="POINTER.cur" />
     <None Include="res\AwesomeStudy.rc2" />
+    <None Include="res\cursor1.cur" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="AwesomeStudy.rc" />
@@ -231,6 +237,7 @@
   <ItemGroup>
     <Image Include="res\AwesomeStudy.ico" />
     <Image Include="res\AwesomeStudyDoc.ico" />
+    <Image Include="res\bitmap1.bmp" />
     <Image Include="res\Toolbar.bmp" />
     <Image Include="res\toolbar1.bmp" />
   </ItemGroup>

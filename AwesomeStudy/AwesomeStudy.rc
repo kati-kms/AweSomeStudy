@@ -82,6 +82,8 @@ IDR_MAINFRAME           BITMAP                  "res\\Toolbar.bmp"
 
 IDR_MAIN_TOOLBAR        BITMAP                  "res\\toolbar1.bmp"
 
+IDB_BITMAP1             BITMAP                  "res\\bitmap1.bmp"
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -154,6 +156,34 @@ BEGIN
     END
 END
 
+IDR_MMAP_CNTXT MENU
+BEGIN
+    POPUP "RBTN_OUT_IDEA"
+    BEGIN
+        MENUITEM "붙혀넣기(&P)",                    ID_RBN_OUT_PASTE
+        MENUITEM "독립 Idea 삽입(&I)",              ID_RBN_OUT_INSERT_INDEPENDENT
+    END
+    POPUP "RBTN_IN_IDEA"
+    BEGIN
+        MENUITEM "잘라내기(&T)",                    ID_RBN_IN_CUT
+        MENUITEM "복사(&Y)",                      ID_RBN_IN_PASTE
+        MENUITEM SEPARATOR
+        MENUITEM "텍스트 편집(&E)",                  ID_RBN_IN_TXT_EDIT
+        MENUITEM "색상(&C)",                      ID_RBTN_IN_COLOR
+        MENUITEM SEPARATOR
+        POPUP "삭제(&D)"
+        BEGIN
+            MENUITEM "Only this(&O)",               ID_RBTN_IN_DELETE_ONLY
+            MENUITEM "Every Sub Ideas(&S)",         ID_RBN_IN_DELETE_SUB
+        END
+        POPUP "삽입(&I)"
+        BEGIN
+            MENUITEM "하위 Idea(&X)",                 ID_RBN_IN_INSERT_SUB
+            MENUITEM "독립 Idea(&P)",                 ID_RBN_IN_INSERT_INDEPENDENT
+        END
+    END
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -218,9 +248,11 @@ IDD_AWESOMEHOME DIALOGEX 0, 0, 451, 270
 STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD
 FONT 9, "MS Shell Dlg", 0, 0, 0x0
 BEGIN
-    PUSHBUTTON      "필기",IDC_HOME_WRITE,361,46,50,14
-    PUSHBUTTON      "그림",IDC_HOME_PIC,361,73,50,14
-    PUSHBUTTON      "마인드 맵",IDC_HOME_MINDMAP,361,100,50,14
+    PUSHBUTTON      "필기",IDC_HOME_WRITE,361,46,50,14,WS_DISABLED
+    PUSHBUTTON      "그림",IDC_HOME_PIC,361,73,50,14,WS_DISABLED
+    PUSHBUTTON      "마인드 맵",IDC_HOME_MINDMAP,361,100,50,14,WS_DISABLED
+    LISTBOX         IDC_INFO,362,145,49,110,LBS_NOINTEGRALHEIGHT | WS_DISABLED | WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "삭제",IDC_DELETE,362,126,50,14,WS_DISABLED
 END
 
 IDD_AWESOMEPIC DIALOGEX 0, 0, 450, 222
@@ -542,6 +574,16 @@ BEGIN
     END
 END
 #endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Cursor
+//
+
+IDC_CURSOR1             CURSOR                  "res\\cursor1.cur"
+
+IDC_ADD_CHILD           CURSOR                  "POINTER.cur"
 
 
 /////////////////////////////////////////////////////////////////////////////
