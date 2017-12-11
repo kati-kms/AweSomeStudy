@@ -227,7 +227,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="AwesomeStudy.reg" />
+    <None Include="POINTER.cur" />
     <None Include="res\AwesomeStudy.rc2" />
+    <None Include="res\cursor1.cur" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="AwesomeStudy.rc" />
@@ -235,6 +237,7 @@
   <ItemGroup>
     <Image Include="res\AwesomeStudy.ico" />
     <Image Include="res\AwesomeStudyDoc.ico" />
+    <Image Include="res\bitmap1.bmp" />
     <Image Include="res\Toolbar.bmp" />
     <Image Include="res\toolbar1.bmp" />
   </ItemGroup>

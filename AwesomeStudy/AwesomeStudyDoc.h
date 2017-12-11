@@ -70,4 +70,6 @@ protected:
 public:
 	int PicGetIndentLevel(HTREEITEM hItem);
 	HTREEITEM PicGetNextItem(HTREEITEM hItem);
+	// m_ideaList를 순회하면서 selfIndex와 pnt를 비교, 일치한다면 그놈을 리턴, pos도 같이 내보낸다.
+	CIdea& FindIndexIdea(POSITION pos, IndexPointer pnt);
 };

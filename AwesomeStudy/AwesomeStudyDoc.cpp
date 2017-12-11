@@ -62,14 +62,22 @@ BOOL CAwesomeStudyDoc::OnNewDocument()
 	//m_ideaLine.RemoveAll();
 	//m_tempIdea1 = m_tempIdea2 = NULL;
 
-	//하나의 독립Idea를 만들어놓자.
-	CRect mainIdeaRect, clientRect;
-	CPoint topLeftPnt, botRightPnt;
-	//pView->GetClientRect(&clientRect);
-	topLeftPnt = CPoint(300, 300);
-	botRightPnt = CPoint(500, 500);
-	mainIdeaRect.SetRect(topLeftPnt, botRightPnt);
-	CIdea firstMainIdea(mainIdeaRect, _T("Main Idea"));
+	if (m_ideaList.GetCount() == 0) {
+		//하나의 독립Idea를 만들어놓자.
+		CRect mainIdeaRect, clientRect;
+		CPoint topLeftPnt, botRightPnt;
+		//pView->GetClientRect(&clientRect);
+		topLeftPnt = CPoint(300, 300);
+		botRightPnt = CPoint(500, 500);
+		mainIdeaRect.SetRect(topLeftPnt, botRightPnt);
+		CIdea firstMainIdea(mainIdeaRect, _T("Main Idea"));
+		firstMainIdea.NewIdea();
+
+		//List에 추가
+		m_ideaList.AddTail(firstMainIdea);
+		UpdateAllViews(NULL);
+	}
+
 
 	//debug
 	/*
@@ -85,18 +93,6 @@ BOOL CAwesomeStudyDoc::OnNewDocument()
 	AfxMessageBox(str);
 	*/
 
-	//List에 추가
-	m_ideaList.AddTail(firstMainIdea);
-	//UpdateAllViews(NULL);
-
-	//하나 더 추가해볼까?
-	topLeftPnt = CPoint(700, 200);
-	botRightPnt = CPoint(800, 500);
-	mainIdeaRect.SetRect(topLeftPnt, botRightPnt);
-	CIdea secondMainIdea(mainIdeaRect, _T("Main Idea #2"));
-
-	m_ideaList.AddTail(secondMainIdea);
-	UpdateAllViews(NULL);
 
 	return TRUE;
 }
@@ -361,3 +357,17 @@ HTREEITEM CAwesomeStudyDoc::PicGetNextItem(HTREEITEM hItem)
 }
 
 
+
+
+// m_ideaList를 순회하면서 selfIndex와 pnt를 비교, 일치한다면 그놈을 리턴, pos도 같이 내보낸다.
+CIdea& CAwesomeStudyDoc::FindIndexIdea(POSITION pos, IndexPointer pnt)
+{
+	// TODO: 여기에 반환 구문을 삽입합니다.
+	CIdea tmpIdea;
+	pos = m_ideaList.GetHeadPosition();
+	while (pos != NULL) {
+		tmpIdea = m_ideaList.GetNext(pos);
+		if (tmpIdea.m_ipSelfNode == pnt) { return tmpIdea; }
+	}
+	return tmpIdea;
+}

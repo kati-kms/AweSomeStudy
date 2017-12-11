@@ -4,7 +4,10 @@
 #include "AwesomeMMap.h"
 #include <afxtempl.h>
 
-const double roundRate = 0.2;
+typedef int IndexPointer;
+const double roundRate = 0.2;		
+
+#define szhnd 3
 
 class CIdea : public CObject
 {
@@ -20,8 +23,11 @@ public:
 	CRgn m_ideaRegion;
 	CString m_ideaString;
 	COLORREF m_ideaColor;
-	//CIdea * m_pParent;
 	BOOL m_bHighlighted;
+	IndexPointer m_ipSelfNode;
+	IndexPointer m_ipParentNode;
+	IndexPointer m_ipLeftChild;
+	IndexPointer m_ipRightSibling;
 
 	//메소드
 public:
@@ -31,13 +37,25 @@ public:
 	//Make 하고나서 반드시 Delete를 해주어야 한다.
 	CRgn& MakeIdeaRgn();
 	void DeleteIdeaRgn();
+	CString StringOutIdea();
+	void SetHighlight(BOOL bl);
 
 	//생성 / 소멸자
 public:
 	CIdea();
 	CIdea(CRect rect, CString str);
-	CIdea(CRect rect, CString str, CIdea* _parent);
+	CIdea(CRect rect, CString str, IndexPointer _parent);
 	CIdea(const CIdea & idea);
 	~CIdea();
 	void Serialize(CArchive & ar);
+
+public:
+	// 진짜 새로운 Idea를 생성해서 리스트에 집어넣을 때에만 스태틱 변수를 1씩 증가시킨다.
+	IndexPointer NewIdea()
+	{
+		static int nowIndex = 0;
+		this->m_ipSelfNode = ++nowIndex;
+		this->m_ipParentNode = nowIndex;
+		return nowIndex;
+	}
 };

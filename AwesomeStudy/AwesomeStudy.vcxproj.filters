@@ -122,6 +122,12 @@
     <None Include="res\AwesomeStudy.rc2">
       <Filter>리소스 파일</Filter>
     </None>
+    <None Include="res\cursor1.cur">
+      <Filter>리소스 파일</Filter>
+    </None>
+    <None Include="POINTER.cur">
+      <Filter>리소스 파일</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="AwesomeStudy.rc">
@@ -139,6 +145,9 @@
       <Filter>리소스 파일</Filter>
     </Image>
     <Image Include="res\toolbar1.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\bitmap1.bmp">
       <Filter>리소스 파일</Filter>
     </Image>
   </ItemGroup>

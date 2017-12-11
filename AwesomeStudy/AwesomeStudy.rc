@@ -82,6 +82,8 @@ IDR_MAINFRAME           BITMAP                  "res\\Toolbar.bmp"
 
 IDR_MAIN_TOOLBAR        BITMAP                  "res\\toolbar1.bmp"
 
+IDB_BITMAP1             BITMAP                  "res\\bitmap1.bmp"
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -151,6 +153,34 @@ BEGIN
     POPUP "file"
     BEGIN
         MENUITEM "open",                        ID_FILE_OPEN, GRAYED
+    END
+END
+
+IDR_MMAP_CNTXT MENU
+BEGIN
+    POPUP "RBTN_OUT_IDEA"
+    BEGIN
+        MENUITEM "붙혀넣기(&P)",                    ID_RBN_OUT_PASTE
+        MENUITEM "독립 Idea 삽입(&I)",              ID_RBN_OUT_INSERT_INDEPENDENT
+    END
+    POPUP "RBTN_IN_IDEA"
+    BEGIN
+        MENUITEM "잘라내기(&T)",                    ID_RBN_IN_CUT
+        MENUITEM "복사(&Y)",                      ID_RBN_IN_PASTE
+        MENUITEM SEPARATOR
+        MENUITEM "텍스트 편집(&E)",                  ID_RBN_IN_TXT_EDIT
+        MENUITEM "색상(&C)",                      ID_RBTN_IN_COLOR
+        MENUITEM SEPARATOR
+        POPUP "삭제(&D)"
+        BEGIN
+            MENUITEM "Only this(&O)",               ID_RBTN_IN_DELETE_ONLY
+            MENUITEM "Every Sub Ideas(&S)",         ID_RBN_IN_DELETE_SUB
+        END
+        POPUP "삽입(&I)"
+        BEGIN
+            MENUITEM "하위 Idea(&X)",                 ID_RBN_IN_INSERT_SUB
+            MENUITEM "독립 Idea(&P)",                 ID_RBN_IN_INSERT_INDEPENDENT
+        END
     END
 END
 
@@ -544,6 +574,16 @@ BEGIN
     END
 END
 #endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Cursor
+//
+
+IDC_CURSOR1             CURSOR                  "res\\cursor1.cur"
+
+IDC_ADD_CHILD           CURSOR                  "POINTER.cur"
 
 
 /////////////////////////////////////////////////////////////////////////////
