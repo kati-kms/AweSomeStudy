@@ -22,11 +22,7 @@ public:
 	CString PicPath;
 	CMapStringToString WriteNodeToTextMap;
 	int PicCount;
-	//CMap<CString, CString&, CFont, CFont&> WriteNodeToFontMap;
-	//CMap<CString,CString&,COLORREF,COLORREF&> WriteNodeToColorMap;
-	//CMap<CString, CString, CPoint, CPoint> WriteNodeToFontMap; 
-	//CMap<int, int, CFont*, CFont*> myMap;
-	//CMapStringToOb w;
+
 
 // 작업입니다.
 public:
