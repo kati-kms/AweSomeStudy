@@ -21,7 +21,8 @@
 #define IDC_CURSOR1                     330
 #define IDB_BITMAP2                     332
 #define IDB_ADD_CHILD                   332
-#define IDB_LOGO                        333
+#define IDB_BITMAP1                     334
+#define IDB_LOGO                        334
 #define IDC_PASSWORD                    1000
 #define IDC_OPEN                        1002
 #define IDC_LOGIN                       1003
@@ -142,7 +143,7 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        334
+#define _APS_NEXT_RESOURCE_VALUE        335
 #define _APS_NEXT_COMMAND_VALUE         32867
 #define _APS_NEXT_CONTROL_VALUE         1051
 #define _APS_NEXT_SYMED_VALUE           314

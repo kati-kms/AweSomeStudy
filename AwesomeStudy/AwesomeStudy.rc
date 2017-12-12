@@ -84,7 +84,7 @@ IDR_MAIN_TOOLBAR        BITMAP                  "res\\toolbar1.bmp"
 
 IDB_ADD_CHILD           BITMAP                  "res\\AddChild.bmp"
 
-IDB_LOGO                BITMAP                  "C:\\Users\\LG\\Desktop\\AwesomeLOGO.bmp"
+IDB_LOGO                BITMAP                  "AwesomeLOGO.bmp"
 
 
 /////////////////////////////////////////////////////////////////////////////
