@@ -30,6 +30,17 @@ CAwesomeHome::CAwesomeHome()
 	m_array.RemoveAll();
 	AddList = FALSE;
 	Select_num = 0;
+	m_color[0] = RGB(255, 160, 122);
+	m_color[1] = RGB(255, 127, 80);
+	m_color[2] = RGB(188, 143, 143);
+	m_color[3] = RGB(173, 255, 47);
+	m_color[4] = RGB(144, 238, 144);
+	m_color[5] = RGB(32, 178, 170);
+	m_color[6] = RGB(135, 206, 235);
+	m_color[7] = RGB(250, 240, 230);
+	m_color[8] = RGB(123, 104, 238);
+	m_color[9] = RGB(192, 192, 192);
+	color_num = 0;
 }
 
 CAwesomeHome::~CAwesomeHome()
@@ -54,7 +65,6 @@ BEGIN_MESSAGE_MAP(CAwesomeHome, CFormView)
 	ON_UPDATE_COMMAND_UI(ID_FILE_OPEN, &CAwesomeHome::OnUpdateFileOpen)
 	ON_WM_LBUTTONDOWN()
 	ON_BN_CLICKED(IDC_DELETE, &CAwesomeHome::OnBnClickedDelete)
-	ON_UPDATE_COMMAND_UI(IDC_HOME, &CAwesomeHome::OnUpdateHome)
 END_MESSAGE_MAP()
 
 
@@ -113,7 +123,7 @@ void CAwesomeHome::OnDraw(CDC* pDC)
 {
 	// TODO: 여기에 특수화된 코드를 추가 및/또는 기본 클래스를 호출합니다.
 	CAwesomeStudyDoc* pDoc = (CAwesomeStudyDoc *)GetDocument();
-	
+
 	pDC->Rectangle(50, 50, 590, 810);
 	for (int i = 0; i < 12; i++) {
 		pDC->MoveTo(50, 90 + i * 60);
@@ -166,9 +176,15 @@ void CAwesomeHome::OnAdd()
 		temp.m_e_hour = AddDlg.m_e_hour;
 		temp.m_e_minute = AddDlg.m_e_minute;
 		temp.m_place = AddDlg.m_place;
-		
+
+		//Error : 강의명을 지정 안한 경우
+		if (temp.m_class == _T("")) {
+			AfxMessageBox(_T("강의명을 설정하지 않았습니다."));
+			return;
+		}
+
 		// Error : 시작 시간과 끝시간이 같을 경우 or 끝시간이 빠를 경우
-		if (temp.m_s_hour > temp.m_e_hour || ((temp.m_s_hour == temp.m_e_hour) && (temp.m_s_minute > temp.m_e_minute))){
+		if (temp.m_s_hour > temp.m_e_hour || ((temp.m_s_hour == temp.m_e_hour) && (temp.m_s_minute >= temp.m_e_minute))) {
 			AfxMessageBox(_T("시간을 다시 설정해주세요."));
 			return;
 		}
@@ -182,30 +198,13 @@ void CAwesomeHome::OnAdd()
 				return;
 			}
 
-		/*
-		// Error : 이미 지정된 시간에 강의가 추가된 경우
-		int error_num = (AddDlg.m_e_hour - AddDlg.m_s_hour) * 12 + (AddDlg.m_e_minute - AddDlg.m_s_minute);
-		int error_hour = AddDlg.m_s_hour;
-		int error_minute = AddDlg.m_s_minute;
-		int error_i_temp = 0;
-		
-		for (int i = 0; i < error_num; i++) {
-			if ((error_minute + error_i_temp) > 11) {
-				error_hour += 1;
-				error_minute = 0;
-				error_i_temp = 0;
-			}
-			if (IsAble[AddDlg.m_date][error_hour][error_minute+ error_i_temp] == 1) {
-				AfxMessageBox(_T("해당 시간에는 이미 강의가 있습니다."));
-				return;
-			}
-			error_i_temp += 1;
-		}
-		*/
 		// 강의 rect 생성
 		CClientDC dc(this);
 		srand((unsigned)time(NULL));
-		CBrush brush(RGB(rand() % 256, rand() % 256, rand() % 256));
+		CBrush brush(m_color[color_num]);
+		color_num++;
+		if (color_num > 9)
+			color_num = 0;
 		dc.SelectObject(brush);
 		CRect rect(temp.m_date * 100 + 90, temp.m_s_hour * 60 + temp.m_s_minute * 5 + 90,
 			temp.m_date * 100 + 190, temp.m_e_hour * 60 + temp.m_e_minute * 5 + 90);
@@ -224,22 +223,6 @@ void CAwesomeHome::OnAdd()
 		for (int i = Start; i < End; i++)
 			IsAble[temp.m_date][i] = TRUE;
 
-		// 시간정보 넣기
-		/*
-		int able_num = (AddDlg.m_e_hour - AddDlg.m_s_hour) * 12 + (AddDlg.m_e_minute - AddDlg.m_s_minute);
-		int able_hour = AddDlg.m_s_hour;
-		int able_minute = AddDlg.m_s_minute;
-		int able_i_temp = 0;
-		for (int i = 0; i < able_num; i++) {
-			if ((able_minute + able_i_temp) > 11) {
-				able_hour += 1;
-				able_minute = 0;
-				able_i_temp = 0;
-			}
-			IsAble[AddDlg.m_date][able_hour][able_minute + able_i_temp] = 1;
-			able_i_temp += 1;
-		}
-		*/
 		// 강의 정보 m_array에 저장
 		m_array.Add(temp);
 	}
@@ -248,11 +231,11 @@ void CAwesomeHome::OnAdd()
 
 void CAwesomeHome::OnUpdateFileOpen(CCmdUI *pCmdUI)
 {
-	CMainFrame* mView = (CMainFrame*)AfxGetMainWnd();
+	/*CMainFrame* mView = (CMainFrame*)AfxGetMainWnd();
 	CView *pView = mView->GetActiveView();
 	if (pView == mView->m_pwndHome) {
-		pCmdUI->Enable(0);
-	}   //지우지마시오 ㅠㅠㅠㅠㅠㅠㅠ
+	pCmdUI->Enable(0);
+	}*/   //지우지마시오 ㅠㅠㅠㅠㅠㅠㅠ
 	// TODO: 여기에 명령 업데이트 UI 처리기 코드를 추가합니다.
 }
 
@@ -262,9 +245,6 @@ void CAwesomeHome::OnLButtonDown(UINT nFlags, CPoint point)
 	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
 	AddList = FALSE;
 	m_delete.EnableWindow(FALSE);
-	m_write.EnableWindow(FALSE);
-	m_pic.EnableWindow(FALSE);
-	m_map.EnableWindow(FALSE);
 	for (int i = 0; i < m_array.GetSize(); i++) {
 		Select_num = i;
 		if (m_array[i].rect.PtInRect(point)) {
@@ -275,7 +255,7 @@ void CAwesomeHome::OnLButtonDown(UINT nFlags, CPoint point)
 			str.Format(_T("교수명 : %s"), m_array[i].m_professor);
 			m_list.AddString(str);
 			switch (m_array[i].m_date) {
-			case 0 : str.Format(_T("요일 : 월요일"));
+			case 0: str.Format(_T("요일 : 월요일"));
 				break;
 			case 1: str.Format(_T("요일 : 화요일"));
 				break;
@@ -287,18 +267,15 @@ void CAwesomeHome::OnLButtonDown(UINT nFlags, CPoint point)
 				break;
 			}
 			m_list.AddString(str);
-			str.Format(_T("시간 : %d시 %d분 ~ "), m_array[i].m_s_hour + 9, (m_array[i].m_s_minute)*5);
+			str.Format(_T("시간 : %d시 %d분 ~ "), m_array[i].m_s_hour + 9, (m_array[i].m_s_minute) * 5);
 			m_list.AddString(str);
-			str.Format(_T("		  %d시 %d분"), m_array[i].m_e_hour + 9, (m_array[i].m_e_minute)*5);
+			str.Format(_T("		  %d시 %d분"), m_array[i].m_e_hour + 9, (m_array[i].m_e_minute) * 5);
 			m_list.AddString(str);
 			str.Format(_T("장소 : %s"), m_array[i].m_place);
 			m_list.AddString(str);
-			
+
 			AddList = TRUE;
 			m_delete.EnableWindow(TRUE);
-			m_write.EnableWindow(TRUE);
-			m_pic.EnableWindow(TRUE);
-			m_map.EnableWindow(TRUE);
 			break;
 		}
 	}
@@ -319,15 +296,4 @@ void CAwesomeHome::OnBnClickedDelete()
 	m_array.RemoveAt(Select_num);
 	m_list.ResetContent();
 	Invalidate();
-}
-
-
-void CAwesomeHome::OnUpdateHome(CCmdUI *pCmdUI)
-{
-	CMainFrame* mView = (CMainFrame*)AfxGetMainWnd();
-	CView *pView = mView->GetActiveView();
-	if (pView == mView->m_pwndHome) {
-		pCmdUI->Enable(0);
-	}
-	// TODO: 여기에 명령 업데이트 UI 처리기 코드를 추가합니다.
 }
