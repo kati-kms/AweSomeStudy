@@ -42,6 +42,7 @@ BEGIN_MESSAGE_MAP(CAwesomeMmap, CView)
 	ON_COMMAND(ID_RBN_OUT_INSERT_INDEPENDENT, &CAwesomeMmap::OnRbnOutInsertIndependent)
 	ON_WM_MOUSEMOVE()
 	ON_WM_LBUTTONUP()
+	ON_UPDATE_COMMAND_UI(ID_FILE_OPEN, &CAwesomeMmap::OnUpdateFileOpen)
 END_MESSAGE_MAP()
 
 
@@ -722,113 +723,4 @@ void CAwesomeMmap::OnLButtonUp(UINT nFlags, CPoint point)
 	}
 
 	CView::OnLButtonUp(nFlags, point);
-}
-
-
-// pos->Prev자리의 노드를 제거한다.
-//만약 지우려는 노드가 Tail이라 pos가 NULL인 경우,
-//Tail을 지운다
-CIdea& CAwesomeMmap::DeleteIdea(POSITION pos, CList<CIdea, CIdea&>& ideaList)
-{
-	// TODO: 여기에 반환 구문을 삽입합니다.
-	CIdea* tmpIdea;
-	if (pos == NULL) {
-		return ideaList.RemoveTail();
-	}
-	ideaList.GetPrev(pos);
-	tmpIdea = &ideaList.GetAt(pos);
-	ideaList.RemoveAt(pos);
-	return *tmpIdea;
-}
-
-
-// OnDraw 함수가 호출하여 사용하는 더블버퍼링용 그리기 DC
-void CAwesomeMmap::DrawImage(CDC* pDC)
-{
-	CAwesomeStudyDoc* pDoc = (CAwesomeStudyDoc *)GetDocument();
-	POSITION pos;
-	CIdea *ideas;
-	CBrush ideaBrush;
-	CPen ideaPen;
-	CPoint roundPoint;
-	CList<CIdea, CIdea&> *ideaList = &(pDoc->m_ideaList);
-	int r, g, b;
-	double rndX, rndY;
-	const double brightRate = 0.80;
-	int pointCode = cursorFlag;
-
-
-	//Idea 객체 보이기
-	//인쇄할 땐 Tail부터 반대로 인쇄해야겠다.
-	//왜냐면 상대적으로 뒤늦게 인쇄된 Idea가 다른 Idea를 덮었을 경우,
-	//겹친 부분을 클릭했을 때 뒤늦게 인쇄된 Idea가 되어야 하기 때문이다.
-	pos = ideaList->GetTailPosition();
-	while (pos != NULL) {
-		ideas = &ideaList->GetPrev(pos);
-		//debug
-		//CString str;
-		//str.Format(_T("%d, %d, %d"), GetRValue(ideas.m_ideaColor), GetGValue(ideas.m_ideaColor), GetBValue(ideas.m_ideaColor));
-		//AfxMessageBox(str);
-
-		//round value to each of Ideas
-		rndX = ideas->m_ideaRect.Width() * roundRate;
-		rndY = ideas->m_ideaRect.Height() * roundRate;
-		roundPoint.SetPoint(rndX, rndY);
-
-		//debug
-		/*
-		CString str;
-		str.Format(_T("%d, %d"), ideas.m_ideaRect.left, ideas.m_ideaRect.bottom);
-		AfxMessageBox(str);
-		*/
-
-		//brush
-		ideaBrush.DeleteObject();
-		ideaBrush.CreateSolidBrush(ideas->m_ideaColor);
-		//darker pen
-		r = GetRValue(ideas->m_ideaColor);
-		g = GetGValue(ideas->m_ideaColor);
-		b = GetBValue(ideas->m_ideaColor);
-
-		r = r - r * brightRate;
-		g = g - g * brightRate;
-		b = b - b * brightRate;
-		ideaPen.DeleteObject();
-		ideaPen.CreatePen(PS_SOLID, 4, RGB((int)r, (int)g, (int)b));
-
-		pDC->SelectObject(ideaBrush);
-		pDC->RoundRect(ideas->m_ideaRect, roundPoint);
-		pDC->SelectObject(ideaPen);
-		pDC->RoundRect(ideas->m_ideaRect, roundPoint);
-		ideaBrush.DeleteObject();
-		//text
-		pDC->SetBkMode(TRANSPARENT);
-		pDC->DrawText(ideas->m_ideaString, ideas->m_ideaRect, DT_VCENTER | DT_CENTER | DT_SINGLELINE);
-
-		//size handle
-		if (ideas->m_bHighlighted == TRUE) {
-			ideaPen.DeleteObject();
-			ideaPen.CreatePen(PS_SOLID, 1, RGB(0, 0, 0));
-			pDC->SelectStockObject(NULL_BRUSH);
-			pDC->SelectObject(ideaPen);
-
-			pDC->Rectangle(
-				ideas->m_ideaRect.left - szhnd, ideas->m_ideaRect.top - szhnd
-				, ideas->m_ideaRect.left + szhnd, ideas->m_ideaRect.top + szhnd
-			);
-			pDC->Rectangle(
-				ideas->m_ideaRect.right - szhnd, ideas->m_ideaRect.top - szhnd
-				, ideas->m_ideaRect.right + szhnd, ideas->m_ideaRect.top + szhnd
-			);
-			pDC->Rectangle(
-				ideas->m_ideaRect.left - szhnd, ideas->m_ideaRect.bottom - szhnd,
-				ideas->m_ideaRect.left + szhnd, ideas->m_ideaRect.bottom + szhnd
-			);
-			pDC->Rectangle(
-				ideas->m_ideaRect.right - szhnd, ideas->m_ideaRect.bottom - szhnd
-				, ideas->m_ideaRect.right + szhnd, ideas->m_ideaRect.bottom + szhnd
-			);
-			ideaPen.DeleteObject();
-		}
-	}
 }
