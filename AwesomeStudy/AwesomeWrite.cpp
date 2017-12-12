@@ -306,6 +306,9 @@ void CAwesomeWrite::OnEnChangeWrite()
 	// 문자열이 바뀌면 Updata()? 함수 호출 // for 저장
 	// 문자열이 바뀌면 전체줄 기억하기
 	
+	CAwesomeStudyDoc* pDoc = GetDocument();
+	pDoc->SetModifiedFlag();
+
 	int total_line = m_write.GetLineCount();
 	CString str;
 	str.Format(_T("%d"), total_line);

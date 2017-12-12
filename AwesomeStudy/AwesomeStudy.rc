@@ -134,7 +134,6 @@ BEGIN
         MENUITEM "Paste(&P)\tCtrl+V",           ID_WRITE_PASTE
         MENUITEM SEPARATOR
         MENUITEM "Find(&F)\tCtrl+F",            ID_WRITE_FIND
-        MENUITEM "FindNext(&N)\tF3",            ID_WRITE_FINDNEXT
         MENUITEM "Replace(&R)\tCtrl+H",         ID_WRITE_REPLACE
         MENUITEM "Go(&G)\tCtrl+G",              ID_WRITE_GO
         MENUITEM SEPARATOR
