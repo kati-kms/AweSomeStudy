@@ -30,6 +30,9 @@ CAwesomeHome::CAwesomeHome()
 	m_array.RemoveAll();
 	AddList = FALSE;
 	Select_num = 0;
+	for (int i = 0; i < 5; i++)
+		for (int j = 0; j < 144; j++)
+			IsAble[i][j] = FALSE;
 	m_color[0] = RGB(255, 160, 122);
 	m_color[1] = RGB(255, 127, 80);
 	m_color[2] = RGB(188, 143, 143);
@@ -158,6 +161,16 @@ void CAwesomeHome::OnDraw(CDC* pDC)
 		pDC->Rectangle(m_array[i].rect);
 		pDC->SetBkMode(TRANSPARENT);
 		pDC->DrawText(m_array[i].m_class, &m_array[i].rect, TA_LEFT | TA_TOP | DT_EXPANDTABS | DT_WORDBREAK);
+	}
+
+	//IsAble √ ±‚»≠
+	int Start;
+	int End;
+	for (int i = 0; i < m_array.GetCount(); i++) {
+		Start = m_array[i].m_s_hour * 12 + m_array[i].m_s_minute;
+		End = m_array[i].m_e_hour * 12 + m_array[i].m_e_minute;
+		for (int j = Start; j < End; j++)
+			IsAble[m_array[i].m_date][j] = TRUE;
 	}
 }
 
