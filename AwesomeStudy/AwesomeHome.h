@@ -60,6 +60,7 @@ public:
 	CButton m_write;
 	CButton m_pic;
 	CButton m_map;
+	afx_msg void OnUpdateHome(CCmdUI *pCmdUI);
 };
 
 

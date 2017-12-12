@@ -54,6 +54,7 @@ BEGIN_MESSAGE_MAP(CAwesomeHome, CFormView)
 	ON_UPDATE_COMMAND_UI(ID_FILE_OPEN, &CAwesomeHome::OnUpdateFileOpen)
 	ON_WM_LBUTTONDOWN()
 	ON_BN_CLICKED(IDC_DELETE, &CAwesomeHome::OnBnClickedDelete)
+	ON_UPDATE_COMMAND_UI(IDC_HOME, &CAwesomeHome::OnUpdateHome)
 END_MESSAGE_MAP()
 
 
@@ -318,4 +319,15 @@ void CAwesomeHome::OnBnClickedDelete()
 	m_array.RemoveAt(Select_num);
 	m_list.ResetContent();
 	Invalidate();
+}
+
+
+void CAwesomeHome::OnUpdateHome(CCmdUI *pCmdUI)
+{
+	CMainFrame* mView = (CMainFrame*)AfxGetMainWnd();
+	CView *pView = mView->GetActiveView();
+	if (pView == mView->m_pwndHome) {
+		pCmdUI->Enable(0);
+	}
+	// TODO: 여기에 명령 업데이트 UI 처리기 코드를 추가합니다.
 }
