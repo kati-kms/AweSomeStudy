@@ -942,8 +942,6 @@ void CAwesomeMmap::DrawImage(CDC* pDC)
 		pDC->DrawText(ideas->m_ideaString, ideas->m_ideaRect, DT_VCENTER | DT_CENTER | DT_SINGLELINE);
 
 		//Bezier Line ( 루트가 아니면 )
-		pDoc->FindParent(ideas);
-
 
 
 		//size handle & add child handle
