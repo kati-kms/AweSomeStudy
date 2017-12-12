@@ -60,6 +60,7 @@ BEGIN_MESSAGE_MAP(CAwesomeWrite, CFormView)
 	ON_WM_SIZE()
 	ON_NOTIFY(NM_CLICK, IDC_WriteTree, &CAwesomeWrite::OnNMClickWritetree)
 	ON_UPDATE_COMMAND_UI(ID_FILE_OPEN, &CAwesomeWrite::OnUpdateFileOpen)
+	ON_BN_CLICKED(IDC_WRITESAVE, &CAwesomeWrite::OnBnClickedWritesave)
 END_MESSAGE_MAP()
 
 
@@ -129,11 +130,11 @@ void CAwesomeWrite::OnBnClickedWriteSave()
 	else return;
 	//str저장하면됨
 	PicNode = m_treeWrite.InsertItem(name, TVI_ROOT);
-	pDoc->WriteNodeToTextMap.SetAt(name, str);
+	/*pDoc->WriteNodeToTextMap.SetAt(name, str);
 	m_treeWrite.Select(PicNode, TVGN_CARET);
 	int len = m_write.GetWindowTextLength();
 	m_write.SetSel(0, len);
-	m_write.Clear();
+	m_write.Clear();*/
 	//폰트 저장
 	//pDoc->w.SetAt(name, m_font);
 	//색깔 저장
@@ -490,4 +491,19 @@ void CAwesomeWrite::OnUpdateFileOpen(CCmdUI *pCmdUI)
 		pCmdUI->Enable(0);
 	}
 	// TODO: 여기에 명령 업데이트 UI 처리기 코드를 추가합니다.
+}
+
+
+void CAwesomeWrite::OnBnClickedWritesave()
+{
+	CString name = m_treeWrite.GetItemText(PicNode);
+	CString str;
+	m_write.GetWindowText(str);
+	CAwesomeStudyDoc* pDoc = GetDocument();
+	pDoc->WriteNodeToTextMap.SetAt(name, str);
+	m_treeWrite.Select(PicNode, TVGN_CARET);
+	int len = m_write.GetWindowTextLength();
+	m_write.SetSel(0, len);
+	m_write.Clear();
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 }

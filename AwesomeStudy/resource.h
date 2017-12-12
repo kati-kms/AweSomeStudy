@@ -61,6 +61,7 @@
 #define IDC_DATE                        1046
 #define IDC_BUTTON1                     1048
 #define IDC_ADD_TIME                    1048
+#define IDC_WRITESAVE                   1048
 #define IDC_TREE1                       1049
 #define IDC_WriteTree                   1049
 #define IDC_INFO                        1050
