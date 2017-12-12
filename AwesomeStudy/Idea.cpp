@@ -112,11 +112,11 @@ CIdea::CIdea(CRect rect, CString str)
 	this->m_ideaString = str;
 }
 
-CIdea::CIdea(CRect rect, CString str, IndexPointer _parent)
+CIdea::CIdea(CRect rect, CString str, CIdea *_parent)
 {
 	CIdea(rect, str);
 	this->NewIdea();
-	this->m_ipParentNode = _parent;
+	this->m_ipParentNode = _parent->m_ipSelfNode;
 }
 
 CIdea::CIdea(const CIdea & idea)

@@ -44,7 +44,7 @@ public:
 public:
 	CIdea();
 	CIdea(CRect rect, CString str);
-	CIdea(CRect rect, CString str, IndexPointer _parent);
+	CIdea(CRect rect, CString str, CIdea* _parent);
 	CIdea(const CIdea & idea);
 	~CIdea();
 	void Serialize(CArchive & ar);
