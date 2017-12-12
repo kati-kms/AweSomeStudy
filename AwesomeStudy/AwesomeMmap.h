@@ -33,7 +33,7 @@ public:
 	IndexPointer m_ipParent; 
 	IndexPointer m_ipChild;
 	//CIdea m_ChildIdea;
-	CIdea *m_ParentIdea;
+	CIdea m_ParentIdea;
 	CPoint m_tmpChildPnt1, m_tmpChildPnt2;
 	CPoint *m_pPolyBezierPoints;
 	int m_tmpX1, m_tmpX2, m_tmpY1, m_tmpY2;

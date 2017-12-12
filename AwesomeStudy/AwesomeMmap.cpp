@@ -271,11 +271,11 @@ void CAwesomeMmap::OnLButtonDown(UINT nFlags, CPoint point)
 			m_bAddChildMode = TRUE;
 
 			m_ipParent = selectedIdea.m_ipSelfNode;
-			m_ParentIdea = &selectedIdea;
+			m_ParentIdea = selectedIdea;
 			m_tmpChildPnt1 = CPoint(point.x - 50, point.y - 50);
 			m_tmpChildPnt2 = CPoint(point.x + 50, point.y + 50);
 
-			m_pPolyBezierPoints[0] = m_ParentIdea->m_ideaRect.CenterPoint();
+			m_pPolyBezierPoints[0] = m_ParentIdea.m_ideaRect.CenterPoint();
 			m_pPolyBezierPoints[1] = point;
 			m_pPolyBezierPoints[2] = point;
 		}
@@ -812,7 +812,7 @@ void CAwesomeMmap::OnLButtonUp(UINT nFlags, CPoint point)
 		CRect rect(m_tmpChildPnt1, m_tmpChildPnt2);
 		CIdea newIdea(rect, newStr);
 		newIdea.NewIdea();
-		newIdea.m_ipParentNode = m_ParentIdea->m_ipSelfNode;
+		newIdea.m_ipParentNode = m_ParentIdea.m_ipSelfNode;
 
 		pDoc->m_ideaList.AddHead(newIdea);
 		//TODO: m_ipParent와 m_ipChild 초기화
