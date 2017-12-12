@@ -235,6 +235,7 @@
     <ResourceCompile Include="AwesomeStudy.rc" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="..\..\..\..\Desktop\AwesomeLOGO.bmp" />
     <Image Include="res\AddChild.bmp" />
     <Image Include="res\AwesomeStudy.ico" />
     <Image Include="res\AwesomeStudyDoc.ico" />

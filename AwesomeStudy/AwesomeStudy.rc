@@ -84,6 +84,8 @@ IDR_MAIN_TOOLBAR        BITMAP                  "res\\toolbar1.bmp"
 
 IDB_ADD_CHILD           BITMAP                  "res\\AddChild.bmp"
 
+IDB_LOGO                BITMAP                  "C:\\Users\\LG\\Desktop\\AwesomeLOGO.bmp"
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -231,10 +233,10 @@ IDD_AWESOMESTUDY_FORM DIALOGEX 0, 0, 554, 403
 STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD
 FONT 9, "MS Shell Dlg", 0, 0, 0x1
 BEGIN
-    LTEXT           "비밀번호",IDC_STATIC,20,76,39,8
-    EDITTEXT        IDC_PASSWORD,68,76,122,14,ES_AUTOHSCROLL
-    PUSHBUTTON      "로그인",IDC_LOGIN,208,76,50,14
-    LTEXT           "",IDC_PATH,77,45,349,13
+    LTEXT           " 비밀번호 ",IDC_STATIC,146,296,36,9,0,WS_EX_TRANSPARENT | WS_EX_CLIENTEDGE
+    EDITTEXT        IDC_PASSWORD,190,295,137,14,ES_PASSWORD | ES_AUTOHSCROLL
+    PUSHBUTTON      "로그인",IDC_LOGIN,330,295,50,14
+    LTEXT           "",IDC_PATH,77,45,349,13,NOT WS_VISIBLE
 END
 
 IDD_AWESOMEHOME DIALOGEX 0, 0, 506, 292
