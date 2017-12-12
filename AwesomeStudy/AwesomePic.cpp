@@ -210,16 +210,6 @@ void CAwesomePic::OnDraw(CDC* pDC)
 }
 
 
-void CAwesomePic::OnLButtonDown(UINT nFlags, CPoint point)
-{
-	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
-	CRect rect(700, 5, 500, 500);
-	if (rect.PtInRect(point)) {
-		AfxMessageBox(_T("여기당"));
-	}
-	CFormView::OnLButtonDown(nFlags, point);
-}
-
 
 void CAwesomePic::OnUpdateFileOpen(CCmdUI *pCmdUI)
 {

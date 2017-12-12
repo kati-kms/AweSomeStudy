@@ -122,19 +122,19 @@ void CMainFrame::SwitchView(int nID)
 	switch (nID)
 	{
 	case VIEWID_WRITE:
-		AfxMessageBox(_T("VIEWID_WRITE"));
+		//AfxMessageBox(_T("VIEWID_WRITE"));
 		pNewView = (CView*)m_pwndWrite;
 		break;
 	case VIEWID_PIC:
-		AfxMessageBox(_T("VIEWID_PIC"));
+		//AfxMessageBox(_T("VIEWID_PIC"));
 		pNewView = (CView*)m_pwndPic;
 		break;
 	case VIEWID_Mmap:
-		AfxMessageBox(_T("VIEWID_Mmap"));
+		//AfxMessageBox(_T("VIEWID_Mmap"));
 		pNewView = (CView*)m_pwndMmap;
 		break;
 	case VIEWID_HOME:
-		AfxMessageBox(_T("VIEWID_HOME"));
+		//AfxMessageBox(_T("VIEWID_HOME"));
 		pNewView = (CView*)m_pwndHome;
 
 	}
