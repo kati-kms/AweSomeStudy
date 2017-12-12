@@ -381,6 +381,7 @@ LRESULT CAwesomeWrite::OnFindReplaceCmd(WPARAM wParam, LPARAM lParam)
 	}
 	else if (pFindDlg->ReplaceAll()) {
 		int start = 0;
+		int m_next_start = 0;
 		while (1) {
 			//°Ë»öÇÒString
 			CString find_str;
