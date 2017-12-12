@@ -17,12 +17,24 @@ CIdea & CIdea::operator=(const CIdea & data)
 		this->m_ideaRect = data.m_ideaRect;
 		this->m_ideaString = data.m_ideaString;
 		this->m_ideaColor = RGB(66, 134, 244);
-		this->m_ipLeftChild = data.m_ipLeftChild;
 		this->m_ipParentNode = data.m_ipParentNode;
-		this->m_ipRightSibling = data.m_ipRightSibling;
 		this->m_ipSelfNode = data.m_ipSelfNode;
+		//this->m_ipRightSibling = data.m_ipRightSibling;
+		//this->m_ipLeftChild = data.m_ipLeftChild;
 	}
 	return *this;
+}
+
+BOOL CIdea::operator==(const CIdea & data)
+{
+	BOOL flag;
+	flag = this->m_ideaColor == data.m_ideaColor
+		&& this->m_ideaRect == data.m_ideaRect
+		&& this->m_ideaString == data.m_ideaString
+		&& this->m_ipParentNode == data.m_ipParentNode
+		&& this->m_ipSelfNode == data.m_ipSelfNode;
+
+	return flag;
 }
 
 CRgn & CIdea::MakeIdeaRgn()
@@ -66,11 +78,11 @@ CString CIdea::StringOutIdea()
 		this->m_bHighlighted ? CString(_T("TRUE")) : CString(_T("FALSE")) 
 	);
 	masterStr.Append(str);
-	str.Format(_T("myself : %d, parent : %d, leftChild : %d rightChild : %d\n"),
+	str.Format(_T("myself : %d, parent : %d\n"),
 		this->m_ipSelfNode,
-		this->m_ipParentNode,
-		this->m_ipLeftChild,
-		this->m_ipRightSibling
+		this->m_ipParentNode
+		//this->m_ipLeftChild,
+		//this->m_ipRightSibling
 	);
 	masterStr.Append(str);
 
@@ -84,17 +96,21 @@ void CIdea::SetHighlight(BOOL bl)
 
 
 
-
-
-
-
+/////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////
 //»ý¼ºÀÚ-------------------------------------
 CIdea::CIdea()
 {
 	//static IndexPointer nodeIndex = 0;
 	//this->m_ipSelfNode = ++nodeIndex;
-	this->m_ipLeftChild = 0;
-	this->m_ipRightSibling = 0;
+	//this->m_ipLeftChild = 0;
+	//this->m_ipRightSibling = 0;
 	this->m_ipSelfNode = 0;
 	this->m_ipParentNode = 0;
 	this->m_bHighlighted = FALSE;
@@ -112,11 +128,11 @@ CIdea::CIdea(CRect rect, CString str)
 	this->m_ideaString = str;
 }
 
-CIdea::CIdea(CRect rect, CString str, CIdea *_parent)
+CIdea::CIdea(CRect& rect, CString& str, CIdea &_parent)
 {
 	CIdea(rect, str);
 	this->NewIdea();
-	this->m_ipParentNode = _parent->m_ipSelfNode;
+	this->m_ipParentNode = _parent.m_ipSelfNode;
 }
 
 CIdea::CIdea(const CIdea & idea)
@@ -125,10 +141,10 @@ CIdea::CIdea(const CIdea & idea)
 	this->m_ideaRect = idea.m_ideaRect;
 	this->m_ideaString = idea.m_ideaString;
 	this->m_ideaColor = idea.m_ideaColor;
-	this->m_ipLeftChild = idea.m_ipLeftChild;
 	this->m_ipParentNode = idea.m_ipParentNode;
-	this->m_ipRightSibling = idea.m_ipRightSibling;
 	this->m_ipSelfNode = idea.m_ipSelfNode;
+	//this->m_ipLeftChild = idea.m_ipLeftChild;
+	//this->m_ipRightSibling = idea.m_ipRightSibling;
 }
 
 
@@ -152,10 +168,10 @@ void CIdea::Serialize(CArchive & ar)
 			<< this->m_ideaColor
 			<< this->m_ideaRect
 			<< this->m_ideaString
-			<< this->m_ipLeftChild
 			<< this->m_ipParentNode
-			<< this->m_ipRightSibling
 			<< this->m_ipSelfNode
+			//<< this->m_ipRightSibling
+			//<< this->m_ipLeftChild
 			;
 
 	}
@@ -165,10 +181,10 @@ void CIdea::Serialize(CArchive & ar)
 			>> this->m_ideaColor
 			>> this->m_ideaRect
 			>> this->m_ideaString
-			>> this->m_ipLeftChild
 			>> this->m_ipParentNode
-			>> this->m_ipRightSibling
 			>> this->m_ipSelfNode
+			//>> this->m_ipLeftChild
+			//>> this->m_ipRightSibling
 			;
 	}
 }

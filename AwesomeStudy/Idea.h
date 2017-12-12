@@ -26,14 +26,16 @@ public:
 	BOOL m_bHighlighted;
 	IndexPointer m_ipSelfNode;
 	IndexPointer m_ipParentNode;
-	IndexPointer m_ipLeftChild;
-	IndexPointer m_ipRightSibling;
+	//굳이 leftChild와 rightSibling을 집어넣을 필요가 있을까?
+	//IndexPointer m_ipLeftChild;
+	//IndexPointer m_ipRightSibling;
 
 	//메소드
 public:
+	CIdea& operator=(const CIdea& data);
+	BOOL operator==(const CIdea& data);
 	void SetRect(CRect rect) { this->m_ideaRect = rect; }
 	void SetString(CString str) { this->m_ideaString = str; }
-	CIdea& operator=(const CIdea& data);
 	//Make 하고나서 반드시 Delete를 해주어야 한다.
 	CRgn& MakeIdeaRgn();
 	void DeleteIdeaRgn();
@@ -44,7 +46,7 @@ public:
 public:
 	CIdea();
 	CIdea(CRect rect, CString str);
-	CIdea(CRect rect, CString str, CIdea* _parent);
+	CIdea(CRect& rect, CString& str, CIdea& _parent);
 	CIdea(const CIdea & idea);
 	~CIdea();
 	void Serialize(CArchive & ar);
@@ -58,4 +60,5 @@ public:
 		this->m_ipParentNode = nowIndex;
 		return nowIndex;
 	}
+
 };

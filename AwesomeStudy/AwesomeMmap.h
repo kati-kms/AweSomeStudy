@@ -14,8 +14,8 @@
 typedef int IndexPointer;
 
 // CAwesomeMmap ∫‰¿‘¥œ¥Ÿ.
-class CIdea;
 class CMemDC;
+class CIdea;
 
 class CAwesomeMmap : public CView
 {
@@ -32,9 +32,10 @@ public:
 	CPoint m_mousePointInRect;
 	IndexPointer m_ipParent; 
 	IndexPointer m_ipChild;
-	CIdea *m_ChildIdea;
+	//CIdea m_ChildIdea;
 	CIdea *m_ParentIdea;
 	CPoint m_tmpChildPnt1, m_tmpChildPnt2;
+	CPoint *m_pPolyBezierPoints;
 	int m_tmpX1, m_tmpX2, m_tmpY1, m_tmpY2;
 	int m_nPressedFlag;
 	int m_childHndX1, m_childHndY1, m_childHndX2, m_childHndY2;

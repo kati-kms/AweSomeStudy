@@ -28,10 +28,11 @@ CAwesomeMmap::CAwesomeMmap()
 	m_bMoveMode = FALSE;
 	m_nPressedFlag = 0;
 	m_mousePointInRect.SetPoint(0, 0);
-	m_ChildIdea = NULL;
-	m_ParentIdea = NULL;
+	//m_ChildIdea = NULL;
+	//m_ParentIdea = NULL;
 	m_tmpChildPnt1.SetPoint(0, 0);
 	m_tmpChildPnt2.SetPoint(0, 0);
+	m_pPolyBezierPoints = new CPoint[3];
 }
 
 CAwesomeMmap::~CAwesomeMmap()
@@ -272,6 +273,10 @@ void CAwesomeMmap::OnLButtonDown(UINT nFlags, CPoint point)
 			m_ParentIdea = &selectedIdea;
 			m_tmpChildPnt1 = CPoint(point.x - 50, point.y - 50);
 			m_tmpChildPnt2 = CPoint(point.x + 50, point.y + 50);
+
+			m_pPolyBezierPoints[0] = m_ParentIdea->m_ideaRect.CenterPoint();
+			m_pPolyBezierPoints[1] = point;
+			m_pPolyBezierPoints[2] = point;
 		}
 	}
 
@@ -298,14 +303,12 @@ void CAwesomeMmap::OnMouseMove(UINT nFlags, CPoint point)
 	CIdea *thisIdea = &GetIdea(tmpPosition, pDoc->m_ideaList);
 	CClientDC dc(this);
 	CPoint roundPoint;
-	CPoint *bezierPnts = (CPoint*) malloc(3 * sizeof(CPoint));
 	CRect drawRect;
-	//debug --------------------------------------------------------
+	//debug ////////////////////////////////////////////////////////////
 	CClientDC debugDc(this);
 	CString str;
 	CString tmpStr;
-	CRect debugRect;
-	GetClientRect(&debugRect);
+	CRect debugRect(0, 0, 500, 150);
 	int pointCode = cursorFlag;
 	if (pointCode == 0)
 		str.Format(_T("RGN_IDEA_OUT\n"));
@@ -323,9 +326,13 @@ void CAwesomeMmap::OnMouseMove(UINT nFlags, CPoint point)
 		str.Format(_T("RGN_SIZE_HND_BTMRIGHT\n"));
 	str.Append(GetIdea(tmpPosition, pDoc->m_ideaList).StringOutIdea());
 	tmpStr.Format(_T("\n현재 리스트 개수 : %d\n"), pDoc->m_ideaList.GetCount());
+	tmpStr.Format(_T("polybezier : (%d, %d), (%d, %d), (%d, %d)\n"),
+		m_pPolyBezierPoints[0].x, m_pPolyBezierPoints[0].y,
+		m_pPolyBezierPoints[1].x, m_pPolyBezierPoints[1].y,
+		m_pPolyBezierPoints[2].x, m_pPolyBezierPoints[2].y);
 	str.Append(tmpStr);
 	debugDc.DrawText(str, debugRect, 0);
-	//debug_end--------------------------------------------------------
+	//debug_end///////////////////////////////////////////////////////////
 
 
 
@@ -394,28 +401,29 @@ void CAwesomeMmap::OnMouseMove(UINT nFlags, CPoint point)
 	{
 		//TODO: 곡선이 안 그려진다
 		//BezierLine, Rect 이 두가지를 지웠다가 다시 그리는 걸로 하자
-		bezierPnts[0] = m_ParentIdea->m_ideaRect.CenterPoint();
-		bezierPnts[1] = CPoint(m_tmpX1, m_ParentIdea->m_ideaRect.CenterPoint().y);
-		bezierPnts[2] = CPoint(m_tmpX1, m_tmpY1);
+		//bezierPoints[0] = m_ParentIdea.m_ideaRect.CenterPoint();
+		//bezierPoints[1] = CPoint(m_tmpX1, m_ParentIdea.m_ideaRect.CenterPoint().y);
+		//bezierPoints[2] = CPoint(m_tmpX1, m_tmpY1);
+
 		drawRect.SetRect(m_tmpChildPnt1, m_tmpChildPnt2);
 		roundPoint.SetPoint(drawRect.Width() * roundRate, drawRect.Height() * roundRate);
 
 		dc.SelectStockObject(NULL_BRUSH);
 		//이전에 그린 사각형과 곡선을 지운다
 		dc.SetROP2(R2_NOT);
-		dc.PolyBezier(bezierPnts, 3);
+		dc.PolyBezier(m_pPolyBezierPoints, 3);
 		dc.RoundRect(drawRect, roundPoint);
 
 		m_tmpChildPnt1 = CPoint(point.x - 50, point.y - 50);
 		m_tmpChildPnt2 = CPoint(point.x + 50, point.y + 50);
 		m_tmpX1 = point.x;
 		m_tmpY1 = point.y;
-		bezierPnts[1].x = m_tmpX1;
-		bezierPnts[2] = (m_tmpX1, m_tmpY1);
+		m_pPolyBezierPoints[1].x = point.x;
+		m_pPolyBezierPoints[2] = point;
 
 		//새로운 사각형과 곡선을 그린다
 		dc.SetROP2(R2_NOT);
-		dc.PolyBezier(bezierPnts, 3);
+		dc.PolyBezier(m_pPolyBezierPoints, 3);
 
 		drawRect.SetRectEmpty();
 		drawRect.SetRect(m_tmpChildPnt1, m_tmpChildPnt2);
@@ -797,15 +805,18 @@ void CAwesomeMmap::OnLButtonUp(UINT nFlags, CPoint point)
 	if (m_bAddChildMode) {
 		m_bAddChildMode = FALSE;
 		//TODO: 새로운 Child를 생성하여 저장, 인덱스도 같이 끌고간다.
-		CString str;
-		str.Format(_T("[%d, %d]"), point.x, point.y);
-		AfxMessageBox(str);
-		CRect rect(m_tmpChildPnt1, m_tmpChildPnt2);
-		CIdea newIdea(rect, str, m_ParentIdea);
-		pDoc->m_ideaList.AddHead(newIdea);
 
+		CString newStr;
+		newStr.Format(_T("[%d, %d]"), point.x, point.y);
+		CRect rect(m_tmpChildPnt1, m_tmpChildPnt2);
+		CIdea newIdea(rect, newStr);
+		newIdea.NewIdea();
+		newIdea.m_ipParentNode = m_ParentIdea->m_ipSelfNode;
+
+		pDoc->m_ideaList.AddHead(newIdea);
 		//TODO: m_ipParent와 m_ipChild 초기화
 		m_ipParent = m_ipChild = 0;
+		//m_pPolyBezierPoints = NULL;
 
 		//
 		pDoc->SetModifiedFlag();
@@ -853,10 +864,9 @@ void CAwesomeMmap::DrawImage(CDC* pDC)
 	//DEBUG//////////////////////////////////////////////////////////////
 	//지금까지 가지고 있는 모든 리스트의 Idea들을 
 	//전부 클라이언트에 출력한다.
-	CClientDC dc(this);
 	CString masterStr;
 	CString semiStr;
-	CRect debugRect(0, 100, 200, 500);
+	CRect debugRect(0, 150, 600, 1000);
 	pos = ideaList->GetHeadPosition();
 	while (pos != NULL) {
 		ideas = &ideaList->GetNext(pos);
@@ -870,14 +880,14 @@ void CAwesomeMmap::DrawImage(CDC* pDC)
 		masterStr.Append(semiStr);
 		semiStr.Format(_T("m_ipParentNode : %d\n"), ideas->m_ipParentNode);
 		masterStr.Append(semiStr);
-		semiStr.Format(_T("m_ipChildNode : %d\n"), ideas->m_ipLeftChild);
-		masterStr.Append(semiStr);
-		semiStr.Format(_T("m_ipSiblingNode : %d\n"), ideas->m_ipRightSibling);
-		masterStr.Append(semiStr);
+		//semiStr.Format(_T("m_ipChildNode : %d\n"), ideas->m_ipLeftChild);
+		//masterStr.Append(semiStr);
+		//semiStr.Format(_T("m_ipSiblingNode : %d\n"), ideas->m_ipRightSibling);
+		//masterStr.Append(semiStr);
 
-		masterStr.Append(_T("\n\n"));
+		masterStr.Append(_T("\n"));
 	}
-	dc.DrawText(masterStr, &debugRect, DT_LEFT);
+	pDC->DrawText(masterStr, &debugRect, DT_LEFT);
 
 	//DEBUG//////////////////////////////////////////////////////////////
 
@@ -925,9 +935,15 @@ void CAwesomeMmap::DrawImage(CDC* pDC)
 		pDC->SelectObject(ideaPen);
 		pDC->RoundRect(ideas->m_ideaRect, roundPoint);
 		ideaBrush.DeleteObject();
+
 		//text
 		pDC->SetBkMode(TRANSPARENT);
 		pDC->DrawText(ideas->m_ideaString, ideas->m_ideaRect, DT_VCENTER | DT_CENTER | DT_SINGLELINE);
+
+		//Bezier Line ( 루트가 아니면 )
+		pDoc->FindParent(ideas);
+
+
 
 		//size handle & add child handle
 		if (ideas->m_bHighlighted == TRUE) {

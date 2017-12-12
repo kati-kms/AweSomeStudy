@@ -367,3 +367,72 @@ CIdea& CAwesomeStudyDoc::FindIndexIdea(POSITION pos, IndexPointer pnt)
 	}
 	return tmpIdea;
 }
+
+
+// childIdea를 기점으로 자신의 부모를 찾아서 리턴한다.
+CIdea& CAwesomeStudyDoc::FindParent(CIdea* childIdea)
+{
+	// TODO: 여기에 반환 구문을 삽입합니다.
+	POSITION findPos;
+	POSITION savePos;
+	CIdea tmpParent;
+	try {
+		findPos = m_ideaList.Find(*childIdea, NULL);
+		if (&findPos == NULL) { throw 0; }
+		savePos = findPos;
+
+		////////////////////////////////////////////////////////////////////////////////
+		//부모인덱스 가지고 하나씩 순회하면서 대조하는 프로시저
+		//상대적으로 리스트의 왼쪽에 있을 확률이 크므로 현 포지션에서부터 왼쪽으로 탐색.
+		//NULL이라서 빠져나간다면 이젠 현 포지션에서부터 오른쪽으로 탐색.
+		//그래도 없다면? 일단 지금은 메시지 박스 출력해서 부모가 없다고 한 뒤 자기자신을 
+		//루트로 만들어버리는 수밖에..
+		/////////////////////////////////////////////////////////////////////////////////
+
+		//왼쪽에 있을 때
+		while (savePos != NULL) {
+			tmpParent = m_ideaList.GetPrev(savePos);
+			if (tmpParent.m_ipSelfNode == childIdea->m_ipParentNode) {
+				return tmpParent;
+			}
+		}
+
+		//아마 여기로 온다면 왼쪽에 없을 것이다
+		//그러면 오른쪽으로 갑시다.
+		savePos = findPos;
+		while (savePos != NULL) {
+			tmpParent = m_ideaList.GetNext(savePos);
+			if (tmpParent.m_ipSelfNode == childIdea->m_ipParentNode) {
+				return tmpParent;
+			}
+		}
+
+		//여기도 빠져나갔다면 분명 이친구는 ROOT다.
+		return *childIdea;
+	}
+
+	catch (int exception) {
+		CString errorString;
+		if (exception = 0) {
+			errorString.Format(_T("현재 이 리스트는 %s를 가지고있지 않습니다."), childIdea->m_ideaString);
+		}
+		else {
+			errorString.Format(_T("알 수 없는 에러입니다. 알아서 해결하시길.. (%d)"), exception);
+		}
+		AfxMessageBox(errorString);
+
+		//밑은 글에서 퍼온 프로세스 강제종료시키기 코드 
+		DWORD dwExitCode;
+		DWORD dwPID = GetCurrentProcessId();    // 현재 자신의 프로세스 ID 가져오기.
+
+		HANDLE hProcess = OpenProcess(PROCESS_ALL_ACCESS, 0, dwPID);    // 프로세스 핸들 가져오기
+
+		if (NULL != hProcess)
+		{
+			GetExitCodeProcess(hProcess, &dwExitCode);   // 프로세스 나가기 코드 얻어오기
+			TerminateProcess(hProcess, dwExitCode);    // 프로세스 연결 끊기
+			WaitForSingleObject(hProcess, INFINITE); // 종료 될때까지 대기
+			CloseHandle(hProcess);                                 // 프로세스 핸들 닫기
+		}
+	}
+}
