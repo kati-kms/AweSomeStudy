@@ -25,7 +25,7 @@ public:
 	virtual void Dump(CDumpContext& dc) const;
 #endif
 #endif
-public :
+public:
 	CClassInfo *m_pAddDlg;
 	CString class_name; // EditBox > 강의명
 	CString class_professor; // EditBox > 교수명
@@ -38,7 +38,9 @@ public :
 	BOOL IsAble[5][144];
 	BOOL AddList;
 	int Select_num;
-	
+	COLORREF m_color[10];
+	int color_num;
+
 	CArray <CInfoSave, CInfoSave&> m_array;
 
 protected:

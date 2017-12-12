@@ -186,6 +186,9 @@ void CAwesomeStudyDoc::Serialize(CArchive& ar)
 			p_class->Serialize(ar);
 			pHome->m_array.Add(*p_class);
 		}
+		for (int i = 0; i < 5; i++)
+			for (int j = 0; j < 144; j++)
+				pHome->IsAble[i][j] = FALSE;
 		//MMAP
 		int count = 0;
 		ar >> count;

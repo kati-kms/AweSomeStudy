@@ -60,6 +60,7 @@ BEGIN_MESSAGE_MAP(CAwesomeWrite, CFormView)
 	ON_WM_SIZE()
 	ON_NOTIFY(NM_CLICK, IDC_WriteTree, &CAwesomeWrite::OnNMClickWritetree)
 	ON_UPDATE_COMMAND_UI(ID_FILE_OPEN, &CAwesomeWrite::OnUpdateFileOpen)
+	ON_BN_CLICKED(IDC_WRITESAVE, &CAwesomeWrite::OnBnClickedWritesave)
 END_MESSAGE_MAP()
 
 
@@ -129,11 +130,11 @@ void CAwesomeWrite::OnBnClickedWriteSave()
 	else return;
 	//str저장하면됨
 	PicNode = m_treeWrite.InsertItem(name, TVI_ROOT);
-	pDoc->WriteNodeToTextMap.SetAt(name, str);
+	/*pDoc->WriteNodeToTextMap.SetAt(name, str);
 	m_treeWrite.Select(PicNode, TVGN_CARET);
 	int len = m_write.GetWindowTextLength();
 	m_write.SetSel(0, len);
-	m_write.Clear();
+	m_write.Clear();*/
 	//폰트 저장
 	//pDoc->w.SetAt(name, m_font);
 	//색깔 저장
@@ -305,6 +306,9 @@ void CAwesomeWrite::OnEnChangeWrite()
 	// 문자열이 바뀌면 Updata()? 함수 호출 // for 저장
 	// 문자열이 바뀌면 전체줄 기억하기
 	
+	CAwesomeStudyDoc* pDoc = GetDocument();
+	pDoc->SetModifiedFlag();
+
 	int total_line = m_write.GetLineCount();
 	CString str;
 	str.Format(_T("%d"), total_line);
@@ -324,7 +328,7 @@ LRESULT CAwesomeWrite::OnFindReplaceCmd(WPARAM wParam, LPARAM lParam)
 		//검색할String
 		CString FindStr;
 		FindStr = pFindDlg->GetFindString();
-		int length = FindStr.GetLength();
+		int find_length = FindStr.GetLength();
 		//전체 String
 		CString TotalWrite;
 		m_write.GetWindowText(TotalWrite); // 전체String 가져오기   // 찾을때마다 짤라내자 ㅎ // next_start부터의 string
@@ -338,7 +342,7 @@ LRESULT CAwesomeWrite::OnFindReplaceCmd(WPARAM wParam, LPARAM lParam)
 			AfxMessageBox(FindStr + _T("을 찾을 수 없습니다"), /*MB_ICONINFORMATION*/MB_ICONWARNING);
 			return 0;
 		}
-		int end = start + length;
+		int end = start + find_length;
 		m_write.SetSel(m_next_start + start, m_next_start + end);
 		m_next_start = m_next_start + end;
 		m_find_next = false;
@@ -351,7 +355,13 @@ LRESULT CAwesomeWrite::OnFindReplaceCmd(WPARAM wParam, LPARAM lParam)
 		//검색할String
 		CString FindStr;
 		FindStr = pFindDlg->GetFindString();
-		int length = FindStr.GetLength();
+		int find_length = FindStr.GetLength();
+
+		//대체String
+		CString ReplaceStr;
+		ReplaceStr = pFindDlg->GetReplaceString();
+		int replace_length = ReplaceStr.GetLength();
+
 		//전체 String
 		CString TotalWrite;
 		m_write.GetWindowText(TotalWrite); // 전체String 가져오기   // 찾을때마다 짤라내자 ㅎ // next_start부터의 string
@@ -365,19 +375,27 @@ LRESULT CAwesomeWrite::OnFindReplaceCmd(WPARAM wParam, LPARAM lParam)
 			AfxMessageBox(FindStr + _T("을 찾을 수 없습니다"), MB_ICONINFORMATION);
 			return 0;
 		}
-		int end = start + length;
+		int end = start + find_length;
 		m_write.SetSel(m_next_start + start, m_next_start + end);
+		end = start + replace_length; // 다시 해야함..
 		m_next_start = m_next_start + end;
 		m_find_next = false;
 		m_replace_first = false;
 	}
 	else if (pFindDlg->ReplaceAll()) {
 		int start = 0;
+		int m_next_start = 0;
 		while (1) {
 			//검색할String
-			CString FindStr;
-			FindStr = pFindDlg->GetFindString();
-			int length = FindStr.GetLength();
+			CString find_str;
+			find_str = pFindDlg->GetFindString();
+			int find_length = find_str.GetLength();
+
+			//대체String
+			CString ReplaceStr;
+			ReplaceStr = pFindDlg->GetReplaceString();
+			int replace_length = ReplaceStr.GetLength();
+
 			//전체 String
 			CString TotalWrite;
 			m_write.GetWindowText(TotalWrite); // 전체String 가져오기   // 찾을때마다 짤라내자 ㅎ // next_start부터의 string
@@ -386,12 +404,13 @@ LRESULT CAwesomeWrite::OnFindReplaceCmd(WPARAM wParam, LPARAM lParam)
 			//Sub String
 			CString SubWrite;
 			SubWrite = TotalWrite.Right(total_length - m_next_start); //이전까지 찾은 문자열은 빼기
-			int start = SubWrite.Find(FindStr);
+			int start = SubWrite.Find(find_str);
 			if (start == -1) {
 				break;
 			}
-			int end = start + length;
+			int end = start + find_length;
 			m_write.SetSel(m_next_start + start, m_next_start + end);
+			end = start + replace_length;
 			m_next_start = m_next_start + end;
 			m_find_next = false;
 
@@ -490,4 +509,19 @@ void CAwesomeWrite::OnUpdateFileOpen(CCmdUI *pCmdUI)
 		pCmdUI->Enable(0);
 	}
 	// TODO: 여기에 명령 업데이트 UI 처리기 코드를 추가합니다.
+}
+
+
+void CAwesomeWrite::OnBnClickedWritesave()
+{
+	CString name = m_treeWrite.GetItemText(PicNode);
+	CString str;
+	m_write.GetWindowText(str);
+	CAwesomeStudyDoc* pDoc = GetDocument();
+	pDoc->WriteNodeToTextMap.SetAt(name, str);
+	m_treeWrite.Select(PicNode, TVGN_CARET);
+	int len = m_write.GetWindowTextLength();
+	m_write.SetSel(0, len);
+	m_write.Clear();
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 }

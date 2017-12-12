@@ -51,6 +51,7 @@ public:
 	afx_msg void OnBnClickedLogin();
 
 	CStatic m_password;
+	virtual void OnDraw(CDC* /*pDC*/);
 };
 
 #ifndef _DEBUG  // AwesomeStudyView.cpp의 디버그 버전

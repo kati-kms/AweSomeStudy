@@ -200,25 +200,15 @@ void CAwesomePic::OnDraw(CDC* pDC)
 	if (IsPic == 1) {   //노드를 클릭해서 사진을 띄워야하면 사진띄우기
 		CImage Image;
 		Image.Load(PicNodePath);
-		Image.BitBlt(pDC->m_hDC, 700, 5, SRCCOPY);
+		Image.BitBlt(pDC->m_hDC, 500, 5, SRCCOPY);
 		//Image.StretchBlt(pDC->m_hDC, 700, 5, 500, 500, SRCCOPY);
 		CSize size;
-		size.cx = Image.GetWidth()+900;
+		size.cx = Image.GetWidth()+600;
 		size.cy = Image.GetHeight();
 		SetScrollSizes(MM_TEXT, size);
 	}
 }
 
-
-void CAwesomePic::OnLButtonDown(UINT nFlags, CPoint point)
-{
-	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
-	CRect rect(700, 5, 500, 500);
-	if (rect.PtInRect(point)) {
-		AfxMessageBox(_T("여기당"));
-	}
-	CFormView::OnLButtonDown(nFlags, point);
-}
 
 
 void CAwesomePic::OnUpdateFileOpen(CCmdUI *pCmdUI)
