@@ -42,6 +42,7 @@ BEGIN_MESSAGE_MAP(CAwesomeMmap, CView)
 	ON_COMMAND(ID_RBN_OUT_INSERT_INDEPENDENT, &CAwesomeMmap::OnRbnOutInsertIndependent)
 	ON_WM_MOUSEMOVE()
 	ON_WM_LBUTTONUP()
+	ON_UPDATE_COMMAND_UI(ID_FILE_OPEN, &CAwesomeMmap::OnUpdateFileOpen)
 END_MESSAGE_MAP()
 
 
@@ -775,4 +776,15 @@ void CAwesomeMmap::OnLButtonUp(UINT nFlags, CPoint point)
 	}
 
 	CView::OnLButtonUp(nFlags, point);
+}
+
+
+void CAwesomeMmap::OnUpdateFileOpen(CCmdUI *pCmdUI)
+{
+	CMainFrame* mView = (CMainFrame*)AfxGetMainWnd();
+	CView *pView = mView->GetActiveView();
+	if (pView == mView->m_pwndMmap) {
+		pCmdUI->Enable(0);
+	}
+	// TODO: 여기에 명령 업데이트 UI 처리기 코드를 추가합니다.
 }

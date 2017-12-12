@@ -247,11 +247,11 @@ void CAwesomeHome::OnAdd()
 
 void CAwesomeHome::OnUpdateFileOpen(CCmdUI *pCmdUI)
 {
-	/*CMainFrame* mView = (CMainFrame*)AfxGetMainWnd();
+	CMainFrame* mView = (CMainFrame*)AfxGetMainWnd();
 	CView *pView = mView->GetActiveView();
 	if (pView == mView->m_pwndHome) {
 		pCmdUI->Enable(0);
-	}*/   //지우지마시오 ㅠㅠㅠㅠㅠㅠㅠ
+	}   //지우지마시오 ㅠㅠㅠㅠㅠㅠㅠ
 	// TODO: 여기에 명령 업데이트 UI 처리기 코드를 추가합니다.
 }
 

@@ -143,9 +143,6 @@ void CAwesomeStudyDoc::Serialize(CArchive& ar)
 			p_object->Serialize(ar);
 		}
 		//Mmap
-		CString str;
-		str.Format(_T("%d"), PicCount);
-		AfxMessageBox(str);
 		while (hti)
 		{
 			int indent = PicGetIndentLevel(hti);
@@ -162,7 +159,6 @@ void CAwesomeStudyDoc::Serialize(CArchive& ar)
 		{
 			CString str;
 			str.Format(wView->m_treeWrite.GetItemText(hti));
-			AfxMessageBox(str);
 			ar.WriteString(wView->m_treeWrite.GetItemText(hti) + "\n");
 			hti = PicGetNextItem(hti);
 		}

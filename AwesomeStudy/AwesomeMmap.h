@@ -63,6 +63,7 @@ public:
 	void SetIdea(POSITION pos, CList<CIdea, CIdea&>& ideaList, CIdea& newIdea);
 	CIdea& GetIdea(POSITION pos, CList<CIdea, CIdea&>& ideaList);
 	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
+	afx_msg void OnUpdateFileOpen(CCmdUI *pCmdUI);
 };
 
 

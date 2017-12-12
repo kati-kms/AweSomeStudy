@@ -64,6 +64,7 @@ public:
 	CTreeCtrl m_treeWrite;
 	CAwesomeStudyDoc* GetDocument() const;
 	afx_msg void OnNMClickWritetree(NMHDR *pNMHDR, LRESULT *pResult);
+	afx_msg void OnUpdateFileOpen(CCmdUI *pCmdUI);
 };
 
 
