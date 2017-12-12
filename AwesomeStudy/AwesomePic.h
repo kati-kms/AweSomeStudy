@@ -50,6 +50,7 @@ public:
 	virtual void OnDraw(CDC* pDC);
 	CEdit m_PicMemo;
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
+	afx_msg void OnUpdateFileOpen(CCmdUI *pCmdUI);
 };
 
 

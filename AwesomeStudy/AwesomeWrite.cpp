@@ -59,6 +59,7 @@ BEGIN_MESSAGE_MAP(CAwesomeWrite, CFormView)
 	ON_WM_CTLCOLOR()
 	ON_WM_SIZE()
 	ON_NOTIFY(NM_CLICK, IDC_WriteTree, &CAwesomeWrite::OnNMClickWritetree)
+	ON_UPDATE_COMMAND_UI(ID_FILE_OPEN, &CAwesomeWrite::OnUpdateFileOpen)
 END_MESSAGE_MAP()
 
 
@@ -478,4 +479,15 @@ void CAwesomeWrite::OnNMClickWritetree(NMHDR *pNMHDR, LRESULT *pResult)
 	CWnd *pWnd = AfxGetMainWnd();
 	OnCtlColor(pDC, pWnd, m_color);*/
 	*pResult = 0;
+}
+
+
+void CAwesomeWrite::OnUpdateFileOpen(CCmdUI *pCmdUI)
+{
+	CMainFrame* mView = (CMainFrame*)AfxGetMainWnd();
+	CView *pView = mView->GetActiveView();
+	if (pView == mView->m_pwndWrite) {
+		pCmdUI->Enable(0);
+	}
+	// TODO: 여기에 명령 업데이트 UI 처리기 코드를 추가합니다.
 }

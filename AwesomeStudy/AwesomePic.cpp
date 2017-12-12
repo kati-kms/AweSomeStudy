@@ -38,6 +38,7 @@ BEGIN_MESSAGE_MAP(CAwesomePic, CFormView)
 	ON_BN_CLICKED(IDC_PIC_ADD_FILE, &CAwesomePic::OnBnClickedPicAddFile)
 	ON_BN_CLICKED(IDC_PIC_DELETE, &CAwesomePic::OnBnClickedPicDelete)
 	ON_WM_LBUTTONDOWN()
+	ON_UPDATE_COMMAND_UI(ID_FILE_OPEN, &CAwesomePic::OnUpdateFileOpen)
 END_MESSAGE_MAP()
 
 
@@ -83,7 +84,7 @@ void CAwesomePic::OnInitialUpdate()
 	CAwesomeStudyDoc* pDoc = GetDocument();
 	if (pDoc->PicIsSaved == 0) {
 		CAwesomeStudyDoc* pDoc = GetDocument();
-		HTREEITEM root_branch = m_PicTree.InsertItem(_T("고급컴퓨터수학"), TVI_ROOT);
+		HTREEITEM root_branch = m_PicTree.InsertItem(_T("과목"), TVI_ROOT);
 		pDoc->PicNodeToPathMap.SetAt(m_PicTree.GetItemText(root_branch), _T("1"));
 		m_PicTree.Select(root_branch, TVGN_CARET);
 	}
@@ -199,10 +200,10 @@ void CAwesomePic::OnDraw(CDC* pDC)
 	if (IsPic == 1) {   //노드를 클릭해서 사진을 띄워야하면 사진띄우기
 		CImage Image;
 		Image.Load(PicNodePath);
-		//Image.BitBlt(pDC->m_hDC, 700, 5, SRCCOPY);
-		Image.StretchBlt(pDC->m_hDC, 700, 5, 500, 500, SRCCOPY);
+		Image.BitBlt(pDC->m_hDC, 700, 5, SRCCOPY);
+		//Image.StretchBlt(pDC->m_hDC, 700, 5, 500, 500, SRCCOPY);
 		CSize size;
-		size.cx = Image.GetWidth()+700;
+		size.cx = Image.GetWidth()+900;
 		size.cy = Image.GetHeight();
 		SetScrollSizes(MM_TEXT, size);
 	}
@@ -217,4 +218,15 @@ void CAwesomePic::OnLButtonDown(UINT nFlags, CPoint point)
 		AfxMessageBox(_T("여기당"));
 	}
 	CFormView::OnLButtonDown(nFlags, point);
+}
+
+
+void CAwesomePic::OnUpdateFileOpen(CCmdUI *pCmdUI)
+{
+	CMainFrame* mView = (CMainFrame*)AfxGetMainWnd();
+	CView *pView = mView->GetActiveView();
+	if (pView == mView->m_pwndPic) {
+		pCmdUI->Enable(0);
+	}
+	// TODO: 여기에 명령 업데이트 UI 처리기 코드를 추가합니다.
 }
