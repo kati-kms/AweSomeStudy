@@ -11,9 +11,11 @@
 #define RGN_SIZE_HND_BTMLEFT 5
 #define RGN_SIZE_HND_BTMRIGHT 6
 
+typedef int IndexPointer;
 
 // CAwesomeMmap 뷰입니다.
 class CIdea;
+class CMemDC;
 
 class CAwesomeMmap : public CView
 {
@@ -23,12 +25,19 @@ class CAwesomeMmap : public CView
 public:
 	BOOL m_bChangeSizeMode;
 	BOOL m_bMoveMode;
+	BOOL m_bAddChildMode;
 	BOOL m_bLBtnPressed;
 	BOOL m_bPressOnlyOneFlag;
 	//CPoint m_tmpPoint1, m_tmpPoint2;
 	CPoint m_mousePointInRect;
+	IndexPointer m_ipParent; 
+	IndexPointer m_ipChild;
+	CIdea *m_ChildIdea;
+	CIdea *m_ParentIdea;
+	CPoint m_tmpChildPnt1, m_tmpChildPnt2;
 	int m_tmpX1, m_tmpX2, m_tmpY1, m_tmpY2;
 	int m_nPressedFlag;
+	int m_childHndX1, m_childHndY1, m_childHndX2, m_childHndY2;
 
 public:
 	CAwesomeMmap();           // 동적 만들기에 사용되는 protected 생성자입니다.
@@ -50,7 +59,6 @@ public:
 	afx_msg BOOL OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message);
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
-	// 말 그대로 get idea합니다.
 	// 마우스가 객체 안에 들어있으면 변경. (리전 생성 후 제거 요망
 	int CheckPtInIdea(CPoint point, CIdea& whichIdea);
 	int CheckPtInIdea(CPoint point);

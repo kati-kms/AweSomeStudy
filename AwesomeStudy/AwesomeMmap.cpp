@@ -24,9 +24,14 @@ CAwesomeMmap::CAwesomeMmap()
 	m_bChangeSizeMode = FALSE;
 	m_bLBtnPressed = FALSE;
 	m_bPressOnlyOneFlag = FALSE;
-	m_nPressedFlag = 0;
+	m_bAddChildMode = FALSE;
 	m_bMoveMode = FALSE;
+	m_nPressedFlag = 0;
 	m_mousePointInRect.SetPoint(0, 0);
+	m_ChildIdea = NULL;
+	m_ParentIdea = NULL;
+	m_tmpChildPnt1.SetPoint(0, 0);
+	m_tmpChildPnt2.SetPoint(0, 0);
 }
 
 CAwesomeMmap::~CAwesomeMmap()
@@ -250,11 +255,25 @@ void CAwesomeMmap::OnLButtonDown(UINT nFlags, CPoint point)
 	if (pointCode == RGN_SIZE_HND_BTMLEFT || pointCode == RGN_SIZE_HND_BTMRIGHT
 		|| pointCode == RGN_SIZE_HND_TOPLEFT || pointCode == RGN_SIZE_HND_TOPRIGHT)
 		if (m_bPressOnlyOneFlag == TRUE) {
-			m_nPressedFlag = cursorFlag;
-			m_bChangeSizeMode = TRUE;
 			m_bPressOnlyOneFlag = FALSE;
+			m_nPressedFlag = pointCode;
+			m_bChangeSizeMode = TRUE;
 		}
 	//else { m_bChangeSizeMode = FALSE; }
+
+	//Add Child Handle일 경우
+	if (pointCode == RGN_ADD_CHILD_HND) {
+		if (m_bPressOnlyOneFlag == TRUE) {
+			m_bPressOnlyOneFlag = FALSE;
+			m_nPressedFlag = pointCode;
+			m_bAddChildMode = TRUE;
+
+			m_ipParent = selectedIdea.m_ipSelfNode;
+			m_ParentIdea = &selectedIdea;
+			m_tmpChildPnt1 = CPoint(point.x - 50, point.y - 50);
+			m_tmpChildPnt2 = CPoint(point.x + 50, point.y + 50);
+		}
+	}
 
 	/////////////////////////////////////////////
 	//이 코드는 왼쪽 버튼 클릭시 임의로 새 Idea를 생성하는 코드로,
@@ -269,7 +288,6 @@ void CAwesomeMmap::OnLButtonDown(UINT nFlags, CPoint point)
 
 	//Invalidate();
 	////////////////////////////////////////////////
-
 	CView::OnLButtonDown(nFlags, point);
 }
 
@@ -279,7 +297,10 @@ void CAwesomeMmap::OnMouseMove(UINT nFlags, CPoint point)
 	CAwesomeStudyDoc* pDoc = (CAwesomeStudyDoc *)GetDocument();
 	CIdea *thisIdea = &GetIdea(tmpPosition, pDoc->m_ideaList);
 	CClientDC dc(this);
-	//debug
+	CPoint roundPoint;
+	CPoint *bezierPnts = (CPoint*) malloc(3 * sizeof(CPoint));
+	CRect drawRect;
+	//debug --------------------------------------------------------
 	CClientDC debugDc(this);
 	CString str;
 	CString tmpStr;
@@ -304,13 +325,16 @@ void CAwesomeMmap::OnMouseMove(UINT nFlags, CPoint point)
 	tmpStr.Format(_T("\n현재 리스트 개수 : %d\n"), pDoc->m_ideaList.GetCount());
 	str.Append(tmpStr);
 	debugDc.DrawText(str, debugRect, 0);
-	//debug_end
+	//debug_end--------------------------------------------------------
+
+
+
 	// 사이즈 조절모드면 계속해서 마우스를 따라 사각형의 끌리고 있는 핸들의 꼭짓점을 그 위치로 stretch 시킨다.
 	// 그리는건 여기에서 하자.
 	if (m_bChangeSizeMode)
 	{
-		CRect drawRect(m_tmpX1, m_tmpY1, m_tmpX2, m_tmpY2);
-		CPoint roundPoint(drawRect.Width() * roundRate, drawRect.Height() * roundRate);
+		drawRect.SetRect(m_tmpX1, m_tmpY1, m_tmpX2, m_tmpY2);
+		roundPoint.SetPoint(drawRect.Width() * roundRate, drawRect.Height() * roundRate);
 
 		dc.SelectStockObject(NULL_BRUSH);
 		//이전에 그린 사각형을 지운다.
@@ -346,6 +370,7 @@ void CAwesomeMmap::OnMouseMove(UINT nFlags, CPoint point)
 		}
 		drawRect.SetRectEmpty();
 		drawRect.SetRect(m_tmpX1, m_tmpY1, m_tmpX2, m_tmpY2);
+		roundPoint.SetPoint(drawRect.Width() * roundRate, drawRect.Height() * roundRate);
 		dc.RoundRect(drawRect, roundPoint);
 		//thisIdea.SetRect(drawRect);
 		//SetIdea(tmpPosition, pDoc->m_ideaList, thisIdea);
@@ -362,6 +387,42 @@ void CAwesomeMmap::OnMouseMove(UINT nFlags, CPoint point)
 		SetIdea(tmpPosition, pDoc->m_ideaList, *thisIdea);
 
 		Invalidate();
+	}
+
+	//add child Handle
+	if (m_bAddChildMode) 
+	{
+		//TODO: 곡선이 안 그려진다
+		//BezierLine, Rect 이 두가지를 지웠다가 다시 그리는 걸로 하자
+		bezierPnts[0] = m_ParentIdea->m_ideaRect.CenterPoint();
+		bezierPnts[1] = CPoint(m_tmpX1, m_ParentIdea->m_ideaRect.CenterPoint().y);
+		bezierPnts[2] = CPoint(m_tmpX1, m_tmpY1);
+		drawRect.SetRect(m_tmpChildPnt1, m_tmpChildPnt2);
+		roundPoint.SetPoint(drawRect.Width() * roundRate, drawRect.Height() * roundRate);
+
+		dc.SelectStockObject(NULL_BRUSH);
+		//이전에 그린 사각형과 곡선을 지운다
+		dc.SetROP2(R2_NOT);
+		dc.PolyBezier(bezierPnts, 3);
+		dc.RoundRect(drawRect, roundPoint);
+
+		m_tmpChildPnt1 = CPoint(point.x - 50, point.y - 50);
+		m_tmpChildPnt2 = CPoint(point.x + 50, point.y + 50);
+		m_tmpX1 = point.x;
+		m_tmpY1 = point.y;
+		bezierPnts[1].x = m_tmpX1;
+		bezierPnts[2] = (m_tmpX1, m_tmpY1);
+
+		//새로운 사각형과 곡선을 그린다
+		dc.SetROP2(R2_NOT);
+		dc.PolyBezier(bezierPnts, 3);
+
+		drawRect.SetRectEmpty();
+		drawRect.SetRect(m_tmpChildPnt1, m_tmpChildPnt2);
+		roundPoint.SetPoint(drawRect.Width() * roundRate, drawRect.Height() * roundRate);
+		dc.RoundRect(drawRect, roundPoint);
+
+		m_bAddChildMode = TRUE;
 	}
 
 	CView::OnMouseMove(nFlags, point);
@@ -430,6 +491,9 @@ int CAwesomeMmap::CheckPtInIdea(CPoint point, CIdea& whichIdea)
 				, whichIdea.m_ideaRect.right + szhnd
 				, whichIdea.m_ideaRect.bottom + szhnd
 			);
+			//addChildHandleRgn
+			addChildHandleRgn.CreateRectRgn(m_childHndX1, m_childHndY1,
+				m_childHndX2, m_childHndY2);
 
 
 			//마우스가 이미 눌려져 있는 상태라면 유지시킨다.
@@ -445,19 +509,17 @@ int CAwesomeMmap::CheckPtInIdea(CPoint point, CIdea& whichIdea)
 			else if (btmRightRgn.PtInRegion(point)) {
 				tmpReturnValue = RGN_SIZE_HND_BTMRIGHT;
 			}
+			else if (addChildHandleRgn.PtInRegion(point)) {
+				tmpReturnValue = RGN_ADD_CHILD_HND;
+			}
 			//sizeHandleRgn Delete
 			topLeftRgn.DeleteObject();
 			topRightRgn.DeleteObject();
 			btmLeftRgn.DeleteObject();
 			btmRightRgn.DeleteObject();
-
-			//참고로 드래그시 작동하는건 여기에서 관여하지 않는다.
-			//OnMouseMove 함수에서 마우스가 드래그 하고 있는데 m_ideaRect.CenterPoint()를 중심으로
-			//4분면으로 나뉘어있으니까 그때가서 고려하면 된다.
-
-			//addChildHandleRgn
-
 			//addChildHandleRgn Delete
+			addChildHandleRgn.DeleteObject();
+
 			return tmpReturnValue;
 		}
 	}
@@ -473,7 +535,11 @@ int CAwesomeMmap::CheckPtInIdea(CPoint point)
 
 	CRgn topLeftRgn, topRightRgn, btmLeftRgn, btmRightRgn;
 	CRgn addChildHandleRgn;
-	CIdea *whichIdea;
+	//참고로 이 함수는 CIdea 변수를 사용하지 않는다.
+	CIdea whichIdea;
+	return CAwesomeMmap::CheckPtInIdea(point, whichIdea);
+	//어차피 오버로딩된 함수는 하나만 쓰고 다른 함수에서 가져다 쓰면 되겠구나
+	/* 
 	POSITION pos = pDoc->m_ideaList.GetHeadPosition();
 
 	while (pos != NULL)
@@ -565,6 +631,7 @@ int CAwesomeMmap::CheckPtInIdea(CPoint point)
 	///Region = Idea out = 0
 	//이건 제일 마지막에 해야겠다. 전부 다 아닐 경우
 	return RGN_IDEA_OUT;
+	*/
 }
 
 
@@ -638,7 +705,7 @@ void CAwesomeMmap::OnRbnInInsertIndependent()
 
 	CIdea newIdea(newRect, newStr);
 	newIdea.NewIdea();
-	pDoc->m_ideaList.AddTail(newIdea);
+	pDoc->m_ideaList.AddHead(newIdea);
 	pDoc->SetModifiedFlag();
 
 	Invalidate();
@@ -656,7 +723,7 @@ void CAwesomeMmap::OnRbnOutInsertIndependent()
 
 	CIdea newIdea(newRect, newStr);
 	newIdea.NewIdea();
-	pDoc->m_ideaList.AddTail(newIdea);
+	pDoc->m_ideaList.AddHead(newIdea);
 	pDoc->SetModifiedFlag();
 
 	Invalidate();
@@ -695,16 +762,18 @@ CIdea& CAwesomeMmap::GetIdea(POSITION pos, CList<CIdea, CIdea&>& ideaList)
 void CAwesomeMmap::OnLButtonUp(UINT nFlags, CPoint point)
 {
 	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
+	CAwesomeStudyDoc* pDoc = (CAwesomeStudyDoc *)GetDocument();
+	CClientDC dc(this);
 	m_bLBtnPressed = FALSE;
 	m_bPressOnlyOneFlag = TRUE;
-	m_mousePointInRect.SetPoint(0, 0);
+	m_nPressedFlag = 0;
+
+	//Change Size Mode
 	if (m_bChangeSizeMode) {
-		CAwesomeStudyDoc* pDoc = (CAwesomeStudyDoc *)GetDocument();
-		CClientDC dc(this);
+		m_bChangeSizeMode = FALSE;
 		CRect drawRect(m_tmpX1, m_tmpY1, m_tmpX2, m_tmpY2);
 		CPoint roundPoint(drawRect.Width() * roundRate, drawRect.Height() * roundRate);
 		CIdea *newIdea = &GetIdea(tmpPosition, pDoc->m_ideaList);
-		m_bChangeSizeMode = FALSE;
 
 		//사각형 지우기
 		dc.SetROP2(R2_NOT);
@@ -714,13 +783,36 @@ void CAwesomeMmap::OnLButtonUp(UINT nFlags, CPoint point)
 		newIdea->SetRect(drawRect);
 		SetIdea(tmpPosition, pDoc->m_ideaList, *newIdea);
 
+		m_mousePointInRect.SetPoint(0, 0);
 		pDoc->SetModifiedFlag();
 		Invalidate();
 	}
+
+	//Move Mode
 	if (m_bMoveMode) {
 		m_bMoveMode = FALSE;
 	}
 
+	//Add Child Mode
+	if (m_bAddChildMode) {
+		m_bAddChildMode = FALSE;
+		//TODO: 새로운 Child를 생성하여 저장, 인덱스도 같이 끌고간다.
+		CString str;
+		str.Format(_T("[%d, %d]"), point.x, point.y);
+		AfxMessageBox(str);
+		CRect rect(m_tmpChildPnt1, m_tmpChildPnt2);
+		CIdea newIdea(rect, str, m_ParentIdea);
+		pDoc->m_ideaList.AddHead(newIdea);
+
+		//TODO: m_ipParent와 m_ipChild 초기화
+		m_ipParent = m_ipChild = 0;
+
+		//
+		pDoc->SetModifiedFlag();
+		Invalidate();
+	}
+
+	m_tmpX1 = m_tmpX2 = m_tmpY1 = m_tmpY2 = 0;
 	CView::OnLButtonUp(nFlags, point);
 }
 
@@ -752,10 +844,42 @@ void CAwesomeMmap::DrawImage(CDC* pDC)
 	CPen ideaPen;
 	CPoint roundPoint;
 	CList<CIdea, CIdea&> *ideaList = &(pDoc->m_ideaList);
+	CBitmap acBitmap;	//Add Child -> ac
 	int r, g, b;
 	double rndX, rndY;
-	const double brightRate = 0.80;
+	const double brightRate = 0.50;
 	int pointCode = cursorFlag;
+
+	//DEBUG//////////////////////////////////////////////////////////////
+	//지금까지 가지고 있는 모든 리스트의 Idea들을 
+	//전부 클라이언트에 출력한다.
+	CClientDC dc(this);
+	CString masterStr;
+	CString semiStr;
+	CRect debugRect(0, 100, 200, 500);
+	pos = ideaList->GetHeadPosition();
+	while (pos != NULL) {
+		ideas = &ideaList->GetNext(pos);
+		semiStr.Format(_T("m_ideaRect.CenterPoint() : (%d, %d)\n"), ideas->m_ideaRect.CenterPoint().x,
+			ideas->m_ideaRect.CenterPoint().y);
+		masterStr.Append(semiStr);
+		semiStr.Format(_T("m_ideaString : %s\n"), ideas->m_ideaString);
+		masterStr.Append(semiStr);
+
+		semiStr.Format(_T("m_ipSelfNode : %d\n"), ideas->m_ipSelfNode);
+		masterStr.Append(semiStr);
+		semiStr.Format(_T("m_ipParentNode : %d\n"), ideas->m_ipParentNode);
+		masterStr.Append(semiStr);
+		semiStr.Format(_T("m_ipChildNode : %d\n"), ideas->m_ipLeftChild);
+		masterStr.Append(semiStr);
+		semiStr.Format(_T("m_ipSiblingNode : %d\n"), ideas->m_ipRightSibling);
+		masterStr.Append(semiStr);
+
+		masterStr.Append(_T("\n\n"));
+	}
+	dc.DrawText(masterStr, &debugRect, DT_LEFT);
+
+	//DEBUG//////////////////////////////////////////////////////////////
 
 
 	//Idea 객체 보이기
@@ -805,7 +929,7 @@ void CAwesomeMmap::DrawImage(CDC* pDC)
 		pDC->SetBkMode(TRANSPARENT);
 		pDC->DrawText(ideas->m_ideaString, ideas->m_ideaRect, DT_VCENTER | DT_CENTER | DT_SINGLELINE);
 
-		//size handle
+		//size handle & add child handle
 		if (ideas->m_bHighlighted == TRUE) {
 			ideaPen.DeleteObject();
 			ideaPen.CreatePen(PS_SOLID, 1, RGB(0, 0, 0));
@@ -829,6 +953,27 @@ void CAwesomeMmap::DrawImage(CDC* pDC)
 				, ideas->m_ideaRect.right + szhnd, ideas->m_ideaRect.bottom + szhnd
 			);
 			ideaPen.DeleteObject();
+
+
+			//Add Child Handle
+			acBitmap.LoadBitmapW(IDB_ADD_CHILD);
+			BITMAP acBmpInfo;
+			acBitmap.GetBitmap(&acBmpInfo);
+			//메모리 DC를 만든 후 비트맵을 선택해 넣는다.
+			CDC dcmem;
+			dcmem.CreateCompatibleDC(pDC);
+			dcmem.SelectObject(&acBitmap);
+
+			//비트맵 화면출력
+			m_childHndX1 = ideas->m_ideaRect.right + 5;
+			m_childHndY1 = ideas->m_ideaRect.CenterPoint().y - 6;
+			m_childHndX2 = m_childHndX1 + acBmpInfo.bmWidth / 2;
+			m_childHndY2 = m_childHndY1 + acBmpInfo.bmHeight / 2;
+			pDC->StretchBlt(m_childHndX1, m_childHndY1,
+				acBmpInfo.bmWidth / 2, acBmpInfo.bmHeight / 2, &dcmem, 0, 0, 
+				acBmpInfo.bmWidth, acBmpInfo.bmHeight ,SRCCOPY);
+			
 		}
+
 	}
 }

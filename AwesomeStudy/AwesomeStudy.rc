@@ -82,7 +82,7 @@ IDR_MAINFRAME           BITMAP                  "res\\Toolbar.bmp"
 
 IDR_MAIN_TOOLBAR        BITMAP                  "res\\toolbar1.bmp"
 
-IDB_BITMAP1             BITMAP                  "res\\bitmap1.bmp"
+IDB_ADD_CHILD           BITMAP                  "res\\AddChild.bmp"
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -160,7 +160,7 @@ IDR_MMAP_CNTXT MENU
 BEGIN
     POPUP "RBTN_OUT_IDEA"
     BEGIN
-        MENUITEM "붙혀넣기(&P)",                    ID_RBN_OUT_PASTE
+        MENUITEM "붙여넣기(&P)",                    ID_RBN_OUT_PASTE
         MENUITEM "독립 Idea 삽입(&I)",              ID_RBN_OUT_INSERT_INDEPENDENT
     END
     POPUP "RBTN_IN_IDEA"
