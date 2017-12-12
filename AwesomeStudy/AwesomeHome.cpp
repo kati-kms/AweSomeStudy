@@ -281,9 +281,8 @@ void CAwesomeHome::OnLButtonDown(UINT nFlags, CPoint point)
 				break;
 			}
 			m_list.AddString(str);
-			str.Format(_T("시간 : %d시 %d분 ~ "), m_array[i].m_s_hour + 9, (m_array[i].m_s_minute) * 5);
-			m_list.AddString(str);
-			str.Format(_T("		  %d시 %d분"), m_array[i].m_e_hour + 9, (m_array[i].m_e_minute) * 5);
+			str.Format(_T("시간 : %d시 %d분 ~ %d시 %d분"), m_array[i].m_s_hour + 9, (m_array[i].m_s_minute) * 5
+														, m_array[i].m_e_hour + 9, (m_array[i].m_e_minute) * 5);
 			m_list.AddString(str);
 			str.Format(_T("장소 : %s"), m_array[i].m_place);
 			m_list.AddString(str);
