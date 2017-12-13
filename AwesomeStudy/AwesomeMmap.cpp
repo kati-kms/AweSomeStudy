@@ -1,5 +1,8 @@
-// AwesomeMmap.cpp : ±¸Çö ÆÄÀÏÀÔ´Ï´Ù.
+ï»¿// AwesomeMmap.cpp : êµ¬í˜„ íŒŒì¼ì…ë‹ˆë‹¤.
 //
+//ë”ë¸” ë²„í¼ë§ê³¼ ìƒ‰ìƒ ë°”ê¾¸ê¸°, sizeHandle ëˆ„ë¥´ê¸°ë§Œ í•˜ë©´ ì‚¬ë¼ì§€ëŠ” ë²„ê·¸,
+//ìì‹ ì¶”ê°€í•˜ë©´ ì„  ê·¸ë¦¬ê¸°, ë”ë¸”í´ë¦­ì‹œ ìºëŸ¿ ê¹œë°•ì´Âˆê²Œ, ë§ˆìš°ìŠ¤ ì˜¤ë¥¸ìª½ ë²„íŠ¼ìœ¼ë¡œ í´ë¼ì´ì–¸íŠ¸ ë·°ì˜ì—­ì„ ì´ë™,
+//ì‹œí”„íŠ¸ + í´ë¦­ ì‹œ ë™ì‹œì— ì—¬ëŸ¬ê°œì˜ Ideaë“¤ì„ ì„ íƒí•  ìˆ˜ ìˆê²Œ í•˜ëŠ” ê¸°ëŠ¥
 
 #include "stdafx.h"
 #include "AwesomeStudy.h"
@@ -10,7 +13,7 @@
 
 #include <WinUser.h>
 
-//ÀÓ½Ã Àü¿ªº¯¼ö
+//ì„ì‹œ ì „ì—­ë³€ìˆ˜
 CPoint tmpPoint;
 POSITION tmpPosition;
 int cursorFlag = FALSE;
@@ -58,42 +61,42 @@ BEGIN_MESSAGE_MAP(CAwesomeMmap, CView)
 END_MESSAGE_MAP()
 
 
-// CAwesomeMmap ±×¸®±âÀÔ´Ï´Ù.
+// CAwesomeMmap ê·¸ë¦¬ê¸°ì…ë‹ˆë‹¤.
 
-///TODO: °¡´ÉÇÏ¸é ´Ù ³¡³ª°í ´õºí ¹öÆÛ¸µ ½ÃµµÇØº¸ÀÚ
+///TODO: ê°€ëŠ¥í•˜ë©´ ë‹¤ ëë‚˜ê³  ë”ë¸” ë²„í¼ë§ ì‹œë„í•´ë³´ì
 void CAwesomeMmap::OnDraw(CDC* pDC)
 {
 	CAwesomeStudyDoc* pDoc = (CAwesomeStudyDoc *)GetDocument();
 	//CAwesomeStudyDoc * pDoc = (CAwesomeStudyDoc *)((CMainFrame *)AfxGetMainWnd())->GetActiveDocument();
-	// TODO: ¿©±â¿¡ ±×¸®±â ÄÚµå¸¦ Ãß°¡ÇÕ´Ï´Ù.
+	// TODO: ì—¬ê¸°ì— ê·¸ë¦¬ê¸° ì½”ë“œë¥¼ ì¶”ê°€í•©ë‹ˆë‹¤.
 	CRect rect;
 	GetClientRect(&rect);
-	//¸Ş¸ğ¸® DC¿Í BITMAP »ı¼º
+	//ë©”ëª¨ë¦¬ DCì™€ BITMAP ìƒì„±
 	CDC MemDC;
 	CBitmap* pOldBitmap;
 	CBitmap bmp;
 
-	//¸Ş¸ğ¸® DC¿Í ÇöÀç DCÀÇ ¼³Á¤ ÀÏÄ¡
+	//ë©”ëª¨ë¦¬ DCì™€ í˜„ì¬ DCì˜ ì„¤ì • ì¼ì¹˜
 	MemDC.CreateCompatibleDC(pDC);
 	bmp.CreateCompatibleBitmap(pDC, rect.Width(), rect.Height());
 	pOldBitmap = (CBitmap*)MemDC.SelectObject(&bmp);
 	MemDC.PatBlt(0, 0, rect.Width(), rect.Height(), WHITENESS);
 
-	//¸Ş¸ğ¸® DC¿¡ ±×¸®±â
+	//ë©”ëª¨ë¦¬ DCì— ê·¸ë¦¬ê¸°
 	DrawImage(&MemDC);
 
-	//¸Ş¸ğ¸® DC¸¦ ÇöÀç DC¿¡ º¹»ç
+	//ë©”ëª¨ë¦¬ DCë¥¼ í˜„ì¬ DCì— ë³µì‚¬
 	pDC->BitBlt(
 		0, 0, rect.Width(), rect.Height(), &MemDC, 0, 0, SRCCOPY
 	);
 	
-	//»ç¿ëµÈ ¸Ş¸ğ¸®DC ¹× BITMAP »èÁ¦
+	//ì‚¬ìš©ëœ ë©”ëª¨ë¦¬DC ë° BITMAP ì‚­ì œ
 	MemDC.SelectObject(pOldBitmap);
 	MemDC.DeleteDC();
 }
 
 
-// CAwesomeMmap Áø´ÜÀÔ´Ï´Ù.
+// CAwesomeMmap ì§„ë‹¨ì…ë‹ˆë‹¤.
 
 #ifdef _DEBUG
 void CAwesomeMmap::AssertValid() const
@@ -110,20 +113,20 @@ void CAwesomeMmap::Dump(CDumpContext& dc) const
 #endif //_DEBUG
 
 
-// CAwesomeMmap ¸Ş½ÃÁö Ã³¸®±âÀÔ´Ï´Ù.
+// CAwesomeMmap ë©”ì‹œì§€ ì²˜ë¦¬ê¸°ì…ë‹ˆë‹¤.
 
 
 void CAwesomeMmap::OnHome()
 {
 	CMainFrame * frame = (CMainFrame *)AfxGetApp()->GetMainWnd();
 	frame->SwitchView(VIEWID_HOME);
-	// TODO: ¿©±â¿¡ ¸í·É Ã³¸®±â ÄÚµå¸¦ Ãß°¡ÇÕ´Ï´Ù.
+	// TODO: ì—¬ê¸°ì— ëª…ë ¹ ì²˜ë¦¬ê¸° ì½”ë“œë¥¼ ì¶”ê°€í•©ë‹ˆë‹¤.
 }
 
 
 BOOL CAwesomeMmap::OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message)
 {
-	// TODO: ¿©±â¿¡ ¸Ş½ÃÁö Ã³¸®±â ÄÚµå¸¦ Ãß°¡ ¹×/¶Ç´Â ±âº»°ªÀ» È£ÃâÇÕ´Ï´Ù.
+	// TODO: ì—¬ê¸°ì— ë©”ì‹œì§€ ì²˜ë¦¬ê¸° ì½”ë“œë¥¼ ì¶”ê°€ ë°/ë˜ëŠ” ê¸°ë³¸ê°’ì„ í˜¸ì¶œí•©ë‹ˆë‹¤.
 	if (nHitTest == HTCLIENT) {
 		CAwesomeStudyDoc* pDoc = (CAwesomeStudyDoc *)GetDocument();
 
@@ -136,8 +139,8 @@ BOOL CAwesomeMmap::OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message)
 		ScreenToClient(&point);
 		cursorFlag = CheckPtInIdea(point);
 
-		//OR ¿¬»êÀ» ÇØ¼­ ¸®Àüµé Áß ÇÏ³ª¶ó°í °ãÄ¡´Â ºÎºĞÀÌ ÀÖ´Ù¸é
-		//flag¿¡ µû¶ó °¢°¢ ´Ù¸¥ Ä¿¼­ÀÇ ¸ğ¾çÀ» ¸¸µç´Ù.
+		//OR ì—°ì‚°ì„ í•´ì„œ ë¦¬ì „ë“¤ ì¤‘ í•˜ë‚˜ë¼ê³  ê²¹ì¹˜ëŠ” ë¶€ë¶„ì´ ìˆë‹¤ë©´
+		//flagì— ë”°ë¼ ê°ê° ë‹¤ë¥¸ ì»¤ì„œì˜ ëª¨ì–‘ì„ ë§Œë“ ë‹¤.
 		if (cursorFlag == RGN_IDEA_IN) {
 			::SetCursor((LoadCursor(NULL, IDC_SIZEALL)));
 		}
@@ -169,21 +172,21 @@ BOOL CAwesomeMmap::OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message)
 
 void CAwesomeMmap::OnLButtonDown(UINT nFlags, CPoint point)
 {
-	//ÀÌ ÄÚµå´Â »õ·Î¿î °´Ã¼ »ı¼ºÀ» À§ÇÑ Âü°í¿ëÀÔ´Ï´Ù.
-	// TODO: ¿©±â¿¡ ¸Ş½ÃÁö Ã³¸®±â ÄÚµå¸¦ Ãß°¡ ¹×/¶Ç´Â ±âº»°ªÀ» È£ÃâÇÕ´Ï´Ù.
+	//ì´ ì½”ë“œëŠ” ìƒˆë¡œìš´ ê°ì²´ ìƒì„±ì„ ìœ„í•œ ì°¸ê³ ìš©ì…ë‹ˆë‹¤.
+	// TODO: ì—¬ê¸°ì— ë©”ì‹œì§€ ì²˜ë¦¬ê¸° ì½”ë“œë¥¼ ì¶”ê°€ ë°/ë˜ëŠ” ê¸°ë³¸ê°’ì„ í˜¸ì¶œí•©ë‹ˆë‹¤.
 	m_bLBtnPressed = TRUE;
 	CAwesomeStudyDoc* pDoc = (CAwesomeStudyDoc *)GetDocument();
 	POSITION ideaPosition = NULL;
 	CIdea selectedIdea;
 	CString str;
-	//TODO: selectedIdeaÀÇ ÁÖ¼Ò°ªÀ» ´øÁ®ÁáÀ» ¶§ List¿¡ ¸Â´Â IdeaÀÇ ÁÖ¼Ò°ªÀ» ¾ò¾î¿ÔÀ¸¸é ÁÁ°Ú´Ù.
-	//CList´Â GetNext·Î ¾ò¾î¿Â °ªÀº ÁøÂ¥°ªÀÌ ¾Æ´Ï¶ó º¹»çµÈ °´Ã¼ÀÏ µí ÇÏ´Ù.
-	//°á±¹, SetAt(POSITION pos, ARG_TYPE newElement); ÇÔ¼ö¸¦ »ç¿ëÇØ¼­ 
-	//´Ù½Ã ±× ÀÚ¸®ÀÇ Element¸¦ newElement·Î ´ëÃ¼ÇØ¾ß ÇÒ °Í °°´Ù.
-	//TODO: GetNext(pos)ÀÇ pos´Â Element¸¦ Á¤È®È÷ °¡¸®Å°´Â pos°¡ ¾Æ´Ï¶ó
-	//ElementÀÇ Next¸¦ °¡¸®Å°´Â posÀÌ±â ¶§¹®¿¡ ÀÌ¿¡ °üÇÑ Ãß°¡ÀûÀÎ ÄÚµùÀÌ ÇÊ¿äÇÏ´Ù
+	//TODO: selectedIdeaì˜ ì£¼ì†Œê°’ì„ ë˜ì ¸ì¤¬ì„ ë•Œ Listì— ë§ëŠ” Ideaì˜ ì£¼ì†Œê°’ì„ ì–»ì–´ì™”ìœ¼ë©´ ì¢‹ê² ë‹¤.
+	//CListëŠ” GetNextë¡œ ì–»ì–´ì˜¨ ê°’ì€ ì§„ì§œê°’ì´ ì•„ë‹ˆë¼ ë³µì‚¬ëœ ê°ì²´ì¼ ë“¯ í•˜ë‹¤.
+	//ê²°êµ­, SetAt(POSITION pos, ARG_TYPE newElement); í•¨ìˆ˜ë¥¼ ì‚¬ìš©í•´ì„œ 
+	//ë‹¤ì‹œ ê·¸ ìë¦¬ì˜ Elementë¥¼ newElementë¡œ ëŒ€ì²´í•´ì•¼ í•  ê²ƒ ê°™ë‹¤.
+	//TODO: GetNext(pos)ì˜ posëŠ” Elementë¥¼ ì •í™•íˆ ê°€ë¦¬í‚¤ëŠ” posê°€ ì•„ë‹ˆë¼
+	//Elementì˜ Nextë¥¼ ê°€ë¦¬í‚¤ëŠ” posì´ê¸° ë•Œë¬¸ì— ì´ì— ê´€í•œ ì¶”ê°€ì ì¸ ì½”ë”©ì´ í•„ìš”í•˜ë‹¤
 	int pointCode = CheckPtInIdea(point, selectedIdea);
-	//¼±ÅÃµÈ ¾ÆÀÌµğ¾Æ¸¦ Head¿¡ °¡Á®´Ù ³õ´Â´Ù.
+	//ì„ íƒëœ ì•„ì´ë””ì•„ë¥¼ Headì— ê°€ì ¸ë‹¤ ë†“ëŠ”ë‹¤.
 
 
 	/*
@@ -209,24 +212,24 @@ void CAwesomeMmap::OnLButtonDown(UINT nFlags, CPoint point)
 
 
 	//CheckPtInIdea(point) -->
-	//Idea inÀÏ °æ¿ì : ¸ÕÀú ÀüºÎ ¼±ÅÃÀ» FALSE·Î, 
-	//¼±ÅÃÇÑ ³à¼®ÀÇ m_bHighlight¸¦ True·Î ¼³Á¤
+	//Idea inì¼ ê²½ìš° : ë¨¼ì € ì „ë¶€ ì„ íƒì„ FALSEë¡œ, 
+	//ì„ íƒí•œ ë…€ì„ì˜ m_bHighlightë¥¼ Trueë¡œ ì„¤ì •
 	if (pointCode == RGN_IDEA_IN /*&& &selectedIdea != NULL*/) {
 		SetDehighlight(pDoc->m_ideaList);
 		selectedIdea.SetHighlight(TRUE);
 
-		//¸¶¿ì½º ²ø¾úÀ» ¶§ ¿òÁ÷ÀÌµµ·Ï nPressedFlagÀÇ °ªÀ» °íÁ¤½ÃÅ²´Ù.
+		//ë§ˆìš°ìŠ¤ ëŒì—ˆì„ ë•Œ ì›€ì§ì´ë„ë¡ nPressedFlagì˜ ê°’ì„ ê³ ì •ì‹œí‚¨ë‹¤.
 		if (m_bPressOnlyOneFlag == TRUE) {
 			m_bPressOnlyOneFlag = FALSE;
 			m_nPressedFlag = cursorFlag;
 			m_bMoveMode = TRUE;
 			m_mousePointInRect = point - selectedIdea.m_ideaRect.TopLeft();
 		}
-		//SetAt(POSITION, ARG_TYPE)¸¦ È£ÃâÇÏ¿© À§¿¡¼­ ÀúÀåÇÑ ideaPosition º¯¼öÀÇ
-		//Prev°ªÀÌ °ğ ¿ø ElementÀÌ±â ¶§¹®¿¡ ideaPosition.PrevÇÑ ÀÚ¸®¿¡ selectedIdea¸¦ 
-		//Áı¾î³Ö´Â´Ù.
-		//ToDO:¾Æ´Ï! ¼±ÅÃµÈ Idea´Â Head¿¡ ¿Ã·ÁÁà¾ß ÇÑ´Ù. Áï, ÇöÀç Idea°¡ ÀÖ´Â ÀÚ¸®ÀÇ ³ëµå´Â
-		//Á¦°ÅÇÏ°í ÀÌ°É Head¿¡´Ù°¡ ºÙÇôÁÖ¸é µÇ°Ú´Ù
+		//SetAt(POSITION, ARG_TYPE)ë¥¼ í˜¸ì¶œí•˜ì—¬ ìœ„ì—ì„œ ì €ì¥í•œ ideaPosition ë³€ìˆ˜ì˜
+		//Prevê°’ì´ ê³§ ì› Elementì´ê¸° ë•Œë¬¸ì— ideaPosition.Preví•œ ìë¦¬ì— selectedIdeaë¥¼ 
+		//ì§‘ì–´ë„£ëŠ”ë‹¤.
+		//ToDO:ì•„ë‹ˆ! ì„ íƒëœ IdeaëŠ” Headì— ì˜¬ë ¤ì¤˜ì•¼ í•œë‹¤. ì¦‰, í˜„ì¬ Ideaê°€ ìˆëŠ” ìë¦¬ì˜ ë…¸ë“œëŠ”
+		//ì œê±°í•˜ê³  ì´ê±¸ Headì—ë‹¤ê°€ ë¶™í˜€ì£¼ë©´ ë˜ê² ë‹¤
 		//SetIdea(tmpPosition, pDoc->m_ideaList, selectedIdea);
 		DeleteIdea(tmpPosition, pDoc->m_ideaList);
 		pDoc->m_ideaList.AddHead(selectedIdea);
@@ -235,7 +238,7 @@ void CAwesomeMmap::OnLButtonDown(UINT nFlags, CPoint point)
 		Invalidate();
 	}
 
-	//Idea outÀÏ °æ¿ì : ¸ğµç ³ğµéÀÇ m_bHighlight¸¦ False·Î ¼³Á¤
+	//Idea outì¼ ê²½ìš° : ëª¨ë“  ë†ˆë“¤ì˜ m_bHighlightë¥¼ Falseë¡œ ì„¤ì •
 	if (pointCode == RGN_IDEA_OUT) {
 		CList<CIdea, CIdea&> *ideaList = &pDoc->m_ideaList;
 		POSITION pos = ideaList->GetHeadPosition();
@@ -258,8 +261,8 @@ void CAwesomeMmap::OnLButtonDown(UINT nFlags, CPoint point)
 		Invalidate();
 	}
 
-	//Size HandleÀÏ °æ¿ì : 4°¡Áö °æ¿ì
-	//¾îÂ÷ÇÇ °æ¿ì¿¡ µû¸¥ ³ª´®Àº OnMouseMove¿¡¼­ Ã³¸®ÇÑ´Ù.
+	//Size Handleì¼ ê²½ìš° : 4ê°€ì§€ ê²½ìš°
+	//ì–´ì°¨í”¼ ê²½ìš°ì— ë”°ë¥¸ ë‚˜ëˆ”ì€ OnMouseMoveì—ì„œ ì²˜ë¦¬í•œë‹¤.
 	if (pointCode == RGN_SIZE_HND_BTMLEFT || pointCode == RGN_SIZE_HND_BTMRIGHT
 		|| pointCode == RGN_SIZE_HND_TOPLEFT || pointCode == RGN_SIZE_HND_TOPRIGHT)
 		if (m_bPressOnlyOneFlag == TRUE) {
@@ -269,7 +272,7 @@ void CAwesomeMmap::OnLButtonDown(UINT nFlags, CPoint point)
 		}
 	//else { m_bChangeSizeMode = FALSE; }
 
-	//Add Child HandleÀÏ °æ¿ì
+	//Add Child Handleì¼ ê²½ìš°
 	if (pointCode == RGN_ADD_CHILD_HND) {
 		if (m_bPressOnlyOneFlag == TRUE) {
 			m_bPressOnlyOneFlag = FALSE;
@@ -288,8 +291,8 @@ void CAwesomeMmap::OnLButtonDown(UINT nFlags, CPoint point)
 	}
 
 	/////////////////////////////////////////////
-	//ÀÌ ÄÚµå´Â ¿ŞÂÊ ¹öÆ° Å¬¸¯½Ã ÀÓÀÇ·Î »õ Idea¸¦ »ı¼ºÇÏ´Â ÄÚµå·Î,
-	//ÀÌÁ¨ »ç¿ëÇÏÁö ¾ÊÀ¸¹Ç·Î ÁÖ¼®Ã³¸®ÇÕ´Ï´Ù.
+	//ì´ ì½”ë“œëŠ” ì™¼ìª½ ë²„íŠ¼ í´ë¦­ì‹œ ì„ì˜ë¡œ ìƒˆ Ideaë¥¼ ìƒì„±í•˜ëŠ” ì½”ë“œë¡œ,
+	//ì´ì   ì‚¬ìš©í•˜ì§€ ì•Šìœ¼ë¯€ë¡œ ì£¼ì„ì²˜ë¦¬í•©ë‹ˆë‹¤.
 	//CRect newRect(point.x - 50, point.y - 50, point.x + 50, point.y + 50);
 	//CString newStr;
 	//newStr.Format(_T("[%d,%d]"), point.x, point.y);
@@ -305,7 +308,7 @@ void CAwesomeMmap::OnLButtonDown(UINT nFlags, CPoint point)
 
 void CAwesomeMmap::OnMouseMove(UINT nFlags, CPoint point)
 {
-	// TODO: ¿©±â¿¡ ¸Ş½ÃÁö Ã³¸®±â ÄÚµå¸¦ Ãß°¡ ¹×/¶Ç´Â ±âº»°ªÀ» È£ÃâÇÕ´Ï´Ù.
+	// TODO: ì—¬ê¸°ì— ë©”ì‹œì§€ ì²˜ë¦¬ê¸° ì½”ë“œë¥¼ ì¶”ê°€ ë°/ë˜ëŠ” ê¸°ë³¸ê°’ì„ í˜¸ì¶œí•©ë‹ˆë‹¤.
 	CAwesomeStudyDoc* pDoc = (CAwesomeStudyDoc *)GetDocument();
 	CIdea *thisIdea = &GetIdea(tmpPosition, pDoc->m_ideaList);
 	CClientDC dc(this);
@@ -333,7 +336,7 @@ void CAwesomeMmap::OnMouseMove(UINT nFlags, CPoint point)
 	else if (pointCode == 6)
 		str.Format(_T("RGN_SIZE_HND_BTMRIGHT\n"));
 	str.Append(GetIdea(tmpPosition, pDoc->m_ideaList).StringOutIdea());
-	tmpStr.Format(_T("\nÇöÀç ¸®½ºÆ® °³¼ö : %d\n"), pDoc->m_ideaList.GetCount());
+	tmpStr.Format(_T("\ní˜„ì¬ ë¦¬ìŠ¤íŠ¸ ê°œìˆ˜ : %d\n"), pDoc->m_ideaList.GetCount());
 	tmpStr.Format(_T("polybezier : (%d, %d), (%d, %d), (%d, %d)\n"),
 		m_pPolyBezierPoints[0].x, m_pPolyBezierPoints[0].y,
 		m_pPolyBezierPoints[1].x, m_pPolyBezierPoints[1].y,
@@ -345,16 +348,16 @@ void CAwesomeMmap::OnMouseMove(UINT nFlags, CPoint point)
 
 
 
-	// »çÀÌÁî Á¶Àı¸ğµå¸é °è¼ÓÇØ¼­ ¸¶¿ì½º¸¦ µû¶ó »ç°¢ÇüÀÇ ²ø¸®°í ÀÖ´Â ÇÚµéÀÇ ²ÀÁşÁ¡À» ±× À§Ä¡·Î stretch ½ÃÅ²´Ù.
-	// ±×¸®´Â°Ç ¿©±â¿¡¼­ ÇÏÀÚ.
+	// ì‚¬ì´ì¦ˆ ì¡°ì ˆëª¨ë“œë©´ ê³„ì†í•´ì„œ ë§ˆìš°ìŠ¤ë¥¼ ë”°ë¼ ì‚¬ê°í˜•ì˜ ëŒë¦¬ê³  ìˆëŠ” í•¸ë“¤ì˜ ê¼­ì§“ì ì„ ê·¸ ìœ„ì¹˜ë¡œ stretch ì‹œí‚¨ë‹¤.
+	// ê·¸ë¦¬ëŠ”ê±´ ì—¬ê¸°ì—ì„œ í•˜ì.
 	if (m_bChangeSizeMode)
 	{
 		drawRect.SetRect(m_tmpX1, m_tmpY1, m_tmpX2, m_tmpY2);
 		roundPoint.SetPoint(drawRect.Width() * roundRate, drawRect.Height() * roundRate);
 
 		dc.SelectStockObject(NULL_BRUSH);
-		//ÀÌÀü¿¡ ±×¸° »ç°¢ÇüÀ» Áö¿î´Ù.
-///TODO : ¿Ö ÀÌÀü¿¡ ±×¸° »ç°¢ÇüÀÌ Áö¿öÁöÁö ¾ÊÁö?
+		//ì´ì „ì— ê·¸ë¦° ì‚¬ê°í˜•ì„ ì§€ìš´ë‹¤.
+///TODO : ì™œ ì´ì „ì— ê·¸ë¦° ì‚¬ê°í˜•ì´ ì§€ì›Œì§€ì§€ ì•Šì§€?
 		dc.SetROP2(R2_NOT);
 		dc.RoundRect(drawRect, roundPoint);
 		m_tmpX1 = thisIdea->m_ideaRect.left;
@@ -366,7 +369,7 @@ void CAwesomeMmap::OnMouseMove(UINT nFlags, CPoint point)
 		roundPoint.SetPoint(drawRect.Width() * roundRate, drawRect.Height() * roundRate);
 
 
-		//»õ·Î¿î »ç°¢ÇüÀ» ±×¸°´Ù.
+		//ìƒˆë¡œìš´ ì‚¬ê°í˜•ì„ ê·¸ë¦°ë‹¤.
 		dc.SetROP2(R2_NOT);
 		if (m_nPressedFlag == RGN_SIZE_HND_BTMRIGHT) {
 			m_tmpX2 = point.x;
@@ -394,7 +397,7 @@ void CAwesomeMmap::OnMouseMove(UINT nFlags, CPoint point)
 		m_bChangeSizeMode = TRUE;
 	}
 
-	//ÀÌ°Å´Â Á÷Á¢ ¿òÁ÷ÀÌ°Ô ÇØ¾ß°Ú´Ù
+	//ì´ê±°ëŠ” ì§ì ‘ ì›€ì§ì´ê²Œ í•´ì•¼ê² ë‹¤
 	if (m_bMoveMode) {
 		thisIdea->m_ideaRect.MoveToXY(
 			point.x - m_mousePointInRect.x,
@@ -408,8 +411,8 @@ void CAwesomeMmap::OnMouseMove(UINT nFlags, CPoint point)
 	//add child Handle
 	if (m_bAddChildMode) 
 	{
-		//TODO: °î¼±ÀÌ ¾È ±×·ÁÁø´Ù
-		//BezierLine, Rect ÀÌ µÎ°¡Áö¸¦ Áö¿ü´Ù°¡ ´Ù½Ã ±×¸®´Â °É·Î ÇÏÀÚ
+		//TODO: ê³¡ì„ ì´ ì•ˆ ê·¸ë ¤ì§„ë‹¤
+		//BezierLine, Rect ì´ ë‘ê°€ì§€ë¥¼ ì§€ì› ë‹¤ê°€ ë‹¤ì‹œ ê·¸ë¦¬ëŠ” ê±¸ë¡œ í•˜ì
 		//bezierPoints[0] = m_ParentIdea.m_ideaRect.CenterPoint();
 		//bezierPoints[1] = CPoint(m_tmpX1, m_ParentIdea.m_ideaRect.CenterPoint().y);
 		//bezierPoints[2] = CPoint(m_tmpX1, m_tmpY1);
@@ -418,7 +421,7 @@ void CAwesomeMmap::OnMouseMove(UINT nFlags, CPoint point)
 		roundPoint.SetPoint(drawRect.Width() * roundRate, drawRect.Height() * roundRate);
 
 		dc.SelectStockObject(NULL_BRUSH);
-		//ÀÌÀü¿¡ ±×¸° »ç°¢Çü°ú °î¼±À» Áö¿î´Ù
+		//ì´ì „ì— ê·¸ë¦° ì‚¬ê°í˜•ê³¼ ê³¡ì„ ì„ ì§€ìš´ë‹¤
 		dc.SetROP2(R2_NOT);
 		dc.PolyBezier(m_pPolyBezierPoints, 3);
 		dc.RoundRect(drawRect, roundPoint);
@@ -430,7 +433,7 @@ void CAwesomeMmap::OnMouseMove(UINT nFlags, CPoint point)
 		m_pPolyBezierPoints[1].x = point.x;
 		m_pPolyBezierPoints[2] = point;
 
-		//»õ·Î¿î »ç°¢Çü°ú °î¼±À» ±×¸°´Ù
+		//ìƒˆë¡œìš´ ì‚¬ê°í˜•ê³¼ ê³¡ì„ ì„ ê·¸ë¦°ë‹¤
 		dc.SetROP2(R2_NOT);
 		dc.PolyBezier(m_pPolyBezierPoints, 3);
 
@@ -447,7 +450,7 @@ void CAwesomeMmap::OnMouseMove(UINT nFlags, CPoint point)
 
 
 
-// ¸¶¿ì½º°¡ °´Ã¼ ¾È¿¡ µé¾îÀÖÀ¸¸é º¯°æ. (¸®Àü »ı¼º ÈÄ Á¦°Å ¿ä¸Á
+// ë§ˆìš°ìŠ¤ê°€ ê°ì²´ ì•ˆì— ë“¤ì–´ìˆìœ¼ë©´ ë³€ê²½. (ë¦¬ì „ ìƒì„± í›„ ì œê±° ìš”ë§
 int CAwesomeMmap::CheckPtInIdea(CPoint point, CIdea& whichIdea)
 {
 	CAwesomeStudyDoc* pDoc = (CAwesomeStudyDoc *)GetDocument();
@@ -458,13 +461,13 @@ int CAwesomeMmap::CheckPtInIdea(CPoint point, CIdea& whichIdea)
 
 	while (tmpPosition != NULL)
 	{
-		//TODO : CIdea* whichIdea¿¡ list.GetNext()ÀÇ ¸®ÅÏÇÑ °´Ã¼ÀÇ ÁÖ¼Ò¸¦ 
-		//³Ñ°ÜÁÖ°í ½ÍÀºµ¥..(±×·¸°Ô ÇØ¾ß CheckPtInIdeaÇÔ¼ö¸¦ È£ÃâÇÑ µ¥¿¡¼­ whichIdea¸¦ °¡Áö°í
-		//¹Ù²Ù¾î¾ß ¸®½ºÆ® ¾È¿¡ ÀÖ´Â ÁøÂ¥ °´Ã¼°¡ ¹Ù²îÁö)
+		//TODO : CIdea* whichIdeaì— list.GetNext()ì˜ ë¦¬í„´í•œ ê°ì²´ì˜ ì£¼ì†Œë¥¼ 
+		//ë„˜ê²¨ì£¼ê³  ì‹¶ì€ë°..(ê·¸ë ‡ê²Œ í•´ì•¼ CheckPtInIdeaí•¨ìˆ˜ë¥¼ í˜¸ì¶œí•œ ë°ì—ì„œ whichIdeaë¥¼ ê°€ì§€ê³ 
+		//ë°”ê¾¸ì–´ì•¼ ë¦¬ìŠ¤íŠ¸ ì•ˆì— ìˆëŠ” ì§„ì§œ ê°ì²´ê°€ ë°”ë€Œì§€)
 		whichIdea = (pDoc->m_ideaList.GetNext(tmpPosition));
 		whichIdea.DeleteIdeaRgn();
 		///Region = Idea in = 1
-		//¸®Àü ¸®ÅÏ ÇÑ µÚ PtInRgn°¡ TRUE¶ó¸é
+		//ë¦¬ì „ ë¦¬í„´ í•œ ë’¤ PtInRgnê°€ TRUEë¼ë©´
 		if (whichIdea.MakeIdeaRgn().PtInRegion(point) == TRUE)
 		{
 			//debugstart
@@ -478,9 +481,9 @@ int CAwesomeMmap::CheckPtInIdea(CPoint point, CIdea& whichIdea)
 
 		///Region = Idea Size Handle = 3 ~ 6
 		///Region = Idea Add Child Handle = 2
-		//È°¼ºÈ­°¡ µÇ¾îÀÖ´Â °æ¿ì --> 
-		//{ size handle¿¡ ´ëÇÑ ¸®Àü »ı¼º ÈÄ PtInRegion(point)
-		// , ¶Ç´Â Add Child Handle¿¡ ´ëÇÑ ¸®Àü »ı¼º ÈÄ PtInRegion(point) }
+		//í™œì„±í™”ê°€ ë˜ì–´ìˆëŠ” ê²½ìš° --> 
+		//{ size handleì— ëŒ€í•œ ë¦¬ì „ ìƒì„± í›„ PtInRegion(point)
+		// , ë˜ëŠ” Add Child Handleì— ëŒ€í•œ ë¦¬ì „ ìƒì„± í›„ PtInRegion(point) }
 		if (whichIdea.m_bHighlighted) {
 			int tmpReturnValue = 0;
 			//sizeHandleRgn * 4
@@ -513,7 +516,7 @@ int CAwesomeMmap::CheckPtInIdea(CPoint point, CIdea& whichIdea)
 				m_childHndX2, m_childHndY2);
 
 
-			//¸¶¿ì½º°¡ ÀÌ¹Ì ´­·ÁÁ® ÀÖ´Â »óÅÂ¶ó¸é À¯Áö½ÃÅ²´Ù.
+			//ë§ˆìš°ìŠ¤ê°€ ì´ë¯¸ ëˆŒë ¤ì ¸ ìˆëŠ” ìƒíƒœë¼ë©´ ìœ ì§€ì‹œí‚¨ë‹¤.
 			if (topLeftRgn.PtInRegion(point)) {
 				tmpReturnValue = RGN_SIZE_HND_TOPLEFT;
 			}
@@ -542,7 +545,7 @@ int CAwesomeMmap::CheckPtInIdea(CPoint point, CIdea& whichIdea)
 	}
 
 	///Region = Idea out = 0
-	//ÀÌ°Ç Á¦ÀÏ ¸¶Áö¸·¿¡ ÇØ¾ß°Ú´Ù. ÀüºÎ ´Ù ¾Æ´Ò °æ¿ì
+	//ì´ê±´ ì œì¼ ë§ˆì§€ë§‰ì— í•´ì•¼ê² ë‹¤. ì „ë¶€ ë‹¤ ì•„ë‹ ê²½ìš°
 	return RGN_IDEA_OUT;
 }
 
@@ -552,24 +555,24 @@ int CAwesomeMmap::CheckPtInIdea(CPoint point)
 
 	CRgn topLeftRgn, topRightRgn, btmLeftRgn, btmRightRgn;
 	CRgn addChildHandleRgn;
-	//Âü°í·Î ÀÌ ÇÔ¼ö´Â CIdea º¯¼ö¸¦ »ç¿ëÇÏÁö ¾Ê´Â´Ù.
+	//ì°¸ê³ ë¡œ ì´ í•¨ìˆ˜ëŠ” CIdea ë³€ìˆ˜ë¥¼ ì‚¬ìš©í•˜ì§€ ì•ŠëŠ”ë‹¤.
 	CIdea whichIdea;
 	return CAwesomeMmap::CheckPtInIdea(point, whichIdea);
-	//¾îÂ÷ÇÇ ¿À¹ö·ÎµùµÈ ÇÔ¼ö´Â ÇÏ³ª¸¸ ¾²°í ´Ù¸¥ ÇÔ¼ö¿¡¼­ °¡Á®´Ù ¾²¸é µÇ°Ú±¸³ª
+	//ì–´ì°¨í”¼ ì˜¤ë²„ë¡œë”©ëœ í•¨ìˆ˜ëŠ” í•˜ë‚˜ë§Œ ì“°ê³  ë‹¤ë¥¸ í•¨ìˆ˜ì—ì„œ ê°€ì ¸ë‹¤ ì“°ë©´ ë˜ê² êµ¬ë‚˜
 	/* 
 	POSITION pos = pDoc->m_ideaList.GetHeadPosition();
 
 	while (pos != NULL)
 	{
-		//TODO : CIdea* whichIdea¿¡ list.GetNext()ÀÇ ¸®ÅÏÇÑ °´Ã¼ÀÇ ÁÖ¼Ò¸¦ 
-		//³Ñ°ÜÁÖ°í ½ÍÀºµ¥..(±×·¸°Ô ÇØ¾ß CheckPtInIdeaÇÔ¼ö¸¦ È£ÃâÇÑ µ¥¿¡¼­ whichIdea¸¦ °¡Áö°í
-		//¹Ù²Ù¾î¾ß ¸®½ºÆ® ¾È¿¡ ÀÖ´Â ÁøÂ¥ °´Ã¼°¡ ¹Ù²îÁö)
+		//TODO : CIdea* whichIdeaì— list.GetNext()ì˜ ë¦¬í„´í•œ ê°ì²´ì˜ ì£¼ì†Œë¥¼ 
+		//ë„˜ê²¨ì£¼ê³  ì‹¶ì€ë°..(ê·¸ë ‡ê²Œ í•´ì•¼ CheckPtInIdeaí•¨ìˆ˜ë¥¼ í˜¸ì¶œí•œ ë°ì—ì„œ whichIdeaë¥¼ ê°€ì§€ê³ 
+		//ë°”ê¾¸ì–´ì•¼ ë¦¬ìŠ¤íŠ¸ ì•ˆì— ìˆëŠ” ì§„ì§œ ê°ì²´ê°€ ë°”ë€Œì§€)
 		whichIdea = &pDoc->m_ideaList.GetNext(pos);
 		whichIdea->DeleteIdeaRgn();
 		///Region = Idea in = 1
-		//¸®Àü ¸®ÅÏ ÇÑ µÚ PtInRgn°¡ TRUE¶ó¸é
-		//¸¶¿ì½º°¡ ´­·ÁÀÖ´Â »óÅÂ¶ó¸é ±âÁ¸ »óÅÂ¸¦ °è¼Ó À¯ÁöÇÑ´Ù.
-		//¹Ú½º¸¦ ¿òÁ÷ÀÌ°í ÀÖ´ø°¡ Å©±âÇÚµéÀ» °¡Áö°í ¿òÁ÷ÀÎ´Ù´ø°¡
+		//ë¦¬ì „ ë¦¬í„´ í•œ ë’¤ PtInRgnê°€ TRUEë¼ë©´
+		//ë§ˆìš°ìŠ¤ê°€ ëˆŒë ¤ìˆëŠ” ìƒíƒœë¼ë©´ ê¸°ì¡´ ìƒíƒœë¥¼ ê³„ì† ìœ ì§€í•œë‹¤.
+		//ë°•ìŠ¤ë¥¼ ì›€ì§ì´ê³  ìˆë˜ê°€ í¬ê¸°í•¸ë“¤ì„ ê°€ì§€ê³  ì›€ì§ì¸ë‹¤ë˜ê°€
 		if (whichIdea->MakeIdeaRgn().PtInRegion(point) == TRUE)
 		{
 			//debugstart
@@ -583,9 +586,9 @@ int CAwesomeMmap::CheckPtInIdea(CPoint point)
 
 		///Region = Idea Size Handle = 3 ~ 6
 		///Region = Idea Add Child Handle = 2
-		//È°¼ºÈ­°¡ µÇ¾îÀÖ´Â °æ¿ì --> 
-		//{ size handle¿¡ ´ëÇÑ ¸®Àü »ı¼º ÈÄ PtInRegion(point)
-		// , ¶Ç´Â Add Child Handle¿¡ ´ëÇÑ ¸®Àü »ı¼º ÈÄ PtInRegion(point) }
+		//í™œì„±í™”ê°€ ë˜ì–´ìˆëŠ” ê²½ìš° --> 
+		//{ size handleì— ëŒ€í•œ ë¦¬ì „ ìƒì„± í›„ PtInRegion(point)
+		// , ë˜ëŠ” Add Child Handleì— ëŒ€í•œ ë¦¬ì „ ìƒì„± í›„ PtInRegion(point) }
 		if (whichIdea->m_bHighlighted) {
 			tmpReturnValue = 0;
 			//sizeHandleRgn * 4
@@ -633,9 +636,9 @@ int CAwesomeMmap::CheckPtInIdea(CPoint point)
 			btmLeftRgn.DeleteObject();
 			btmRightRgn.DeleteObject();
 
-			//Âü°í·Î µå·¡±×½Ã ÀÛµ¿ÇÏ´Â°Ç ¿©±â¿¡¼­ °ü¿©ÇÏÁö ¾Ê´Â´Ù.
-			//OnMouseMove ÇÔ¼ö¿¡¼­ ¸¶¿ì½º°¡ µå·¡±× ÇÏ°í ÀÖ´Âµ¥ m_ideaRect.CenterPoint()¸¦ Áß½ÉÀ¸·Î
-			//4ºĞ¸éÀ¸·Î ³ª´µ¾îÀÖÀ¸´Ï±î ±×¶§°¡¼­ °í·ÁÇÏ¸é µÈ´Ù.
+			//ì°¸ê³ ë¡œ ë“œë˜ê·¸ì‹œ ì‘ë™í•˜ëŠ”ê±´ ì—¬ê¸°ì—ì„œ ê´€ì—¬í•˜ì§€ ì•ŠëŠ”ë‹¤.
+			//OnMouseMove í•¨ìˆ˜ì—ì„œ ë§ˆìš°ìŠ¤ê°€ ë“œë˜ê·¸ í•˜ê³  ìˆëŠ”ë° m_ideaRect.CenterPoint()ë¥¼ ì¤‘ì‹¬ìœ¼ë¡œ
+			//4ë¶„ë©´ìœ¼ë¡œ ë‚˜ë‰˜ì–´ìˆìœ¼ë‹ˆê¹Œ ê·¸ë•Œê°€ì„œ ê³ ë ¤í•˜ë©´ ëœë‹¤.
 
 			//addChildHandleRgn
 
@@ -646,13 +649,13 @@ int CAwesomeMmap::CheckPtInIdea(CPoint point)
 		}
 	}
 	///Region = Idea out = 0
-	//ÀÌ°Ç Á¦ÀÏ ¸¶Áö¸·¿¡ ÇØ¾ß°Ú´Ù. ÀüºÎ ´Ù ¾Æ´Ò °æ¿ì
+	//ì´ê±´ ì œì¼ ë§ˆì§€ë§‰ì— í•´ì•¼ê² ë‹¤. ì „ë¶€ ë‹¤ ì•„ë‹ ê²½ìš°
 	return RGN_IDEA_OUT;
 	*/
 }
 
 
-// ¸®½ºÆ®ÀÇ ¸ğµç IdeaµéÀÇ m_bHighlighted¸¦ False·Î ¹Ù²Ù¾îÁÖ´Â ÇÔ¼ö
+// ë¦¬ìŠ¤íŠ¸ì˜ ëª¨ë“  Ideaë“¤ì˜ m_bHighlightedë¥¼ Falseë¡œ ë°”ê¾¸ì–´ì£¼ëŠ” í•¨ìˆ˜
 int CAwesomeMmap::SetDehighlight(CList<CIdea, CIdea&>& ideaList)
 {
 	int count = 0;
@@ -681,14 +684,14 @@ int CAwesomeMmap::SetDehighlight(CList<CIdea, CIdea&>& ideaList)
 
 void CAwesomeMmap::OnContextMenu(CWnd* pWnd, CPoint point)
 {
-	// TODO: ¿©±â¿¡ ¸Ş½ÃÁö Ã³¸®±â ÄÚµå¸¦ Ãß°¡ÇÕ´Ï´Ù.
+	// TODO: ì—¬ê¸°ì— ë©”ì‹œì§€ ì²˜ë¦¬ê¸° ì½”ë“œë¥¼ ì¶”ê°€í•©ë‹ˆë‹¤.
 	CMenu menu;
 	CMenu* pMenu;
 	ScreenToClient(&point);
 	int ideaOption = CheckPtInIdea(point, *m_contextIdea);
 	menu.LoadMenu(IDR_MMAP_CNTXT);
 	if (ideaOption == RGN_IDEA_IN) {
-		//ÀÓ½ÃÀü¿ªº¯¼ö¿¡ point¸¦ Áı¾î³Ö´Â´Ù.
+		//ì„ì‹œì „ì—­ë³€ìˆ˜ì— pointë¥¼ ì§‘ì–´ë„£ëŠ”ë‹¤.
 		tmpPoint = point;
 		ClientToScreen(&point);
 		pMenu = menu.GetSubMenu(RGN_IDEA_IN);
@@ -698,7 +701,7 @@ void CAwesomeMmap::OnContextMenu(CWnd* pWnd, CPoint point)
 		);
 	}
 	else if (ideaOption == RGN_IDEA_OUT) {
-		//ÀÓ½ÃÀü¿ªº¯¼ö¿¡ point¸¦ Áı¾î³Ö´Â´Ù.
+		//ì„ì‹œì „ì—­ë³€ìˆ˜ì— pointë¥¼ ì§‘ì–´ë„£ëŠ”ë‹¤.
 		tmpPoint = point;
 		ClientToScreen(&point);
 		pMenu = menu.GetSubMenu(RGN_IDEA_OUT);
@@ -713,7 +716,7 @@ void CAwesomeMmap::OnContextMenu(CWnd* pWnd, CPoint point)
 
 void CAwesomeMmap::OnRbnInInsertIndependent()
 {
-	// TODO: ¿©±â¿¡ ¸í·É Ã³¸®±â ÄÚµå¸¦ Ãß°¡ÇÕ´Ï´Ù.
+	// TODO: ì—¬ê¸°ì— ëª…ë ¹ ì²˜ë¦¬ê¸° ì½”ë“œë¥¼ ì¶”ê°€í•©ë‹ˆë‹¤.
 	CAwesomeStudyDoc* pDoc = (CAwesomeStudyDoc *)GetDocument();
 
 	CRect newRect(tmpPoint.x - 50, tmpPoint.y - 50, tmpPoint.x + 50, tmpPoint.y + 50);
@@ -731,7 +734,7 @@ void CAwesomeMmap::OnRbnInInsertIndependent()
 
 void CAwesomeMmap::OnRbnOutInsertIndependent()
 {
-	// TODO: ¿©±â¿¡ ¸í·É Ã³¸®±â ÄÚµå¸¦ Ãß°¡ÇÕ´Ï´Ù.
+	// TODO: ì—¬ê¸°ì— ëª…ë ¹ ì²˜ë¦¬ê¸° ì½”ë“œë¥¼ ì¶”ê°€í•©ë‹ˆë‹¤.
 	CAwesomeStudyDoc* pDoc = (CAwesomeStudyDoc *)GetDocument();
 
 	CRect newRect(tmpPoint.x - 50, tmpPoint.y - 50, tmpPoint.x + 50, tmpPoint.y + 50);
@@ -747,11 +750,11 @@ void CAwesomeMmap::OnRbnOutInsertIndependent()
 }
 
 
-// pos->prev¿¡ new Idea·Î ±³Ã¼ÇÑ´Ù.
+// pos->prevì— new Ideaë¡œ êµì²´í•œë‹¤.
 void CAwesomeMmap::SetIdea(POSITION pos, CList<CIdea, CIdea&>& ideaList, CIdea& newIdea)
 {
-	//¸¶Áö¸· ¿ø¼Ò(tail)¿¡ ÀÖ´Â °æ¿ì pos°¡ nullptrÀÎ °æ¿ì°¡ ÀÖ´Ù!!!
-	//¹®Á¦¸¦ ÇØ°áÇÒ ¼ö ÀÖ´Ù. pos°¡ nullptrÀÎ °æ¿ì¿¡¸¸ tailÀ» °¡¸®Å°¸é µÈ´Ù.
+	//ë§ˆì§€ë§‰ ì›ì†Œ(tail)ì— ìˆëŠ” ê²½ìš° posê°€ nullptrì¸ ê²½ìš°ê°€ ìˆë‹¤!!!
+	//ë¬¸ì œë¥¼ í•´ê²°í•  ìˆ˜ ìˆë‹¤. posê°€ nullptrì¸ ê²½ìš°ì—ë§Œ tailì„ ê°€ë¦¬í‚¤ë©´ ëœë‹¤.
 	if (pos == 0) {
 		pos = ideaList.GetTailPosition();
 		ideaList.SetAt(pos, newIdea);
@@ -762,10 +765,10 @@ void CAwesomeMmap::SetIdea(POSITION pos, CList<CIdea, CIdea&>& ideaList, CIdea& 
 	return;
 }
 
-// ¸» ±×´ë·Î get ideaÇÕ´Ï´Ù.
+// ë§ ê·¸ëŒ€ë¡œ get ideaí•©ë‹ˆë‹¤.
 CIdea& CAwesomeMmap::GetIdea(POSITION pos, CList<CIdea, CIdea&>& ideaList)
 {
-	// TODO: ¿©±â¿¡ ¹İÈ¯ ±¸¹®À» »ğÀÔÇÕ´Ï´Ù.
+	// TODO: ì—¬ê¸°ì— ë°˜í™˜ êµ¬ë¬¸ì„ ì‚½ì…í•©ë‹ˆë‹¤.
 	if (pos == 0) {
 		pos = ideaList.GetTailPosition();
 		return ideaList.GetAt(pos);
@@ -778,7 +781,7 @@ CIdea& CAwesomeMmap::GetIdea(POSITION pos, CList<CIdea, CIdea&>& ideaList)
 
 void CAwesomeMmap::OnLButtonUp(UINT nFlags, CPoint point)
 {
-	// TODO: ¿©±â¿¡ ¸Ş½ÃÁö Ã³¸®±â ÄÚµå¸¦ Ãß°¡ ¹×/¶Ç´Â ±âº»°ªÀ» È£ÃâÇÕ´Ï´Ù.
+	// TODO: ì—¬ê¸°ì— ë©”ì‹œì§€ ì²˜ë¦¬ê¸° ì½”ë“œë¥¼ ì¶”ê°€ ë°/ë˜ëŠ” ê¸°ë³¸ê°’ì„ í˜¸ì¶œí•©ë‹ˆë‹¤.
 	CAwesomeStudyDoc* pDoc = (CAwesomeStudyDoc *)GetDocument();
 	CClientDC dc(this);
 	m_bLBtnPressed = FALSE;
@@ -792,11 +795,11 @@ void CAwesomeMmap::OnLButtonUp(UINT nFlags, CPoint point)
 		CPoint roundPoint(drawRect.Width() * roundRate, drawRect.Height() * roundRate);
 		CIdea *newIdea = &GetIdea(tmpPosition, pDoc->m_ideaList);
 
-		//»ç°¢Çü Áö¿ì±â
+		//ì‚¬ê°í˜• ì§€ìš°ê¸°
 		dc.SetROP2(R2_NOT);
 		dc.RoundRect(drawRect, roundPoint);
 
-		//ÃÖÁ¾ÀûÀÎ »ç°¢ÇüÀÇ Rect¸¦ Áı¾î³Ö°í SetIdea½ÃÅ²´Ù.
+		//ìµœì¢…ì ì¸ ì‚¬ê°í˜•ì˜ Rectë¥¼ ì§‘ì–´ë„£ê³  SetIdeaì‹œí‚¨ë‹¤.
 		newIdea->SetRect(drawRect);
 		SetIdea(tmpPosition, pDoc->m_ideaList, *newIdea);
 
@@ -813,7 +816,7 @@ void CAwesomeMmap::OnLButtonUp(UINT nFlags, CPoint point)
 	//Add Child Mode
 	if (m_bAddChildMode) {
 		m_bAddChildMode = FALSE;
-		//TODO: »õ·Î¿î Child¸¦ »ı¼ºÇÏ¿© ÀúÀå, ÀÎµ¦½ºµµ °°ÀÌ ²ø°í°£´Ù.
+		//TODO: ìƒˆë¡œìš´ Childë¥¼ ìƒì„±í•˜ì—¬ ì €ì¥, ì¸ë±ìŠ¤ë„ ê°™ì´ ëŒê³ ê°„ë‹¤.
 
 		CString newStr;
 		newStr.Format(_T("[%d, %d]"), point.x, point.y);
@@ -823,7 +826,7 @@ void CAwesomeMmap::OnLButtonUp(UINT nFlags, CPoint point)
 		newIdea.m_ipParentNode = m_ipParent;
 
 		pDoc->m_ideaList.AddHead(newIdea);
-		//TODO: m_ipParent¿Í m_ipChild ÃÊ±âÈ­
+		//TODO: m_ipParentì™€ m_ipChild ì´ˆê¸°í™”
 		m_ipParent = m_ipChild = 0;
 		//m_pPolyBezierPoints = NULL;
 
@@ -837,12 +840,12 @@ void CAwesomeMmap::OnLButtonUp(UINT nFlags, CPoint point)
 }
 
 
-// pos->PrevÀÚ¸®ÀÇ ³ëµå¸¦ Á¦°ÅÇÑ´Ù.
-//¸¸¾à Áö¿ì·Á´Â ³ëµå°¡ TailÀÌ¶ó pos°¡ NULLÀÎ °æ¿ì,
-//TailÀ» Áö¿î´Ù
+// pos->Prevìë¦¬ì˜ ë…¸ë“œë¥¼ ì œê±°í•œë‹¤.
+//ë§Œì•½ ì§€ìš°ë ¤ëŠ” ë…¸ë“œê°€ Tailì´ë¼ posê°€ NULLì¸ ê²½ìš°,
+//Tailì„ ì§€ìš´ë‹¤
 CIdea& CAwesomeMmap::DeleteIdea(POSITION pos, CList<CIdea, CIdea&>& ideaList)
 {
-	// TODO: ¿©±â¿¡ ¹İÈ¯ ±¸¹®À» »ğÀÔÇÕ´Ï´Ù.
+	// TODO: ì—¬ê¸°ì— ë°˜í™˜ êµ¬ë¬¸ì„ ì‚½ì…í•©ë‹ˆë‹¤.
 	CIdea* tmpIdea;
 	if (pos == NULL) {
 		return ideaList.RemoveTail();
@@ -854,7 +857,7 @@ CIdea& CAwesomeMmap::DeleteIdea(POSITION pos, CList<CIdea, CIdea&>& ideaList)
 }
 
 
-// OnDraw ÇÔ¼ö°¡ È£ÃâÇÏ¿© »ç¿ëÇÏ´Â ´õºí¹öÆÛ¸µ¿ë ±×¸®±â DC
+// OnDraw í•¨ìˆ˜ê°€ í˜¸ì¶œí•˜ì—¬ ì‚¬ìš©í•˜ëŠ” ë”ë¸”ë²„í¼ë§ìš© ê·¸ë¦¬ê¸° DC
 void CAwesomeMmap::DrawImage(CDC* pDC)
 {
 	CAwesomeStudyDoc* pDoc = (CAwesomeStudyDoc *)GetDocument();
@@ -873,8 +876,8 @@ void CAwesomeMmap::DrawImage(CDC* pDC)
 
 	/////////////////////////////////////////////////////////////////////
 	//DEBUG//////////////////////////////////////////////////////////////
-	//Áö±İ±îÁö °¡Áö°í ÀÖ´Â ¸ğµç ¸®½ºÆ®ÀÇ IdeaµéÀ» 
-	//ÀüºÎ Å¬¶óÀÌ¾ğÆ®¿¡ Ãâ·ÂÇÑ´Ù.
+	//ì§€ê¸ˆê¹Œì§€ ê°€ì§€ê³  ìˆëŠ” ëª¨ë“  ë¦¬ìŠ¤íŠ¸ì˜ Ideaë“¤ì„ 
+	//ì „ë¶€ í´ë¼ì´ì–¸íŠ¸ì— ì¶œë ¥í•œë‹¤.
 	/*
 	CString masterStr;
 	CString semiStr;
@@ -902,7 +905,7 @@ void CAwesomeMmap::DrawImage(CDC* pDC)
 		//semiStr.Format(_T("m_ipSiblingNode : %d\n"), ideas->m_ipRightSibling);
 		//masterStr.Append(semiStr);
 
-		//ºÎ¸ğ°¡ Á¦´ë·Î µé¾î°£ °Ô ¸Â´ÂÁö?
+		//ë¶€ëª¨ê°€ ì œëŒ€ë¡œ ë“¤ì–´ê°„ ê²Œ ë§ëŠ”ì§€?
 		//semiStr.Format(_T("Parent node's String : %s\n"), pDoc->FindParent(ideas).m_ideaString);
 		//masterStr.Append(semiStr);
 
@@ -915,10 +918,10 @@ void CAwesomeMmap::DrawImage(CDC* pDC)
 	/////////////////////////////////////////////////////////////////////
 
 
-	//Idea °´Ã¼ º¸ÀÌ±â
-	//ÀÎ¼âÇÒ ¶© TailºÎÅÍ ¹İ´ë·Î ÀÎ¼âÇØ¾ß°Ú´Ù.
-	//¿Ö³Ä¸é »ó´ëÀûÀ¸·Î µÚ´Ê°Ô ÀÎ¼âµÈ Idea°¡ ´Ù¸¥ Idea¸¦ µ¤¾úÀ» °æ¿ì,
-	//°ãÄ£ ºÎºĞÀ» Å¬¸¯ÇßÀ» ¶§ µÚ´Ê°Ô ÀÎ¼âµÈ Idea°¡ µÇ¾î¾ß ÇÏ±â ¶§¹®ÀÌ´Ù.
+	//Idea ê°ì²´ ë³´ì´ê¸°
+	//ì¸ì‡„í•  ë• Tailë¶€í„° ë°˜ëŒ€ë¡œ ì¸ì‡„í•´ì•¼ê² ë‹¤.
+	//ì™œëƒë©´ ìƒëŒ€ì ìœ¼ë¡œ ë’¤ëŠ¦ê²Œ ì¸ì‡„ëœ Ideaê°€ ë‹¤ë¥¸ Ideaë¥¼ ë®ì—ˆì„ ê²½ìš°,
+	//ê²¹ì¹œ ë¶€ë¶„ì„ í´ë¦­í–ˆì„ ë•Œ ë’¤ëŠ¦ê²Œ ì¸ì‡„ëœ Ideaê°€ ë˜ì–´ì•¼ í•˜ê¸° ë•Œë¬¸ì´ë‹¤.
 	pos = ideaList->GetTailPosition();
 	while (pos != NULL) {
 		ideas = &ideaList->GetPrev(pos);
@@ -963,9 +966,9 @@ void CAwesomeMmap::DrawImage(CDC* pDC)
 		pDC->SetBkMode(TRANSPARENT);
 		pDC->DrawText(ideas->m_ideaString, ideas->m_ideaRect, DT_VCENTER | DT_CENTER | DT_SINGLELINE);
 
-		//Bezier Line ( ·çÆ®°¡ ¾Æ´Ï¸é )
+		//Bezier Line ( ë£¨íŠ¸ê°€ ì•„ë‹ˆë©´ )
 		//tmpParentIdea = *pDoc->FindParent(pos); 
-		//·çÆ®°¡ ¾Æ´Ñ °æ¿ì¿¡¸¸ ÀÚ½ÅÀÇ ºÎ¸ğ¿Í ¼±À» ±ß´Â´Ù.
+		//ë£¨íŠ¸ê°€ ì•„ë‹Œ ê²½ìš°ì—ë§Œ ìì‹ ì˜ ë¶€ëª¨ì™€ ì„ ì„ ê¸‹ëŠ”ë‹¤.
 		//if (tmpParentIdea != *ideas) {
 			
 		//}
@@ -1001,12 +1004,12 @@ void CAwesomeMmap::DrawImage(CDC* pDC)
 			acBitmap.LoadBitmapW(IDB_ADD_CHILD);
 			BITMAP acBmpInfo;
 			acBitmap.GetBitmap(&acBmpInfo);
-			//¸Ş¸ğ¸® DC¸¦ ¸¸µç ÈÄ ºñÆ®¸ÊÀ» ¼±ÅÃÇØ ³Ö´Â´Ù.
+			//ë©”ëª¨ë¦¬ DCë¥¼ ë§Œë“  í›„ ë¹„íŠ¸ë§µì„ ì„ íƒí•´ ë„£ëŠ”ë‹¤.
 			CDC dcmem;
 			dcmem.CreateCompatibleDC(pDC);
 			dcmem.SelectObject(&acBitmap);
 
-			//ºñÆ®¸Ê È­¸éÃâ·Â
+			//ë¹„íŠ¸ë§µ í™”ë©´ì¶œë ¥
 			m_childHndX1 = ideas->m_ideaRect.right + 5;
 			m_childHndY1 = ideas->m_ideaRect.CenterPoint().y - 6;
 			m_childHndX2 = m_childHndX1 + acBmpInfo.bmWidth / 2;
@@ -1028,16 +1031,16 @@ void CAwesomeMmap::OnUpdateFileOpen(CCmdUI *pCmdUI)
 	if (pView == mView->m_pwndMmap) {
 		pCmdUI->Enable(0);
 	}
-	// TODO: ¿©±â¿¡ ¸í·É ¾÷µ¥ÀÌÆ® UI Ã³¸®±â ÄÚµå¸¦ Ãß°¡ÇÕ´Ï´Ù.
+	// TODO: ì—¬ê¸°ì— ëª…ë ¹ ì—…ë°ì´íŠ¸ UI ì²˜ë¦¬ê¸° ì½”ë“œë¥¼ ì¶”ê°€í•©ë‹ˆë‹¤.
 }
 
 
-//Doc.cpp ÆÄÀÏ¿¡ FindParent ÇÔ¼ö°¡ ÀÖ´Âµ¥ °Å±â¿¡¼­´Â ¸®½ºÆ® ³»ºÎÀÇ ¸ğµç ÇÔ¼ö Á¢±ÙÀÌ
-//ºÒ°¡´ÉÇß´Ù. ³ª·Î½ã ÀÌÇØÇÒ ¼ö°¡ ¾ø´Ù.
+//Doc.cpp íŒŒì¼ì— FindParent í•¨ìˆ˜ê°€ ìˆëŠ”ë° ê±°ê¸°ì—ì„œëŠ” ë¦¬ìŠ¤íŠ¸ ë‚´ë¶€ì˜ ëª¨ë“  í•¨ìˆ˜ ì ‘ê·¼ì´
+//ë¶ˆê°€ëŠ¥í–ˆë‹¤. ë‚˜ë¡œì¬ ì´í•´í•  ìˆ˜ê°€ ì—†ë‹¤.
 CIdea& CAwesomeMmap::FindParentIdea(CList<CIdea, CIdea&>& ideaList, POSITION nextPos)
 {
-	// TODO: ¿©±â¿¡ ¹İÈ¯ ±¸¹®À» »ğÀÔÇÕ´Ï´Ù.
-	//NULLÀÌ¶ó¸é Tail¿¡ ÀÖÀ¸´Ï±î
+	// TODO: ì—¬ê¸°ì— ë°˜í™˜ êµ¬ë¬¸ì„ ì‚½ì…í•©ë‹ˆë‹¤.
+	//NULLì´ë¼ë©´ Tailì— ìˆìœ¼ë‹ˆê¹Œ
 	if (nextPos == NULL) {
 		nextPos = ideaList.GetTailPosition();
 	}
@@ -1047,25 +1050,25 @@ CIdea& CAwesomeMmap::FindParentIdea(CList<CIdea, CIdea&>& ideaList, POSITION nex
 	CIdea tmpParent;
 
 	try {
-		//Á¦ÀÏ¸ÕÀú ÀÌ Ä£±¸°¡ ·çÆ®ÀÎÁö¸¦ È®ÀÎÇÑ´Ù.
+		//ì œì¼ë¨¼ì € ì´ ì¹œêµ¬ê°€ ë£¨íŠ¸ì¸ì§€ë¥¼ í™•ì¸í•œë‹¤.
 		if (exactIdea.m_ipParentNode == exactIdea.m_ipSelfNode) { return exactIdea; }
 
-		//ÇÑ¹ÙÄû¸¦ ¼øÈ¸ÇÏ¸ç ºÎ¸ğ¸¦ È®ÀÎÇÑ´Ù.
+		//í•œë°”í€´ë¥¼ ìˆœíšŒí•˜ë©° ë¶€ëª¨ë¥¼ í™•ì¸í•œë‹¤.
 		while (savePos != NULL) {
 			tmpParent = ideaList.GetNext(savePos);
 			if (tmpParent.m_ipSelfNode == exactIdea.m_ipParentNode) { return tmpParent; }
 		}
 
-		//¸®ÅÏÀÌ ¾ÈµÇ¾ú´Ù¸é ¿¡·¯´Ù
+		//ë¦¬í„´ì´ ì•ˆë˜ì—ˆë‹¤ë©´ ì—ëŸ¬ë‹¤
 		throw(0);
 	}
 	catch (int exception) {
 		CString errorString;
 		if (exception == 0) {
-			errorString.Format(_T("Àß¸øµÈ ÂüÁ¶ÀÔ´Ï´Ù."));
+			errorString.Format(_T("ì˜ëª»ëœ ì°¸ì¡°ì…ë‹ˆë‹¤."));
 		}
 		else {
-			errorString.Format(_T("¾Ë ¼ö ¾ø´Â ¿¡·¯ÀÔ´Ï´Ù. (%d)"), exception);
+			errorString.Format(_T("ì•Œ ìˆ˜ ì—†ëŠ” ì—ëŸ¬ì…ë‹ˆë‹¤. (%d)"), exception);
 		}
 		AfxMessageBox(errorString);
 	}
@@ -1074,7 +1077,7 @@ CIdea& CAwesomeMmap::FindParentIdea(CList<CIdea, CIdea&>& ideaList, POSITION nex
 
 void CAwesomeMmap::OnRbnInTxtEdit()
 {
-	// TODO: ¿©±â¿¡ ¸í·É Ã³¸®±â ÄÚµå¸¦ Ãß°¡ÇÕ´Ï´Ù.
+	// TODO: ì—¬ê¸°ì— ëª…ë ¹ ì²˜ë¦¬ê¸° ì½”ë“œë¥¼ ì¶”ê°€í•©ë‹ˆë‹¤.
 	CAwesomeStudyDoc* pDoc = (CAwesomeStudyDoc *)GetDocument();
 	CMMapTxtEditDlg dlg;
 	dlg.m_str = m_ideaString;
@@ -1093,7 +1096,7 @@ void CAwesomeMmap::OnRbnInTxtEdit()
 
 void CAwesomeMmap::OnRbtnInColor()
 {
-	// TODO: ¿©±â¿¡ ¸í·É Ã³¸®±â ÄÚµå¸¦ Ãß°¡ÇÕ´Ï´Ù.
+	// TODO: ì—¬ê¸°ì— ëª…ë ¹ ì²˜ë¦¬ê¸° ì½”ë“œë¥¼ ì¶”ê°€í•©ë‹ˆë‹¤.
 	CAwesomeStudyDoc* pDoc = (CAwesomeStudyDoc *)GetDocument();
 	CColorDialog dlg;
 	dlg.DoModal();
