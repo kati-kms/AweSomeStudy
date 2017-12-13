@@ -312,6 +312,7 @@ void CAwesomeMmap::OnMouseMove(UINT nFlags, CPoint point)
 	CPoint roundPoint;
 	CRect drawRect;
 	//debug ////////////////////////////////////////////////////////////
+	/*
 	CClientDC debugDc(this);
 	CString str;
 	CString tmpStr;
@@ -339,6 +340,7 @@ void CAwesomeMmap::OnMouseMove(UINT nFlags, CPoint point)
 		m_pPolyBezierPoints[2].x, m_pPolyBezierPoints[2].y);
 	str.Append(tmpStr);
 	debugDc.DrawText(str, debugRect, 0);
+	*/
 	//debug_end///////////////////////////////////////////////////////////
 
 
@@ -873,6 +875,7 @@ void CAwesomeMmap::DrawImage(CDC* pDC)
 	//DEBUG//////////////////////////////////////////////////////////////
 	//지금까지 가지고 있는 모든 리스트의 Idea들을 
 	//전부 클라이언트에 출력한다.
+	/*
 	CString masterStr;
 	CString semiStr;
 	CRect debugRect(0, 150, 600, 1000);
@@ -907,6 +910,7 @@ void CAwesomeMmap::DrawImage(CDC* pDC)
 		masterStr.Append(_T("\n"));
 	}
 	pDC->DrawText(masterStr, &debugRect, DT_LEFT);
+	*/
 	//DEBUG//////////////////////////////////////////////////////////////
 	/////////////////////////////////////////////////////////////////////
 
