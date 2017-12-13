@@ -144,6 +144,11 @@ void CAwesomeWrite::OnBnClickedWriteSave()
 
 void CAwesomeWrite::OnBnClickedWriteClose()
 {
+	HTREEITEM node= m_treeWrite.GetSelectedItem();
+	m_treeWrite.DeleteItem(node);
+	int len = m_write.GetWindowTextLength();
+	m_write.SetSel(0, len);
+	m_write.Clear();
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 	//저장할지 물어보고 Home으로 이동
 	//저장 누르고 닫기면, 그냥 닫힘
