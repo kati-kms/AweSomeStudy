@@ -34,6 +34,7 @@ public:
 public:
 	CIdea& operator=(const CIdea& data);
 	BOOL operator==(const CIdea& data);
+	BOOL operator!=(const CIdea& data);
 	void SetRect(CRect rect) { this->m_ideaRect = rect; }
 	void SetString(CString str) { this->m_ideaString = str; }
 	//Make 하고나서 반드시 Delete를 해주어야 한다.

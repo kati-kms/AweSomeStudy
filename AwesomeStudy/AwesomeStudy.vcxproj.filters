@@ -51,9 +51,6 @@
     <ClInclude Include="AwesomeWrite.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="VeiwPassDialog.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="WriteGoLine.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -67,6 +64,9 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="InfoSave.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="MMapTxtEditDlg.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
@@ -114,6 +114,9 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="InfoSave.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="MMapTxtEditDlg.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

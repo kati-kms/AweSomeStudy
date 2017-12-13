@@ -6,6 +6,7 @@
 #include "AwesomeMmap.h"
 #include "AwesomeStudyDoc.h"
 #include "MainFrm.h"
+#include "MMapTxtEditDlg.h"
 
 #include <WinUser.h>
 
@@ -14,6 +15,7 @@ CPoint tmpPoint;
 POSITION tmpPosition;
 int cursorFlag = FALSE;
 int tmpReturnValue = 0;
+
 
 // CAwesomeMmap
 
@@ -33,6 +35,8 @@ CAwesomeMmap::CAwesomeMmap()
 	m_tmpChildPnt1.SetPoint(0, 0);
 	m_tmpChildPnt2.SetPoint(0, 0);
 	m_pPolyBezierPoints = new CPoint[3];
+	m_ideaString = _T("");
+	m_contextIdea = new CIdea;
 }
 
 CAwesomeMmap::~CAwesomeMmap()
@@ -49,6 +53,8 @@ BEGIN_MESSAGE_MAP(CAwesomeMmap, CView)
 	ON_WM_MOUSEMOVE()
 	ON_WM_LBUTTONUP()
 	ON_UPDATE_COMMAND_UI(ID_FILE_OPEN, &CAwesomeMmap::OnUpdateFileOpen)
+	ON_COMMAND(ID_RBN_IN_TXT_EDIT, &CAwesomeMmap::OnRbnInTxtEdit)
+	ON_COMMAND(ID_RBTN_IN_COLOR, &CAwesomeMmap::OnRbtnInColor)
 END_MESSAGE_MAP()
 
 
@@ -271,11 +277,11 @@ void CAwesomeMmap::OnLButtonDown(UINT nFlags, CPoint point)
 			m_bAddChildMode = TRUE;
 
 			m_ipParent = selectedIdea.m_ipSelfNode;
-			m_ParentIdea = selectedIdea;
+			ParentIdea = &selectedIdea;
 			m_tmpChildPnt1 = CPoint(point.x - 50, point.y - 50);
 			m_tmpChildPnt2 = CPoint(point.x + 50, point.y + 50);
 
-			m_pPolyBezierPoints[0] = m_ParentIdea.m_ideaRect.CenterPoint();
+			m_pPolyBezierPoints[0] = ParentIdea->m_ideaRect.CenterPoint();
 			m_pPolyBezierPoints[1] = point;
 			m_pPolyBezierPoints[2] = point;
 		}
@@ -677,7 +683,7 @@ void CAwesomeMmap::OnContextMenu(CWnd* pWnd, CPoint point)
 	CMenu menu;
 	CMenu* pMenu;
 	ScreenToClient(&point);
-	int ideaOption = CheckPtInIdea(point);
+	int ideaOption = CheckPtInIdea(point, *m_contextIdea);
 	menu.LoadMenu(IDR_MMAP_CNTXT);
 	if (ideaOption == RGN_IDEA_IN) {
 		//임시전역변수에 point를 집어넣는다.
@@ -812,7 +818,7 @@ void CAwesomeMmap::OnLButtonUp(UINT nFlags, CPoint point)
 		CRect rect(m_tmpChildPnt1, m_tmpChildPnt2);
 		CIdea newIdea(rect, newStr);
 		newIdea.NewIdea();
-		newIdea.m_ipParentNode = m_ParentIdea.m_ipSelfNode;
+		newIdea.m_ipParentNode = m_ipParent;
 
 		pDoc->m_ideaList.AddHead(newIdea);
 		//TODO: m_ipParent와 m_ipChild 초기화
@@ -852,6 +858,7 @@ void CAwesomeMmap::DrawImage(CDC* pDC)
 	CAwesomeStudyDoc* pDoc = (CAwesomeStudyDoc *)GetDocument();
 	POSITION pos;
 	CIdea *ideas;
+	CIdea tmpParentIdea;
 	CBrush ideaBrush;
 	CPen ideaPen;
 	CPoint roundPoint;
@@ -862,6 +869,7 @@ void CAwesomeMmap::DrawImage(CDC* pDC)
 	const double brightRate = 0.50;
 	int pointCode = cursorFlag;
 
+	/////////////////////////////////////////////////////////////////////
 	//DEBUG//////////////////////////////////////////////////////////////
 	//지금까지 가지고 있는 모든 리스트의 Idea들을 
 	//전부 클라이언트에 출력한다.
@@ -873,6 +881,11 @@ void CAwesomeMmap::DrawImage(CDC* pDC)
 		ideas = &ideaList->GetNext(pos);
 		semiStr.Format(_T("m_ideaRect.CenterPoint() : (%d, %d)\n"), ideas->m_ideaRect.CenterPoint().x,
 			ideas->m_ideaRect.CenterPoint().y);
+		masterStr.Append(semiStr);
+		semiStr.Format(_T("m_ideaColor : (%d, %d, %d)\n"),
+			GetRValue(ideas->m_ideaColor)
+			, GetGValue(ideas->m_ideaColor)
+			, GetBValue(ideas->m_ideaColor));
 		masterStr.Append(semiStr);
 		semiStr.Format(_T("m_ideaString : %s\n"), ideas->m_ideaString);
 		masterStr.Append(semiStr);
@@ -886,11 +899,16 @@ void CAwesomeMmap::DrawImage(CDC* pDC)
 		//semiStr.Format(_T("m_ipSiblingNode : %d\n"), ideas->m_ipRightSibling);
 		//masterStr.Append(semiStr);
 
+		//부모가 제대로 들어간 게 맞는지?
+		//semiStr.Format(_T("Parent node's String : %s\n"), pDoc->FindParent(ideas).m_ideaString);
+		//masterStr.Append(semiStr);
+
+
 		masterStr.Append(_T("\n"));
 	}
 	pDC->DrawText(masterStr, &debugRect, DT_LEFT);
-
 	//DEBUG//////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////
 
 
 	//Idea 객체 보이기
@@ -942,6 +960,11 @@ void CAwesomeMmap::DrawImage(CDC* pDC)
 		pDC->DrawText(ideas->m_ideaString, ideas->m_ideaRect, DT_VCENTER | DT_CENTER | DT_SINGLELINE);
 
 		//Bezier Line ( 루트가 아니면 )
+		//tmpParentIdea = *pDoc->FindParent(pos); 
+		//루트가 아닌 경우에만 자신의 부모와 선을 긋는다.
+		//if (tmpParentIdea != *ideas) {
+			
+		//}
 
 
 		//size handle & add child handle
@@ -1002,4 +1025,84 @@ void CAwesomeMmap::OnUpdateFileOpen(CCmdUI *pCmdUI)
 		pCmdUI->Enable(0);
 	}
 	// TODO: 여기에 명령 업데이트 UI 처리기 코드를 추가합니다.
+}
+
+
+//Doc.cpp 파일에 FindParent 함수가 있는데 거기에서는 리스트 내부의 모든 함수 접근이
+//불가능했다. 나로썬 이해할 수가 없다.
+CIdea& CAwesomeMmap::FindParentIdea(CList<CIdea, CIdea&>& ideaList, POSITION nextPos)
+{
+	// TODO: 여기에 반환 구문을 삽입합니다.
+	//NULL이라면 Tail에 있으니까
+	if (nextPos == NULL) {
+		nextPos = ideaList.GetTailPosition();
+	}
+	ideaList.GetPrev(nextPos);
+	POSITION savePos = ideaList.GetHeadPosition();
+	CIdea exactIdea = ideaList.GetAt(savePos);
+	CIdea tmpParent;
+
+	try {
+		//제일먼저 이 친구가 루트인지를 확인한다.
+		if (exactIdea.m_ipParentNode == exactIdea.m_ipSelfNode) { return exactIdea; }
+
+		//한바퀴를 순회하며 부모를 확인한다.
+		while (savePos != NULL) {
+			tmpParent = ideaList.GetNext(savePos);
+			if (tmpParent.m_ipSelfNode == exactIdea.m_ipParentNode) { return tmpParent; }
+		}
+
+		//리턴이 안되었다면 에러다
+		throw(0);
+	}
+	catch (int exception) {
+		CString errorString;
+		if (exception == 0) {
+			errorString.Format(_T("잘못된 참조입니다."));
+		}
+		else {
+			errorString.Format(_T("알 수 없는 에러입니다. (%d)"), exception);
+		}
+		AfxMessageBox(errorString);
+	}
+}
+
+
+void CAwesomeMmap::OnRbnInTxtEdit()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+	CAwesomeStudyDoc* pDoc = (CAwesomeStudyDoc *)GetDocument();
+	CMMapTxtEditDlg dlg;
+	dlg.m_str = m_ideaString;
+
+	int result = dlg.DoModal();
+	if (result == IDOK) {
+		m_ideaString = dlg.m_str;
+		m_contextIdea->m_ideaString = dlg.m_str;
+		SetIdea(tmpPosition, pDoc->m_ideaList, *m_contextIdea);
+
+		pDoc->SetModifiedFlag();
+		Invalidate();
+	}
+}
+
+
+void CAwesomeMmap::OnRbtnInColor()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+	CAwesomeStudyDoc* pDoc = (CAwesomeStudyDoc *)GetDocument();
+	CColorDialog dlg;
+	dlg.DoModal();
+	m_contextIdea->m_ideaColor = dlg.GetColor();
+	CString str;
+	str.Format(_T("R:%d,G:%d,B:%d")
+		, GetRValue(m_contextIdea->m_ideaColor)
+		, GetGValue(m_contextIdea->m_ideaColor)
+		, GetBValue(m_contextIdea->m_ideaColor)
+		);
+	AfxMessageBox(str);
+	SetIdea(tmpPosition, pDoc->m_ideaList, *m_contextIdea);
+
+	pDoc->SetModifiedFlag();
+	Invalidate();
 }

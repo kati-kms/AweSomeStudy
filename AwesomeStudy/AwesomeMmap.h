@@ -14,8 +14,8 @@
 typedef int IndexPointer;
 
 // CAwesomeMmap 뷰입니다.
-class CMemDC;
 class CIdea;
+class CMemDC;
 
 class CAwesomeMmap : public CView
 {
@@ -33,9 +33,11 @@ public:
 	IndexPointer m_ipParent; 
 	IndexPointer m_ipChild;
 	//CIdea m_ChildIdea;
-	CIdea m_ParentIdea;
+	CIdea *ParentIdea;
+	CIdea *m_contextIdea;
 	CPoint m_tmpChildPnt1, m_tmpChildPnt2;
 	CPoint *m_pPolyBezierPoints;
+	CString m_ideaString;
 	int m_tmpX1, m_tmpX2, m_tmpY1, m_tmpY2;
 	int m_nPressedFlag;
 	int m_childHndX1, m_childHndY1, m_childHndX2, m_childHndY2;
@@ -77,6 +79,9 @@ public:
 	// OnDraw 함수가 호출하여 사용하는 더블버퍼링용 그리기 DC
 	void DrawImage(CDC* pDC);
 	afx_msg void OnUpdateFileOpen(CCmdUI *pCmdUI);
+	CIdea& FindParentIdea(CList<CIdea, CIdea&>& ideaList, POSITION nextPos);
+	afx_msg void OnRbnInTxtEdit();
+	afx_msg void OnRbtnInColor();
 };
 
 

@@ -357,7 +357,8 @@ HTREEITEM CAwesomeStudyDoc::PicGetNextItem(HTREEITEM hItem)
 
 
 
-
+/////////////////////////////////////////////////////////////////////////////////////////////
+//MMap///////////////////////////////////////////////////////////////////////////////////////
 // m_ideaList를 순회하면서 selfIndex와 pnt를 비교, 일치한다면 그놈을 리턴, pos도 같이 내보낸다.
 CIdea* CAwesomeStudyDoc::FindIndexIdea(POSITION pos, IndexPointer pnt)
 {
@@ -387,69 +388,53 @@ CIdea* CAwesomeStudyDoc::FindIndexIdea(POSITION pos, IndexPointer pnt)
 
 
 // childIdea를 기점으로 자신의 부모를 찾아서 리턴한다.
-CIdea& CAwesomeStudyDoc::FindParent(CIdea* childIdea)
+CIdea* CAwesomeStudyDoc::FindParent(CIdea* childIdea)
 {
 	// TODO: 여기에 반환 구문을 삽입합니다.
 	POSITION findPos;
 	POSITION savePos;
 	CIdea tmpParent;
-	try {
-		////////////////////////////////////////////////////////////////////////////////
-		//부모인덱스 본격적으로 찾기 전에 childIdea의 Position을 찾는 부분
-		//원래는
-		//findPos = m_ideaList.Find(*childIdea, NULL);
-		//이렇게 CList가 제공하는 Find 함수를 사용하려 했으나
-		//operator== 쪽에서 문제가 발생하는 것 같아 오버라이드를 해도
-		//문제가 고쳐지지 않아 직접 순회하기로 했다.
-		//고멘 >д<
-		////////////////////////////////////////////////////////////////////////////////
-		findPos = m_ideaList.GetHeadPosition();
-		while (findPos)
-		{
-			tmpParent = m_ideaList.GetNext(findPos);
-			//Idea.h에 operator==를 오버라이드를 해놓았다.
-			if (tmpParent == *childIdea) {
-				//Position이 맨 끝에 있으면 GetNext()했을 때 NULL을 참조하게 된다.
-				//헉! NULL->GetPrev()를 할 생각인거야?
-				if (findPos == NULL) { findPos = m_ideaList.GetTailPosition(); break; }
-				//GetPrev를 해주어야 한다.
-				//포지션은 항상 한 칸씩 앞에 가있거든
-				m_ideaList.GetPrev(findPos);
-				break;
-			}
+	////////////////////////////////////////////////////////////////////////////////
+	//부모인덱스 본격적으로 찾기 전에 childIdea의 Position을 찾는 부분
+	//원래는
+	//findPos = m_ideaList.Find(*childIdea, NULL);
+	//이렇게 CList가 제공하는 Find 함수를 사용하려 했으나
+	//operator== 쪽에서 문제가 발생하는 것 같아 오버라이드를 해도
+	//문제가 고쳐지지 않아 직접 순회하기로 했다.
+	//고멘 >д<
+	////////////////////////////////////////////////////////////////////////////////
+	findPos = m_ideaList.GetHeadPosition();
+	while (findPos)
+	{
+		tmpParent = m_ideaList.GetNext(findPos);
+		//Idea.h에 operator==를 오버라이드를 해놓았다.
+		if (tmpParent == *childIdea) {
+			//Position이 맨 끝에 있으면 GetNext()했을 때 NULL을 참조하게 된다.
+			//헉! NULL->GetPrev()를 할 생각인거야?
+			//if (findPos == NULL) { findPos = m_ideaList.GetTailPosition(); break; }
+			//어차피 FindParent(POSITION pos)에서 예외처리 해주니까 상관쓰지 않아도 돼
+			break;
 		}
-
-		//만약 그래도 NULL을 들고 빠져나왔다면 childIdea가 이 리스트에 없다는 말이 된다. 
-		//throw 해버리자.
-		//그리고 현재 findPos는 childIdea의 제대로 된 위치를 참조하고 있다.
-		if (&findPos == NULL) { throw 0; }
-		savePos = findPos;
-
-		//만약 이 함수를 호출할 시점에 제대로 된 위치의 Position value를 가지고 있다면,
-		//굳이 또 수고스럽게 돌릴 필요는 없을 것이다.
-		//이게 무슨 소리냐면, FindParent()함수를 오버로딩 해서 
-		//여기부분부터 그 뒷부분, 즉 '진짜' 부모 찾는 부분만을 만들어 중복 사용하자.
-
-		return FindParent(savePos);
 	}
 
-	catch (int exception) {
-		CString errorString;
-		if (exception = 0) {
-			errorString.Format(_T("현재 이 리스트는 %s를 가지고있지 않습니다."), childIdea->m_ideaString);
-		}
-		else {
-			errorString.Format(_T("알 수 없는 에러입니다. 알아서 해결하시길.. (%d)"), exception);
-		}
-		AfxMessageBox(errorString);
+	//만약 그래도 NULL을 들고 빠져나왔다면 childIdea가 이 리스트에 없다는 말이 된다. 
+	//throw 해버리자.
+	//그리고 현재 findPos는 childIdea의 한 칸 이동된 위치를 참조하고 있다.
+	//심지어는 Tail -> NULL
+	//if (&findPos == NULL) { throw 0; }
+	savePos = findPos;
 
-		KillProgram();
-	}
+	//만약 이 함수를 호출할 시점에 제대로 된 위치의 Position value를 가지고 있다면,
+	//굳이 또 수고스럽게 돌릴 필요는 없을 것이다.
+	//이게 무슨 소리냐면, FindParent()함수를 오버로딩 해서 
+	//여기부분부터 그 뒷부분, 즉 '진짜' 부모 찾는 부분만을 만들어 중복 사용하자.
+
+	return FindParent(savePos);
 }
 
 
-// 제대로 된 Position 값을 가지고 그 친구의 부모를 찾는 함수이다. 왼쪽과 오른쪽 순서로 먼저 탐색한다.
-CIdea& CAwesomeStudyDoc::FindParent(POSITION exactPos)
+// 한 칸 Next 된 Position 값을 가지고 그 친구의 부모를 찾는 함수이다. 왼쪽과 오른쪽 순서로 먼저 탐색한다.
+CIdea* CAwesomeStudyDoc::FindParent(POSITION nextPos)
 {
 	// TODO: 여기에 반환 구문을 삽입합니다.
 	////////////////////////////////////////////////////////////////////////////////
@@ -459,29 +444,37 @@ CIdea& CAwesomeStudyDoc::FindParent(POSITION exactPos)
 	//그래도 없다면? 일단 지금은 메시지 박스 출력해서 부모가 없다고 한 뒤 자기자신을 
 	//루트로 만들어버리는 수밖에..
 	/////////////////////////////////////////////////////////////////////////////////
-	POSITION savePos = exactPos;
+
+	//NULL이라면 Tail에 있으니까
+	if (nextPos == NULL) {
+		nextPos = m_ideaList.GetTailPosition();
+	}
+	else {
+		m_ideaList.GetPrev(nextPos);
+	}
+	POSITION savePos = nextPos;
 	CIdea exactIdea = m_ideaList.GetAt(savePos);
 	CIdea tmpParent;
 
 	try {
 		//제일먼저 이친구가 루트인지를 확인한다.
-		if (exactIdea.m_ipParentNode == exactIdea.m_ipSelfNode) { return exactIdea; }
+		if (exactIdea.m_ipParentNode == exactIdea.m_ipSelfNode) { return &exactIdea; }
 
 		//왼쪽에 있을 때
 		while (savePos != NULL) {
 			tmpParent = m_ideaList.GetPrev(savePos);
 			if (tmpParent.m_ipSelfNode == exactIdea.m_ipParentNode) {
-				return tmpParent;
+				return &tmpParent;
 			}
 		}
 
 		//아마 여기로 온다면 왼쪽에 없을 것이다
 		//그러면 오른쪽으로 갑시다.
-		savePos = exactPos;
+		savePos = nextPos;
 		while (savePos != NULL) {
 			tmpParent = m_ideaList.GetNext(savePos);
 			if (tmpParent.m_ipSelfNode == exactIdea.m_ipParentNode) {
-				return tmpParent;
+				return &tmpParent;
 			}
 		}
 
@@ -520,3 +513,5 @@ void CAwesomeStudyDoc::KillProgram()
 		CloseHandle(hProcess);                                 // 프로세스 핸들 닫기
 	}
 }
+//MMap///////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////

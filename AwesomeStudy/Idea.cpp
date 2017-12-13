@@ -37,6 +37,18 @@ BOOL CIdea::operator==(const CIdea & data)
 	return flag;
 }
 
+BOOL CIdea::operator!=(const CIdea & data)
+{
+	BOOL flag;
+	flag = this->m_ideaColor == data.m_ideaColor
+		&& this->m_ideaRect == data.m_ideaRect
+		&& this->m_ideaString == data.m_ideaString
+		&& this->m_ipParentNode == data.m_ipParentNode
+		&& this->m_ipSelfNode == data.m_ipSelfNode;
+
+	return !flag;
+}
+
 CRgn & CIdea::MakeIdeaRgn()
 {
 	// TODO: 여기에 반환 구문을 삽입합니다.

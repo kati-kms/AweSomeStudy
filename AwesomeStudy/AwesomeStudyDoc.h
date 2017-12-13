@@ -66,11 +66,15 @@ protected:
 public:
 	int PicGetIndentLevel(HTREEITEM hItem);
 	HTREEITEM PicGetNextItem(HTREEITEM hItem);
+	/////////////////////////////////////////////////////////////////////////////////////////////
+	//MMap--------------------------------------------------------------------------------------
 	// m_ideaList를 순회하면서 selfIndex와 pnt를 비교, 일치한다면 그놈을 리턴, pos도 같이 내보낸다.
 	CIdea* FindIndexIdea(POSITION pos, IndexPointer pnt);
 	// childIdea를 기점으로 자신의 부모를 찾아서 리턴한다.
-	CIdea& FindParent(CIdea* childIdea);
+	CIdea* FindParent(CIdea* childIdea);
 	// 제대로 된 Position 값을 가지고 그 친구의 부모를 찾는 함수이다. 왼쪽과 오른쪽 순서로 먼저 탐색한다.
-	CIdea& FindParent(POSITION exactPos);
+	CIdea* FindParent(POSITION exactPos);
 	void KillProgram();
+	//MMap--------------------------------------------------------------------------------------
+	/////////////////////////////////////////////////////////////////////////////////////////////
 };
